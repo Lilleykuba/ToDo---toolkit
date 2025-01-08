@@ -7,7 +7,6 @@ const TaskList = () => {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    // Firestore real-time listener
     const unsubscribe = onSnapshot(collection(db, "tasks"), (snapshot) => {
       const tasksArray = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -16,7 +15,6 @@ const TaskList = () => {
       setTasks(tasksArray);
     });
 
-    // Cleanup listener on component unmount
     return () => unsubscribe();
   }, []);
 
