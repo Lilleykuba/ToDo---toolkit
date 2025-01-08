@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
+import TaskItem from "./TaskItem";
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
