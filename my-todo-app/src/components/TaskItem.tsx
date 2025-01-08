@@ -1,5 +1,6 @@
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { deleteDoc } from "firebase/firestore";
 
 const TaskItem = ({ task }) => {
   const handleComplete = async () => {

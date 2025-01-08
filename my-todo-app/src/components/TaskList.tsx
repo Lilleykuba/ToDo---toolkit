@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 import TaskItem from "./TaskItem";
 
@@ -7,26 +7,25 @@ const TaskList = () => {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      const querySnapshot = await getDocs(collection(db, "tasks"));
-      const tasksArray = querySnapshot.docs.map((doc) => ({
+    // Firestore real-time listener
+    const unsubscribe = onSnapshot(collection(db, "tasks"), (snapshot) => {
+      const tasksArray = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       setTasks(tasksArray);
-    };
+    });
 
-    fetchTasks();
+    // Cleanup listener on component unmount
+    return () => unsubscribe();
   }, []);
 
   return (
-    <>
-      <div>
-        {tasks.map((task) => (
-          <TaskItem key={task.id} task={task} />
-        ))}
-      </div>
-    </>
+    <div>
+      {tasks.map((task) => (
+        <TaskItem key={task.id} task={task} />
+      ))}
+    </div>
   );
 };
 
