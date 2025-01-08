@@ -15,18 +15,20 @@ const TaskItem = ({ task }) => {
   };
 
   return (
-    <div>
-      <input
-        type="checkbox"
-        checked={task.completed}
-        onChange={handleComplete}
-      />
-      <span>{task.name}</span>
-    </div>
-    <div>
+    <>
+      <div>
+        <input
+          type="checkbox"
+          checked={task.completed}
+          onChange={handleComplete}
+        />
+        <span>{task.name}</span>
+      </div>
+      <div>
         <span>{task.name}</span>
         <button onClick={handleDelete}>Delete</button>
-    </div>
+      </div>
+    </>
   );
 };
 
