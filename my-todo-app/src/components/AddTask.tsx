@@ -18,14 +18,20 @@ const AddTask = () => {
   };
 
   return (
-    <form onSubmit={handleAddTask}>
+    <form onSubmit={handleAddTask} className="form-control">
+      <label className="label">
+        <span className="label-text">Task Name</span>
+      </label>
       <input
         type="text"
-        placeholder="Enter task"
+        placeholder="Enter your task"
         value={taskName}
         onChange={(e) => setTaskName(e.target.value)}
+        className="input input-bordered w-full"
       />
-      <button type="submit">Add Task</button>
+      <button type="submit" className="btn btn-primary mt-4">
+        Add Task
+      </button>
     </form>
   );
 };
