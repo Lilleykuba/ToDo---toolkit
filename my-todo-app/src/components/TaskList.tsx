@@ -20,11 +20,13 @@ const TaskList = () => {
   }, []);
 
   return (
-    <div>
-      {tasks.map((task) => (
-        <TaskItem key={task.id} task={task} />
-      ))}
-    </div>
+    <>
+      <div>
+        {tasks.map((task) => (
+          <TaskItem key={task.id} task={task} />
+        ))}
+      </div>
+    </>
   );
 };
 
