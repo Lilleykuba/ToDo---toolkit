@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
-import { db } from "./firebase";
+import { db } from "../firebase";
 
 const AddTask = () => {
   const [taskName, setTaskName] = useState("");
