@@ -18,15 +18,21 @@ const AddTask = () => {
   };
 
   return (
-    <form onSubmit={handleAddTask} className="form-control">
+    <form
+      onSubmit={handleAddTask}
+      className="form-control flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-2"
+    >
+      {/* Input Field */}
       <input
         type="text"
         placeholder="Enter your task"
         value={taskName}
         onChange={(e) => setTaskName(e.target.value)}
-        className="input input-bordered w-full mb-4"
+        className="input input-bordered flex-grow"
       />
-      <button type="submit" className="btn btn-primary w-full">
+
+      {/* Add Task Button */}
+      <button type="submit" className="btn btn-primary sm:w-auto">
         Add Task
       </button>
     </form>
