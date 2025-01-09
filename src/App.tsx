@@ -4,9 +4,9 @@ import AddTask from "./components/AddTask";
 
 function App() {
   return (
-    <div className="w-full sm:max-w-md md:max-w-3xl lg:max-w-5xl p-8">
-      <div className="min-h-screen bg-base-200 flex flex-col items-center justify-center p-6">
-        {/* Main Container */}
+    <div className="min-h-screen bg-base-200 flex flex-col items-center justify-center p-6">
+      {/* Main Container */}
+      <div className="w-full sm:max-w-md md:max-w-3xl lg:max-w-5xl p-8">
         {/* Header */}
         <header className="text-center mb-10">
           <h1 className="text-5xl font-extrabold text-primary mb-4">
