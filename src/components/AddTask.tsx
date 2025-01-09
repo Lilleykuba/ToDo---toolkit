@@ -14,7 +14,7 @@ const AddTask = ({
   saveTasksToLocalStorage,
 }: {
   tasks: Task[];
-  saveTasksToLocalStorage: (tasks: Task[]) => void;
+  saveTasksToLocalStorage: (newTasks: Task[]) => void;
 }) => {
   const [taskName, setTaskName] = useState("");
   const auth = getAuth();
@@ -23,7 +23,7 @@ const AddTask = ({
     e.preventDefault();
     if (!taskName) return;
 
-    const user = auth.currentUser; // Get the current user
+    const user = auth.currentUser;
     if (!user) {
       // Add task to local storage for guest users
       const newTask: Task = {
@@ -43,7 +43,7 @@ const AddTask = ({
         name: taskName,
         completed: false,
         createdAt: new Date(),
-        uid: user.uid, // Associate the task with the user's UID
+        uid: user.uid,
       });
       setTaskName(""); // Clear the input field
       console.log("Task added successfully!");
@@ -57,7 +57,6 @@ const AddTask = ({
       onSubmit={handleAddTask}
       className="form-control flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-2"
     >
-      {/* Input Field */}
       <input
         type="text"
         placeholder="Enter your task"
@@ -65,8 +64,6 @@ const AddTask = ({
         onChange={(e) => setTaskName(e.target.value)}
         className="input input-bordered flex-grow"
       />
-
-      {/* Add Task Button */}
       <button type="submit" className="btn btn-primary sm:w-auto">
         Add Task
       </button>

@@ -10,15 +10,13 @@ interface Task {
   completed: boolean;
 }
 
-const TaskList = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const auth = getAuth();
-
-  const saveTasksToLocalStorage = (newTasks: Task[]) => {
-    localStorage.setItem("guestTasks", JSON.stringify(newTasks));
-    setTasks(newTasks);
-  };
-
+const TaskList = ({
+  tasks,
+  saveTasksToLocalStorage,
+}: {
+  tasks: Task[];
+  saveTasksToLocalStorage: (newTasks: Task[]) => void;
+}) => {
   const handleDeleteTask = (id: string) => {
     const updatedTasks = tasks.filter((task) => task.id !== id);
     saveTasksToLocalStorage(updatedTasks); // Update local storage for guest users
