@@ -52,46 +52,11 @@ const TaskList = () => {
     }
   }, []);
 
-  // Function to handle adding a new task
-  const handleAddTask = async (task: Task) => {
-    if (auth.currentUser) {
-      // Add task to Firestore for logged-in users
-      try {
-        const user = auth.currentUser;
-        await addDoc(collection(db, "tasks"), {
-          name: task.name,
-          completed: task.completed,
-          createdAt: new Date(),
-          uid: user.uid, // Associate the task with the logged-in user's UID
-        });
-      } catch (error) {
-        console.error("Error adding task to Firestore:", error);
-      }
-    } else {
-      // Save to local storage for guest users
-      const newTasks = [...tasks, task];
-      saveTasksToLocalStorage(newTasks);
-    }
-  };
-
   return (
     <div className="space-y-4">
       {tasks.map((task) => (
         <TaskItem key={task.id} task={task} />
       ))}
-      {/* Button to add a task for testing */}
-      <button
-        onClick={() =>
-          handleAddTask({
-            id: `${Date.now()}`,
-            name: "New Task",
-            completed: false,
-          })
-        }
-        className="btn btn-primary"
-      >
-        Add Task
-      </button>
     </div>
   );
 };

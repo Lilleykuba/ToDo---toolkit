@@ -13,11 +13,9 @@ const AddTask = () => {
 
     const user = auth.currentUser; // Get the current user
     if (!user) {
-      console.error("User is not logged in!");
-      return;
+      const newTasks = [...tasks, task];
+      saveTasksToLocalStorage(newTasks);
     }
-
-    console.log("User UID:", user.uid); // Log the UID
 
     try {
       await addDoc(collection(db, "tasks"), {
