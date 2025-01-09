@@ -1,12 +1,17 @@
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { getAuth } from "firebase/auth";
 import { TrashIcon } from "@heroicons/react/24/solid";
 
 const TaskItem = ({
   task,
+  onDelete, // Callback for guest deletions
 }: {
   task: { id: string; name: string; completed: boolean };
+  onDelete?: (id: string) => void;
 }) => {
+  const auth = getAuth();
+
   const handleComplete = async () => {
     const taskRef = doc(db, "tasks", task.id);
     await updateDoc(taskRef, {
@@ -15,8 +20,21 @@ const TaskItem = ({
   };
 
   const handleDelete = async () => {
-    const taskRef = doc(db, "tasks", task.id);
-    await deleteDoc(taskRef);
+    const user = auth.currentUser;
+
+    if (user) {
+      try {
+        // Delete task from Firestore
+        const taskRef = doc(db, "tasks", task.id);
+        await deleteDoc(taskRef);
+        console.log("Task deleted from Firestore!");
+      } catch (error) {
+        console.error("Error deleting task from Firestore:", error);
+      }
+    } else if (onDelete) {
+      // Call the onDelete callback for guest tasks
+      onDelete(task.id);
+    }
   };
 
   return (
