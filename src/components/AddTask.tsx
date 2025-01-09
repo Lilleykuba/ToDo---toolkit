@@ -12,15 +12,25 @@ const AddTask = () => {
     if (!taskName) return;
 
     const user = auth.currentUser; // Get the current user
-    if (!user) return; // Ensure the user is logged in
+    if (!user) {
+      console.error("User is not logged in!");
+      return;
+    }
 
-    await addDoc(collection(db, "tasks"), {
-      name: taskName,
-      completed: false,
-      createdAt: new Date(),
-      uid: user.uid, // Associate the task with the user's UID
-    });
-    setTaskName(""); // Clear the input field after adding
+    console.log("User UID:", user.uid); // Log the UID
+
+    try {
+      await addDoc(collection(db, "tasks"), {
+        name: taskName,
+        completed: false,
+        createdAt: new Date(),
+        uid: user.uid, // Associate the task with the user's UID
+      });
+      setTaskName(""); // Clear the input field after adding
+      console.log("Task added successfully!");
+    } catch (error) {
+      console.error("Error adding task:", error);
+    }
   };
 
   return (
