@@ -3,7 +3,19 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 
-const AddTask = () => {
+interface Task {
+  id: string;
+  name: string;
+  completed: boolean;
+}
+
+const AddTask = ({
+  tasks,
+  saveTasksToLocalStorage,
+}: {
+  tasks: Task[];
+  saveTasksToLocalStorage: (tasks: Task[]) => void;
+}) => {
   const [taskName, setTaskName] = useState("");
   const auth = getAuth();
 
@@ -13,18 +25,27 @@ const AddTask = () => {
 
     const user = auth.currentUser; // Get the current user
     if (!user) {
-      const newTasks = [...tasks, task];
+      // Add task to local storage for guest users
+      const newTask: Task = {
+        id: `${Date.now()}`,
+        name: taskName,
+        completed: false,
+      };
+      const newTasks = [...tasks, newTask];
       saveTasksToLocalStorage(newTasks);
+      setTaskName(""); // Clear the input field
+      return;
     }
 
     try {
+      // Add task to Firestore for logged-in users
       await addDoc(collection(db, "tasks"), {
         name: taskName,
         completed: false,
         createdAt: new Date(),
         uid: user.uid, // Associate the task with the user's UID
       });
-      setTaskName(""); // Clear the input field after adding
+      setTaskName(""); // Clear the input field
       console.log("Task added successfully!");
     } catch (error) {
       console.error("Error adding task:", error);
