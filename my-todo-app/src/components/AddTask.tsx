@@ -5,7 +5,7 @@ import { db } from "../firebase";
 const AddTask = () => {
   const [taskName, setTaskName] = useState("");
 
-  const handleAddTask = async (e) => {
+  const handleAddTask = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!taskName) return;
 
