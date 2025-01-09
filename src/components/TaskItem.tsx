@@ -26,7 +26,7 @@ const TaskItem = ({
           <div className="flex flex-start space-x-6">
             <input
               type="checkbox"
-              className="checkbo"
+              className="checkbox"
               checked={task.completed}
               onChange={handleComplete}
             />
