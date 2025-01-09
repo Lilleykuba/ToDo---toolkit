@@ -1,39 +1,92 @@
+import { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import "./App.css";
 import TaskList from "./components/TaskList";
 import AddTask from "./components/AddTask";
+import Auth from "./components/Auth"; // Authentication component
+import Sidebar from "./components/Sidebar"; // Sidebar component
 
 function App() {
-  return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center p-6">
-      {/* Main Container */}
-      <div className="w-full max-w-screen-xl bg-base-100 shadow-xl rounded-lg p-10">
-        {/* Header */}
-        <header className="text-center mb-10">
-          <h1 className="text-5xl font-extrabold text-primary mb-4">
-            Camo ToDo App
-          </h1>
-          <p className="text-lg text-base-content">
-            Organize your tasks efficiently!
-          </p>
-        </header>
+  const [user, setUser] = useState<User | null>(null); // Store the current user
+  const [loading, setLoading] = useState(true); // Loading state while checking auth
+  const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar toggle for mobile
 
-        {/* Content */}
-        <div className="flex flex-col gap-10">
-          {/* Add Task Section */}
-          <section>
-            <h2 className="text-2xl font-bold text-primary mb-4">Add a Task</h2>
-            <AddTask />
-          </section>
+  useEffect(() => {
+    const auth = getAuth();
 
-          <div className="divider"></div>
+    // Listen for authentication state changes
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false); // Stop showing the loader
+    });
 
-          {/* Task List Section */}
-          <section>
-            <h2 className="text-2xl font-bold text-primary mb-4">Your Tasks</h2>
-            <TaskList />
-          </section>
-        </div>
+    return () => unsubscribe(); // Cleanup the listener
+  }, []);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  if (loading) {
+    // Show a loading spinner while Firebase checks authentication state
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-base-200">
+        <p className="text-xl text-primary">Loading...</p>
       </div>
+    );
+  }
+
+  if (!user) {
+    // If no user is logged in, show the authentication screen
+    return <Auth />;
+  }
+
+  return (
+    <div className="flex min-h-screen bg-base-200">
+      {/* Sidebar */}
+      <Sidebar
+        user={{ email: user.email! }}
+        isOpen={sidebarOpen}
+        toggleSidebar={toggleSidebar}
+      />
+
+      {/* Main Content */}
+      <main
+        className={`flex-grow p-6 flex items-center justify-center transition-all ${
+          sidebarOpen ? "ml-64" : "ml-0"
+        }`}
+      >
+        <div className="w-full max-w-screen-lg bg-base-100 shadow-xl rounded-lg p-10">
+          {/* Hamburger Menu for Mobile */}
+          <button
+            onClick={toggleSidebar}
+            className="btn btn-primary lg:hidden absolute top-4 left-4"
+          >
+            ☰
+          </button>
+
+          {/* Content */}
+          <div className="flex flex-col gap-10">
+            {/* Add Task Section */}
+            <section>
+              <h2 className="text-2xl font-bold text-primary mb-4">
+                Add a Task
+              </h2>
+              <AddTask />
+            </section>
+
+            <div className="divider"></div>
+
+            {/* Task List Section */}
+            <section>
+              <h2 className="text-2xl font-bold text-primary mb-4">
+                Your Tasks
+              </h2>
+              <TaskList />
+            </section>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
+import { getAuth } from "firebase/auth";
 import TaskItem from "./TaskItem";
 
 interface Task {
@@ -11,25 +12,70 @@ interface Task {
 
 const TaskList = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const auth = getAuth();
+
+  // Function to handle adding tasks to local storage for guest users
+  const saveTasksToLocalStorage = (newTasks: Task[]) => {
+    localStorage.setItem("guestTasks", JSON.stringify(newTasks));
+    setTasks(newTasks);
+  };
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "tasks"), (snapshot) => {
-      const tasksArray = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        name: doc.data().name || "Unnamed Task", // Provide a default value if name is missing
-        completed: doc.data().completed || false, // Default to false if completed is missing
-      }));
-      setTasks(tasksArray);
-    });
+    const user = auth.currentUser; // Get the current user
 
-    return () => unsubscribe();
+    if (user) {
+      // Fetch tasks from Firestore for logged-in users
+      const tasksRef = collection(db, "tasks");
+      const q = query(tasksRef, where("uid", "==", user.uid)); // Query tasks where UID matches
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const tasksArray = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          name: doc.data().name || "Unnamed Task",
+          completed: doc.data().completed || false,
+        }));
+        setTasks(tasksArray);
+      });
+
+      return () => unsubscribe(); // Cleanup Firestore listener
+    } else {
+      // Fetch tasks from local storage for guest users
+      const storedTasks = localStorage.getItem("guestTasks");
+      if (storedTasks) {
+        setTasks(JSON.parse(storedTasks));
+      }
+    }
   }, []);
+
+  // Function to handle adding a new task
+  const handleAddTask = (task: Task) => {
+    const newTasks = [...tasks, task];
+    if (auth.currentUser) {
+      // Handle Firestore logic here if logged in (optional)
+      console.error("Add task logic for logged-in users should go here.");
+    } else {
+      // Save to local storage for guest users
+      saveTasksToLocalStorage(newTasks);
+    }
+  };
 
   return (
     <div className="space-y-4">
       {tasks.map((task) => (
         <TaskItem key={task.id} task={task} />
       ))}
+      {/* Button to add a task for testing */}
+      <button
+        onClick={() =>
+          handleAddTask({
+            id: `${Date.now()}`,
+            name: "New Guest Task",
+            completed: false,
+          })
+        }
+        className="btn btn-primary"
+      >
+        Add Guest Task
+      </button>
     </div>
   );
 };
