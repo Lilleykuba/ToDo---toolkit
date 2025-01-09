@@ -6,22 +6,42 @@ import AddTask from "./components/AddTask";
 import Auth from "./components/Auth"; // Authentication component
 import Sidebar from "./components/Sidebar"; // Sidebar component
 
+interface Task {
+  id: string;
+  name: string;
+  completed: boolean;
+}
+
 function App() {
   const [user, setUser] = useState<User | null>(null); // Store the current user
   const [loading, setLoading] = useState(true); // Loading state while checking auth
   const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar toggle for mobile
+  const [tasks, setTasks] = useState<Task[]>([]); // Tasks state for both guest and logged-in users
+
+  const auth = getAuth();
 
   useEffect(() => {
-    const auth = getAuth();
-
-    // Listen for authentication state changes
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+
+      if (!currentUser) {
+        // Load tasks from local storage for guest users
+        const storedTasks = localStorage.getItem("guestTasks");
+        if (storedTasks) {
+          setTasks(JSON.parse(storedTasks));
+        }
+      }
+
       setLoading(false); // Stop showing the loader
     });
 
     return () => unsubscribe(); // Cleanup the listener
   }, []);
+
+  const saveTasksToLocalStorage = (newTasks: Task[]) => {
+    localStorage.setItem("guestTasks", JSON.stringify(newTasks));
+    setTasks(newTasks);
+  };
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -72,7 +92,10 @@ function App() {
               <h2 className="text-2xl font-bold text-primary mb-4">
                 Add a Task
               </h2>
-              <AddTask />
+              <AddTask
+                tasks={tasks}
+                saveTasksToLocalStorage={saveTasksToLocalStorage}
+              />
             </section>
 
             <div className="divider"></div>
@@ -82,7 +105,10 @@ function App() {
               <h2 className="text-2xl font-bold text-primary mb-4">
                 Your Tasks
               </h2>
-              <TaskList />
+              <TaskList
+                tasks={tasks}
+                saveTasksToLocalStorage={saveTasksToLocalStorage}
+              />
             </section>
           </div>
         </div>
