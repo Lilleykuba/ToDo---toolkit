@@ -4,6 +4,7 @@
 
 /* General App Layout */
 #root {
-  margin: 0 auto;
-  padding: 2rem;
+  min-width: 100%;
+  margin: 0;
+  padding: 0;
 }
