@@ -20,25 +20,30 @@ const TaskItem = ({
 
   return (
     <div className="card bg-base-100 shadow-md">
-      <div className="card-body flex justify-between items-center">
-        <div className="flex items-center space-x-4">
-          <input
-            type="checkbox"
-            className="checkbox"
-            checked={task.completed}
-            onChange={handleComplete}
-          />
-          <span
-            className={`text-lg ${
-              task.completed ? "line-through text-gray-400" : ""
-            }`}
+      <div className="card-body">
+        <div className="flex justify-between items-center">
+          <div className="flex flex-start space-x-6">
+            <input
+              type="checkbox"
+              className="checkbo"
+              checked={task.completed}
+              onChange={handleComplete}
+            />
+            <span
+              className={`text-lg ${
+                task.completed ? "line-through text-gray-400" : ""
+              }`}
+            >
+              {task.name}
+            </span>
+          </div>
+          <button
+            className="btn btn-error btn-sm flex-end"
+            onClick={handleDelete}
           >
-            {task.name}
-          </span>
+            Delete
+          </button>
         </div>
-        <button className="btn btn-error btn-sm" onClick={handleDelete}>
-          Delete
-        </button>
       </div>
     </div>
   );
