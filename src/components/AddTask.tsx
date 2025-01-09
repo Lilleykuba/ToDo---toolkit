@@ -9,12 +9,14 @@ interface Task {
   completed: boolean;
 }
 
-const AddTask = ({
-  tasks,
-  saveTasksToLocalStorage,
-}: {
+interface AddTaskProps {
   tasks: Task[];
   saveTasksToLocalStorage: (newTasks: Task[]) => void;
+}
+
+const AddTask: React.FC<AddTaskProps> = ({
+  tasks,
+  saveTasksToLocalStorage,
 }) => {
   const [taskName, setTaskName] = useState("");
   const auth = getAuth();

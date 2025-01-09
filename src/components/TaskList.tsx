@@ -10,6 +10,11 @@ interface Task {
   completed: boolean;
 }
 
+interface TaskListProps {
+  tasks: Task[];
+  saveTasksToLocalStorage: (newTasks: Task[]) => void;
+}
+
 const TaskList = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const auth = getAuth();
