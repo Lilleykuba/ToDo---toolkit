@@ -1,5 +1,6 @@
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { TrashIcon } from "@heroicons/react/24/solid";
 
 const TaskItem = ({
   task,
@@ -38,10 +39,11 @@ const TaskItem = ({
             </span>
           </div>
           <button
-            className="btn btn-error btn-sm flex-end"
+            className="btn btn-ghost p-2"
             onClick={handleDelete}
+            aria-label="Delete task"
           >
-            Delete
+            <TrashIcon className="h-6 w-6 text-red-500 hover:text-red-700" />
           </button>
         </div>
       </div>

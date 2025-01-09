@@ -19,9 +19,6 @@ const AddTask = () => {
 
   return (
     <form onSubmit={handleAddTask} className="form-control">
-      <label className="label">
-        <span className="label-text text-lg">Task Name</span>
-      </label>
       <input
         type="text"
         placeholder="Enter your task"
