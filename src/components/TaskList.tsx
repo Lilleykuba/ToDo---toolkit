@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  addDoc,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 import TaskItem from "./TaskItem";
@@ -47,13 +53,23 @@ const TaskList = () => {
   }, []);
 
   // Function to handle adding a new task
-  const handleAddTask = (task: Task) => {
-    const newTasks = [...tasks, task];
+  const handleAddTask = async (task: Task) => {
     if (auth.currentUser) {
-      // Handle Firestore logic here if logged in (optional)
-      console.error("Add task logic for logged-in users should go here.");
+      // Add task to Firestore for logged-in users
+      try {
+        const user = auth.currentUser;
+        await addDoc(collection(db, "tasks"), {
+          name: task.name,
+          completed: task.completed,
+          createdAt: new Date(),
+          uid: user.uid, // Associate the task with the logged-in user's UID
+        });
+      } catch (error) {
+        console.error("Error adding task to Firestore:", error);
+      }
     } else {
       // Save to local storage for guest users
+      const newTasks = [...tasks, task];
       saveTasksToLocalStorage(newTasks);
     }
   };
@@ -68,13 +84,13 @@ const TaskList = () => {
         onClick={() =>
           handleAddTask({
             id: `${Date.now()}`,
-            name: "New Guest Task",
+            name: "New Task",
             completed: false,
           })
         }
         className="btn btn-primary"
       >
-        Add Guest Task
+        Add Task
       </button>
     </div>
   );
