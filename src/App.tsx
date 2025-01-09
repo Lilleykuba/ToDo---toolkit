@@ -15,7 +15,8 @@ function App() {
         </p>
       </header>
 
-      <div className="card bg-base-100 shadow-xl w-full max-w-lg">
+      {/* Main Container */}
+      <div className="card bg-base-100 shadow-xl w-full sm:max-w-md md:max-w-lg lg:max-w-3xl xl:max-w-5xl p-8">
         <div className="card-body">
           {/* Add Task Section */}
           <section className="mb-8">
