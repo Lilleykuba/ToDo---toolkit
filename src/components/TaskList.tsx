@@ -10,17 +10,9 @@ interface Task {
   completed: boolean;
 }
 
-const TaskList = ({
-  tasks,
-  saveTasksToLocalStorage,
-}: {
-  tasks: Task[];
-  saveTasksToLocalStorage: (newTasks: Task[]) => void;
-}) => {
-  const handleDeleteTask = (id: string) => {
-    const updatedTasks = tasks.filter((task) => task.id !== id);
-    saveTasksToLocalStorage(updatedTasks); // Update local storage for guest users
-  };
+const TaskList = () => {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const auth = getAuth();
 
   useEffect(() => {
     const user = auth.currentUser;
@@ -47,6 +39,16 @@ const TaskList = ({
       }
     }
   }, []);
+
+  const saveTasksToLocalStorage = (newTasks: Task[]) => {
+    localStorage.setItem("guestTasks", JSON.stringify(newTasks));
+    setTasks(newTasks);
+  };
+
+  const handleDeleteTask = (id: string) => {
+    const updatedTasks = tasks.filter((task) => task.id !== id);
+    saveTasksToLocalStorage(updatedTasks); // Update local storage for guest users
+  };
 
   return (
     <div className="space-y-4">
