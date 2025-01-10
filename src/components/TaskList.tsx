@@ -1,6 +1,18 @@
 import { useState, useEffect } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 import TaskItem from "./TaskItem";
@@ -21,8 +33,7 @@ const TaskList = () => {
 
     if (user) {
       // Fetch tasks from Firestore for logged-in and guest users
-      const tasksRef = collection(db, "tasks");
-      const q = query(tasksRef, where("uid", "==", user.uid));
+      const q = query(collection(db, "tasks"), where("uid", "==", user.uid));
       const unsubscribe = onSnapshot(q, (snapshot) => {
         const tasksArray = snapshot.docs.map((doc) => ({
           id: doc.id,
@@ -37,7 +48,7 @@ const TaskList = () => {
     }
   }, []);
 
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = async (result: DropResult) => {
     if (!result.destination) return;
 
     const reorderedTasks = Array.from(tasks);
@@ -53,11 +64,14 @@ const TaskList = () => {
     setTasks(updatedTasks);
 
     // Persist updated order to Firestore
-    const tasksRef = collection(db, "tasks");
-    updatedTasks.forEach((task) => {
-      const taskRef = collection(db, "tasks").doc(task.id);
-      taskRef.update({ order: task.order });
-    });
+    try {
+      for (const task of updatedTasks) {
+        const taskRef = doc(db, "tasks", task.id);
+        await updateDoc(taskRef, { order: task.order });
+      }
+    } catch (error) {
+      console.error("Error updating task order in Firestore:", error);
+    }
   };
 
   return (
@@ -77,10 +91,7 @@ const TaskList = () => {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-                    <TaskItem
-                      task={task}
-                      dragHandleProps={provided.dragHandleProps}
-                    />
+                    <TaskItem task={task} />
                   </div>
                 )}
               </Draggable>
