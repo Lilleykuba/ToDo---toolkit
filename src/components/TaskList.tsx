@@ -15,8 +15,11 @@ interface TaskListProps {
   saveTasksToLocalStorage: (newTasks: Task[]) => void;
 }
 
-const TaskList = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+const TaskList: React.FC<TaskListProps> = ({
+  tasks,
+  saveTasksToLocalStorage,
+}) => {
+  const [localTasks, setLocalTasks] = useState<Task[]>([]);
   const auth = getAuth();
 
   useEffect(() => {
@@ -32,7 +35,7 @@ const TaskList = () => {
           name: doc.data().name || "Unnamed Task",
           completed: doc.data().completed || false,
         }));
-        setTasks(tasksArray);
+        setLocalTasks(tasksArray);
       });
 
       return () => unsubscribe();
@@ -40,29 +43,15 @@ const TaskList = () => {
       // Fetch tasks from local storage for guest users
       const storedTasks = localStorage.getItem("guestTasks");
       if (storedTasks) {
-        setTasks(JSON.parse(storedTasks));
+        setLocalTasks(JSON.parse(storedTasks));
       }
     }
   }, []);
 
-  const saveTasksToLocalStorage = (newTasks: Task[]) => {
-    localStorage.setItem("guestTasks", JSON.stringify(newTasks));
-    setTasks(newTasks);
-  };
-
-  const handleDeleteTask = (id: string) => {
-    const updatedTasks = tasks.filter((task) => task.id !== id);
-    saveTasksToLocalStorage(updatedTasks); // Update local storage for guest users
-  };
-
   return (
     <div className="space-y-4">
-      {tasks.map((task) => (
-        <TaskItem
-          key={task.id}
-          task={task}
-          onDelete={!auth.currentUser ? handleDeleteTask : undefined}
-        />
+      {localTasks.map((task) => (
+        <TaskItem key={task.id} task={task} />
       ))}
     </div>
   );
