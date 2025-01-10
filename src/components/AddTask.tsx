@@ -13,8 +13,8 @@ const AddTask = () => {
 
     const user = auth.currentUser; // Get the current user
     if (!user) {
-      const newTasks = [...tasks, task];
-      saveTasksToLocalStorage(newTasks);
+      console.error("User is not logged in!");
+      return;
     }
 
     try {
