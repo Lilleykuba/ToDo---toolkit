@@ -5,7 +5,6 @@ import TaskList from "./components/TaskList";
 import AddTask from "./components/AddTask";
 import Auth from "./components/Auth"; // Authentication component
 import Sidebar from "./components/Sidebar"; // Sidebar component
-import Register from "./components/Register"; // Register component
 import RegisterGuest from "./components/RegisterGuest";
 
 function App() {
