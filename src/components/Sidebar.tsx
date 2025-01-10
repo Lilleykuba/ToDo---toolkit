@@ -43,7 +43,7 @@ const Sidebar = ({
 
   return (
     <aside
-      className={`h-screen w-64 bg-base-300 p-4 flex flex-col items-start space-y-4 fixed lg:static transition-transform ${
+      className={`h-screen flex flex-col bg-base-300 p-4 fixed lg:static transition-transform ${
         isOpen ? "translate-x-0" : "-translate-x-64"
       } lg:translate-x-0`}
     >
@@ -56,19 +56,16 @@ const Sidebar = ({
       </button>
 
       {/* App Title */}
-      <h1 className="text-2xl font-bold text-primary">Camo ToDo</h1>
+      <h1 className="text-2xl font-bold text-primary text-center mb-8 mt-4">
+        Camo ToDo
+      </h1>
 
       {/* Welcome Message */}
       <p className="text-base text-base-content">
         Welcome, {user.email || "Guest User"}
       </p>
 
-      {/* Logout Button */}
-      <button onClick={handleLogout} className="btn btn-secondary mt-4 w-full">
-        Logout
-      </button>
-
-      {/* Switch to Account Button */}
+      {/* Upgrade to Account Button */}
       {user.isAnonymous && (
         <button
           onClick={onSwitchToAccount}
@@ -80,28 +77,36 @@ const Sidebar = ({
 
       <div className="divider w-full"></div>
 
-      {/* Theme Switcher */}
-      <div className="mt-4 w-full">
-        <label className="label text-sm text-gray-400 mb-2">Switch Theme</label>
-        <select
-          className="select select-bordered w-full"
-          value={theme}
-          onChange={(e) => handleThemeChange(e.target.value)}
-        >
-          {themes.map((t) => (
-            <option key={t} value={t}>
-              {t.charAt(0).toUpperCase() + t.slice(1)}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="divider w-full"></div>
-
-      {/* Placeholder for Additional Functionality */}
-      <p className="mt-auto text-sm text-gray-400">
+      <p className="text-sm text-gray-400 text-center">
         Additional features coming soon...
       </p>
+
+      <div className="mt-auto">
+        {/* Theme Switcher */}
+        <div className="mt-4 w-full">
+          <label className="label text-xl text-gray-400 mb-2">
+            Switch Theme
+          </label>
+          <select
+            className="select select-bordered w-full"
+            value={theme}
+            onChange={(e) => handleThemeChange(e.target.value)}
+          >
+            {themes.map((t) => (
+              <option key={t} value={t}>
+                {t.charAt(0).toUpperCase() + t.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="divider w-full"></div>
+
+        {/* Logout Button */}
+        <button onClick={handleLogout} className="btn btn-secondary w-full">
+          Logout
+        </button>
+      </div>
     </aside>
   );
 };
