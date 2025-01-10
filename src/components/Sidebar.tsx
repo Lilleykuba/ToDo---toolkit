@@ -1,47 +1,20 @@
-import {
-  getAuth,
-  signOut,
-  linkWithCredential,
-  EmailAuthProvider,
-} from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 
 const Sidebar = ({
   user,
   isOpen,
   toggleSidebar,
+  onSwitchToAccount,
 }: {
   user: { email?: string; isAnonymous: boolean };
   isOpen: boolean;
   toggleSidebar: () => void;
+  onSwitchToAccount: () => void;
 }) => {
-  const auth = getAuth();
-
   const handleLogout = async () => {
+    const auth = getAuth();
     await signOut(auth);
     alert("Logged out successfully!");
-  };
-
-  const handleSwitchToAccount = async () => {
-    const email = prompt("Enter your email:");
-    const password = prompt("Enter a password:");
-
-    if (!email || !password) {
-      alert("Email and password are required.");
-      return;
-    }
-
-    try {
-      const credential = EmailAuthProvider.credential(email, password);
-      const user = auth.currentUser;
-
-      if (user && user.isAnonymous) {
-        await linkWithCredential(user, credential);
-        alert("Your guest account has been successfully upgraded!");
-      }
-    } catch (error) {
-      console.error("Error upgrading account:", error);
-      alert("Failed to upgrade account. Please try again.");
-    }
   };
 
   return (
@@ -74,10 +47,10 @@ const Sidebar = ({
       {/* Switch to Account Button */}
       {user.isAnonymous && (
         <button
-          onClick={handleSwitchToAccount}
+          onClick={onSwitchToAccount}
           className="btn btn-primary mt-4 w-full"
         >
-          Switch to Account
+          Upgrade to Account
         </button>
       )}
 

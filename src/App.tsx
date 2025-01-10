@@ -5,11 +5,14 @@ import TaskList from "./components/TaskList";
 import AddTask from "./components/AddTask";
 import Auth from "./components/Auth"; // Authentication component
 import Sidebar from "./components/Sidebar"; // Sidebar component
+import Register from "./components/Register"; // Register component
+import RegisterGuest from "./components/RegisterGuest";
 
 function App() {
   const [user, setUser] = useState<User | null>(null); // Store the current user
   const [loading, setLoading] = useState(true); // Loading state while checking auth
   const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar toggle for mobile
+  const [isSwitchingFromGuest, setIsSwitchingFromGuest] = useState(false); // Guest to account upgrade state
 
   useEffect(() => {
     const auth = getAuth();
@@ -41,16 +44,24 @@ function App() {
     return <Auth />;
   }
 
+  if (isSwitchingFromGuest) {
+    // Render the Register component for guest-to-account upgrade
+    return (
+      <RegisterGuest onSwitchComplete={() => setIsSwitchingFromGuest(false)} />
+    );
+  }
+
   return (
     <div className="flex min-h-screen bg-base-200">
       {/* Sidebar */}
       <Sidebar
         user={{
-          email: user.email || undefined, // Fallback for anonymous users
-          isAnonymous: user.isAnonymous || false, // Ensure the isAnonymous flag is passed
+          email: user?.email || undefined,
+          isAnonymous: user?.isAnonymous || false,
         }}
         isOpen={sidebarOpen}
         toggleSidebar={toggleSidebar}
+        onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
       />
 
       {/* Main Content */}
@@ -60,7 +71,6 @@ function App() {
         }`}
       >
         <div className="w-full max-w-screen-lg bg-base-100 shadow-xl rounded-lg p-10">
-          {/* Hamburger Menu for Mobile */}
           <button
             onClick={toggleSidebar}
             className="btn btn-primary lg:hidden absolute top-4 left-4"
@@ -69,7 +79,6 @@ function App() {
           </button>
           {/* Content */}
           <div className="flex flex-col gap-10">
-            {/* Add Task Section */}
             <section>
               <h2 className="text-2xl font-bold text-primary mb-4">
                 Add a Task
@@ -79,7 +88,6 @@ function App() {
 
             <div className="divider"></div>
 
-            {/* Task List Section */}
             <section>
               <h2 className="text-2xl font-bold text-primary mb-4">
                 Your Tasks
