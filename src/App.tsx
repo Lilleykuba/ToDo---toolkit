@@ -45,7 +45,10 @@ function App() {
     <div className="flex min-h-screen bg-base-200">
       {/* Sidebar */}
       <Sidebar
-        user={{ email: user.email! }}
+        user={{
+          email: user.email || undefined, // Fallback for anonymous users
+          isAnonymous: user.isAnonymous || false, // Ensure the isAnonymous flag is passed
+        }}
         isOpen={sidebarOpen}
         toggleSidebar={toggleSidebar}
       />
@@ -64,7 +67,6 @@ function App() {
           >
             ☰
           </button>
-
           {/* Content */}
           <div className="flex flex-col gap-10">
             {/* Add Task Section */}
