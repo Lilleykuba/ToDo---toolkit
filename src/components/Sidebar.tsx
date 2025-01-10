@@ -1,4 +1,5 @@
 import { getAuth, signOut } from "firebase/auth";
+import { useEffect, useState } from "react";
 
 const Sidebar = ({
   user,
@@ -16,6 +17,29 @@ const Sidebar = ({
     await signOut(auth);
     alert("Logged out successfully!");
   };
+
+  const [theme, setTheme] = useState<string>("light");
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme);
+    document.documentElement.setAttribute("data-theme", savedTheme);
+  }, []);
+
+  const handleThemeChange = (newTheme: string) => {
+    setTheme(newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
+
+  const themes = [
+    "light",
+    "dark",
+    "cupcake",
+    "corporate",
+    "synthwave",
+    "retro",
+  ];
 
   return (
     <aside
@@ -56,8 +80,26 @@ const Sidebar = ({
 
       <div className="divider w-full"></div>
 
+      {/* Theme Switcher */}
+      <div className="mt-4 w-full">
+        <label className="label text-sm text-gray-400 mb-2">Switch Theme</label>
+        <select
+          className="select select-bordered w-full"
+          value={theme}
+          onChange={(e) => handleThemeChange(e.target.value)}
+        >
+          {themes.map((t) => (
+            <option key={t} value={t}>
+              {t.charAt(0).toUpperCase() + t.slice(1)}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="divider w-full"></div>
+
       {/* Placeholder for Additional Functionality */}
-      <p className="text-sm text-gray-400">
+      <p className="mt-auto text-sm text-gray-400">
         Additional features coming soon...
       </p>
     </aside>

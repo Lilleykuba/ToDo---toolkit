@@ -66,7 +66,7 @@ function App() {
 
       {/* Main Content */}
       <main
-        className={`flex-grow p-6 flex items-center justify-center transition-all ${
+        className={`flex-grow p-6 flex items-start justify-center transition-all sm:items-center mt-12 ${
           sidebarOpen ? "ml-64" : "ml-0"
         }`}
       >

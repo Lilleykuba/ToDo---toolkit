@@ -5,8 +5,10 @@ import { TrashIcon } from "@heroicons/react/24/solid";
 
 const TaskItem = ({
   task,
+  dragHandleProps,
 }: {
   task: { id: string; name: string; completed: boolean };
+  dragHandleProps?: any; // Drag handle props for drag-and-drop functionality
 }) => {
   const auth = getAuth();
 
@@ -33,32 +35,33 @@ const TaskItem = ({
   };
 
   return (
-    <div className="card bg-base-100 shadow-md">
-      <div className="card-body">
-        <div className="flex justify-between items-center">
-          <div className="flex flex-start space-x-6">
-            <input
-              type="checkbox"
-              className="checkbox"
-              checked={task.completed}
-              onChange={handleComplete}
-            />
-            <span
-              className={`text-lg ${
-                task.completed ? "line-through text-gray-400" : ""
-              }`}
-            >
-              {task.name}
-            </span>
-          </div>
-          <button
-            className="btn btn-ghost p-2"
-            onClick={handleDelete}
-            aria-label="Delete task"
+    <div
+      className="card bg-base-100 shadow-md flex items-center p-4"
+      {...dragHandleProps} // Enable drag handle for drag-and-drop
+    >
+      <div className="flex justify-between items-center w-full">
+        <div className="flex items-center space-x-4">
+          <input
+            type="checkbox"
+            className="checkbox"
+            checked={task.completed}
+            onChange={handleComplete}
+          />
+          <span
+            className={`text-lg ${
+              task.completed ? "line-through text-gray-400" : ""
+            }`}
           >
-            <TrashIcon className="h-6 w-6 text-red-500 hover:text-red-700" />
-          </button>
+            {task.name}
+          </span>
         </div>
+        <button
+          className="btn btn-ghost p-2"
+          onClick={handleDelete}
+          aria-label="Delete task"
+        >
+          <TrashIcon className="h-6 w-6 text-red-500 hover:text-red-700" />
+        </button>
       </div>
     </div>
   );

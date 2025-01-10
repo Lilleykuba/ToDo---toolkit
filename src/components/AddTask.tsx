@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 
@@ -18,12 +18,25 @@ const AddTask = () => {
     }
 
     try {
-      await addDoc(collection(db, "tasks"), {
+      // Fetch the maximum order value for the user's tasks
+      const tasksRef = collection(db, "tasks");
+      const q = query(tasksRef, where("uid", "==", user.uid));
+      const snapshot = await getDocs(q);
+
+      const maxOrder =
+        snapshot.docs.length > 0
+          ? Math.max(...snapshot.docs.map((doc) => doc.data().order || 0))
+          : 0;
+
+      // Add a new task with the next order value
+      await addDoc(tasksRef, {
         name: taskName,
         completed: false,
         createdAt: new Date(),
-        uid: user.uid, // Associate the task with the user's UID (logged-in or guest)
+        uid: user.uid, // Associate the task with the user's UID
+        order: maxOrder + 1, // Set the order value
       });
+
       setTaskName(""); // Clear the input field after adding
     } catch (error) {
       console.error("Error adding task:", error);

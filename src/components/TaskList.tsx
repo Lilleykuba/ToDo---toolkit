@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
@@ -8,6 +9,7 @@ interface Task {
   id: string;
   name: string;
   completed: boolean;
+  order: number;
 }
 
 const TaskList = () => {
@@ -26,20 +28,68 @@ const TaskList = () => {
           id: doc.id,
           name: doc.data().name || "Unnamed Task",
           completed: doc.data().completed || false,
+          order: doc.data().order || 0,
         }));
-        setTasks(tasksArray);
+        setTasks(tasksArray.sort((a, b) => a.order - b.order));
       });
 
       return () => unsubscribe();
     }
   }, []);
 
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) return;
+
+    const reorderedTasks = Array.from(tasks);
+    const [movedTask] = reorderedTasks.splice(result.source.index, 1);
+    reorderedTasks.splice(result.destination.index, 0, movedTask);
+
+    // Update the order field for each task
+    const updatedTasks = reorderedTasks.map((task, index) => ({
+      ...task,
+      order: index,
+    }));
+
+    setTasks(updatedTasks);
+
+    // Persist updated order to Firestore
+    const tasksRef = collection(db, "tasks");
+    updatedTasks.forEach((task) => {
+      const taskRef = collection(db, "tasks").doc(task.id);
+      taskRef.update({ order: task.order });
+    });
+  };
+
   return (
-    <div className="space-y-4">
-      {tasks.map((task) => (
-        <TaskItem key={task.id} task={task} />
-      ))}
-    </div>
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <Droppable droppableId="tasks">
+        {(provided) => (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className="space-y-4"
+          >
+            {tasks.map((task, index) => (
+              <Draggable key={task.id} draggableId={task.id} index={index}>
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <TaskItem
+                      task={task}
+                      dragHandleProps={provided.dragHandleProps}
+                    />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 };
 
