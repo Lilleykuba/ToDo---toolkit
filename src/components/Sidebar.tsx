@@ -43,7 +43,7 @@ const Sidebar = ({
 
   return (
     <aside
-      className={`h-screen flex flex-col bg-base-300 p-4 fixed lg:static transition-transform ${
+      className={`h-screen flex flex-col w-64 bg-base-300 p-4 fixed lg:static transition-transform ${
         isOpen ? "translate-x-0" : "-translate-x-64"
       } lg:translate-x-0`}
     >
