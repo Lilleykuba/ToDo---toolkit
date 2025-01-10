@@ -42,72 +42,83 @@ const Sidebar = ({
   ];
 
   return (
-    <aside
-      className={`h-screen flex flex-col w-64 bg-base-300 p-4 fixed lg:static transition-transform ${
-        isOpen ? "translate-x-0" : "-translate-x-64"
-      } lg:translate-x-0`}
-    >
-      {/* Close Button for Mobile */}
-      <button
-        onClick={toggleSidebar}
-        className="btn btn-primary lg:hidden self-end"
-      >
-        ✕
-      </button>
-
-      {/* App Title */}
-      <h1 className="text-2xl font-bold text-primary text-center mb-8 mt-4">
-        Camo ToDo
-      </h1>
-
-      {/* Welcome Message */}
-      <p className="text-base text-base-content">
-        Welcome, {user.email || "Guest User"}
-      </p>
-
-      {/* Upgrade to Account Button */}
-      {user.isAnonymous && (
-        <button
-          onClick={onSwitchToAccount}
-          className="btn btn-primary mt-4 w-full"
-        >
-          Upgrade to Account
-        </button>
+    <>
+      {/* Backdrop */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={toggleSidebar}
+        ></div>
       )}
 
-      <div className="divider w-full"></div>
+      {/* Sidebar */}
+      <aside
+        className={`h-screen w-64 bg-base-300 p-4 fixed z-50 transition-transform duration-300 transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 lg:static`}
+      >
+        {/* Close Button for Mobile */}
+        <button
+          onClick={toggleSidebar}
+          className="btn btn-primary lg:hidden self-end"
+        >
+          ✕
+        </button>
 
-      <p className="text-sm text-gray-400 text-center">
-        Additional features coming soon...
-      </p>
+        {/* App Title */}
+        <h1 className="text-2xl font-bold text-primary text-center mb-8 mt-4">
+          Camo ToDo
+        </h1>
 
-      <div className="mt-auto">
-        {/* Theme Switcher */}
-        <div className="mt-4 w-full">
-          <label className="label text-xl text-gray-400 mb-2">
-            Switch Theme
-          </label>
-          <select
-            className="select select-bordered w-full"
-            value={theme}
-            onChange={(e) => handleThemeChange(e.target.value)}
+        {/* Welcome Message */}
+        <p className="text-base text-base-content">
+          Welcome, {user.email || "Guest User"}
+        </p>
+
+        {/* Upgrade to Account Button */}
+        {user.isAnonymous && (
+          <button
+            onClick={onSwitchToAccount}
+            className="btn btn-primary mt-4 w-full"
           >
-            {themes.map((t) => (
-              <option key={t} value={t}>
-                {t.charAt(0).toUpperCase() + t.slice(1)}
-              </option>
-            ))}
-          </select>
-        </div>
+            Upgrade to Account
+          </button>
+        )}
 
         <div className="divider w-full"></div>
 
-        {/* Logout Button */}
-        <button onClick={handleLogout} className="btn btn-secondary w-full">
-          Logout
-        </button>
-      </div>
-    </aside>
+        <p className="text-sm text-gray-400 text-center">
+          Additional features coming soon...
+        </p>
+
+        <div className="mt-auto">
+          {/* Theme Switcher */}
+          <div className="mt-4 w-full">
+            <label className="label text-xl text-gray-400 mb-2">
+              Switch Theme
+            </label>
+            <select
+              className="select select-bordered w-full"
+              value={theme}
+              onChange={(e) => handleThemeChange(e.target.value)}
+            >
+              {themes.map((t) => (
+                <option key={t} value={t}>
+                  {t.charAt(0).toUpperCase() + t.slice(1)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="divider w-full"></div>
+
+          {/* Logout Button */}
+          <button onClick={handleLogout} className="btn btn-secondary w-full">
+            Logout
+          </button>
+        </div>
+      </aside>
+    </>
   );
 };
 
