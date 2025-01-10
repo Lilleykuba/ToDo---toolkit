@@ -22,10 +22,9 @@ const AddTask = () => {
         name: taskName,
         completed: false,
         createdAt: new Date(),
-        uid: user.uid, // Associate the task with the user's UID
+        uid: user.uid, // Associate the task with the user's UID (logged-in or guest)
       });
       setTaskName(""); // Clear the input field after adding
-      console.log("Task added successfully!");
     } catch (error) {
       console.error("Error adding task:", error);
     }
@@ -36,7 +35,6 @@ const AddTask = () => {
       onSubmit={handleAddTask}
       className="form-control flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-2"
     >
-      {/* Input Field */}
       <input
         type="text"
         placeholder="Enter your task"
@@ -44,8 +42,6 @@ const AddTask = () => {
         onChange={(e) => setTaskName(e.target.value)}
         className="input input-bordered flex-grow"
       />
-
-      {/* Add Task Button */}
       <button type="submit" className="btn btn-primary sm:w-auto">
         Add Task
       </button>

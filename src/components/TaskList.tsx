@@ -18,7 +18,7 @@ const TaskList = () => {
     const user = auth.currentUser;
 
     if (user) {
-      // Fetch tasks from Firestore for logged-in users
+      // Fetch tasks from Firestore for logged-in and guest users
       const tasksRef = collection(db, "tasks");
       const q = query(tasksRef, where("uid", "==", user.uid));
       const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -31,12 +31,6 @@ const TaskList = () => {
       });
 
       return () => unsubscribe();
-    } else {
-      // Fetch tasks from local storage for guest users
-      const storedTasks = localStorage.getItem("guestTasks");
-      if (storedTasks) {
-        setTasks(JSON.parse(storedTasks));
-      }
     }
   }, []);
 

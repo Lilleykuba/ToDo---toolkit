@@ -5,10 +5,8 @@ import { TrashIcon } from "@heroicons/react/24/solid";
 
 const TaskItem = ({
   task,
-  onDelete, // Callback for guest deletions
 }: {
   task: { id: string; name: string; completed: boolean };
-  onDelete?: (id: string) => void;
 }) => {
   const auth = getAuth();
 
@@ -31,9 +29,6 @@ const TaskItem = ({
       } catch (error) {
         console.error("Error deleting task from Firestore:", error);
       }
-    } else if (onDelete) {
-      // Call the onDelete callback for guest tasks
-      onDelete(task.id);
     }
   };
 
