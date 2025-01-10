@@ -10,16 +10,8 @@ interface Task {
   completed: boolean;
 }
 
-interface TaskListProps {
-  tasks: Task[];
-  saveTasksToLocalStorage: (newTasks: Task[]) => void;
-}
-
-const TaskList: React.FC<TaskListProps> = ({
-  tasks,
-  saveTasksToLocalStorage,
-}) => {
-  const [localTasks, setLocalTasks] = useState<Task[]>([]);
+const TaskList = () => {
+  const [tasks, setTasks] = useState<Task[]>([]);
   const auth = getAuth();
 
   useEffect(() => {
@@ -35,7 +27,7 @@ const TaskList: React.FC<TaskListProps> = ({
           name: doc.data().name || "Unnamed Task",
           completed: doc.data().completed || false,
         }));
-        setLocalTasks(tasksArray);
+        setTasks(tasksArray);
       });
 
       return () => unsubscribe();
@@ -43,14 +35,14 @@ const TaskList: React.FC<TaskListProps> = ({
       // Fetch tasks from local storage for guest users
       const storedTasks = localStorage.getItem("guestTasks");
       if (storedTasks) {
-        setLocalTasks(JSON.parse(storedTasks));
+        setTasks(JSON.parse(storedTasks));
       }
     }
   }, []);
 
   return (
     <div className="space-y-4">
-      {localTasks.map((task) => (
+      {tasks.map((task) => (
         <TaskItem key={task.id} task={task} />
       ))}
     </div>
