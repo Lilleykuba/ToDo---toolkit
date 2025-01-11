@@ -76,7 +76,7 @@ const Categories = ({
 
   return (
     <div>
-      <h3 className="text-lg font-bold mb-4">Categories</h3>
+      <h3 className="text-lg font-bold mb-4 text-center">Categories</h3>
       <form
         onSubmit={handleAddCategory}
         className="flex items-center gap-2 mb-4"
@@ -98,22 +98,22 @@ const Categories = ({
           Add
         </button>
       </form>
-      <ul className="space-y-2">
+      <ul className="space-y-2 mt-4 flex flex-col">
         <li>
           <button
             onClick={() => onCategorySelect(null)}
-            className="btn btn-ghost w-full text-left"
+            className="btn btn-ghost w-full text-center"
           >
-            All Tasks
+            Show All Tasks
           </button>
         </li>
         {categories.map((category) => (
-          <li key={category.id} className="flex items-center justify-between">
-            <button
-              onClick={() => onCategorySelect(category.id)}
-              className="btn btn-ghost w-full text-left"
-              style={{ borderLeft: `4px solid ${category.color}` }}
-            >
+          <li
+            key={category.id}
+            className="flex items-center justify-between btn btn-ghost w-full text-left"
+            style={{ borderLeft: `4px solid ${category.color}` }}
+          >
+            <button onClick={() => onCategorySelect(category.id)} className="">
               {category.name}
             </button>
             <button

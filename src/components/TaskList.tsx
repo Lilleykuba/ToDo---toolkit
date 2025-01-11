@@ -31,23 +31,37 @@ const TaskList = ({
   selectedCategory: string | null;
 }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [categories, setCategories] = useState<Record<string, string>>({});
   const auth = getAuth();
 
   useEffect(() => {
     const user = auth.currentUser;
 
     if (user) {
-      // Fetch tasks filtered by category from Firestore
+      // Fetch categories and store in a map
+      const categoriesRef = collection(db, "categories");
+      const categoriesQuery = query(
+        categoriesRef,
+        where("uid", "==", user.uid)
+      );
+      const unsubscribeCategories = onSnapshot(categoriesQuery, (snapshot) => {
+        const categoriesMap: Record<string, string> = {};
+        snapshot.forEach((doc) => {
+          categoriesMap[doc.id] = doc.data().color;
+        });
+        setCategories(categoriesMap);
+      });
+
+      // Fetch tasks
       const tasksRef = collection(db, "tasks");
-      const q = selectedCategory
+      const tasksQuery = selectedCategory
         ? query(
             tasksRef,
             where("uid", "==", user.uid),
             where("categoryId", "==", selectedCategory)
           )
         : query(tasksRef, where("uid", "==", user.uid));
-
-      const unsubscribe = onSnapshot(q, (snapshot) => {
+      const unsubscribeTasks = onSnapshot(tasksQuery, (snapshot) => {
         const tasksArray = snapshot.docs.map((doc) => ({
           id: doc.id,
           name: doc.data().name || "Unnamed Task",
@@ -58,7 +72,10 @@ const TaskList = ({
         setTasks(tasksArray.sort((a, b) => a.order - b.order));
       });
 
-      return () => unsubscribe();
+      return () => {
+        unsubscribeCategories();
+        unsubscribeTasks();
+      };
     }
   }, [selectedCategory]);
 
@@ -105,7 +122,14 @@ const TaskList = ({
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-                    <TaskItem task={task} />
+                    <TaskItem
+                      task={task}
+                      categoryColor={
+                        task.categoryId
+                          ? categories[task.categoryId]
+                          : undefined
+                      }
+                    />
                   </div>
                 )}
               </Draggable>
