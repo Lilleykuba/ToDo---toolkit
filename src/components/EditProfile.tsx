@@ -14,7 +14,7 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
 
   const [username, setUsername] = useState(user?.displayName || "");
   const [newPassword, setNewPassword] = useState("");
-  const [profilePicture, setProfilePicture] = useState<File | null>(null);
+  const [profilePicture, setProfilePicture] = useState<string | null>(null);
 
   const handleUpdateProfile = async () => {
     if (!user) return;
