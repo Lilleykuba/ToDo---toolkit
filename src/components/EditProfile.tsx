@@ -69,7 +69,7 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
 
       const formData = new FormData();
       formData.append("file", e.target.files[0]);
-      formData.append("upload_preset", "your_preset_here"); // Replace with your Cloudinary preset
+      formData.append("upload_preset", "ml_default"); // Replace with your Cloudinary preset
 
       try {
         const response = await fetch(
