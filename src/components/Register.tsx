@@ -4,6 +4,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
   const [error, setError] = useState("");
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -11,9 +12,27 @@ const Register = () => {
     const auth = getAuth();
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      // Update Firebase Auth Profile
+      await updateProfile(user, { displayName: username });
+
+      // Save user data to Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        email: user.email,
+        displayName: username,
+      });
+
+      alert("Registration successful!");
       setEmail("");
       setPassword("");
+      setUsername("");
     } catch (err: any) {
       setError(err.message);
     }

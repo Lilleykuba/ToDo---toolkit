@@ -2,6 +2,7 @@ import { getAuth, signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
 import Categories from "./Categories";
 import Footer from "./Footer";
+import EditProfile from "./EditProfile";
 
 const Sidebar = ({
   user,
@@ -45,6 +46,30 @@ const Sidebar = ({
     "retro",
   ];
 
+  const [editingProfile, setEditingProfile] = useState(false);
+
+  if (editingProfile) {
+    return <EditProfile onClose={() => setEditingProfile(false)} />;
+  }
+
+  const [username, setUsername] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (user) {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+          setUsername(userDoc.data().displayName || null);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   return (
     <>
       {/* Backdrop */}
@@ -68,8 +93,15 @@ const Sidebar = ({
 
         {/* Welcome Message */}
         <p className="text-base text-base-content">
-          Welcome, {user.email || "Guest User"}
+          Welcome, {user.email || username || "Guest User"}
         </p>
+
+        <button
+          onClick={() => setEditingProfile(true)} // Trigger the edit profile view
+          className="btn btn-sm btn-outline mt-2"
+        >
+          Edit Profile
+        </button>
 
         {/* Upgrade to Account Button */}
         {user.isAnonymous && (
