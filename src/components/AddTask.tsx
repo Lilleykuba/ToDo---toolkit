@@ -3,7 +3,11 @@ import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 
-const AddTask = ({ selectedCategory }: { selectedCategory: string | null }) => {
+const AddTask = ({
+  selectedCategory,
+}: {
+  selectedCategory?: string | null;
+}) => {
   const [taskName, setTaskName] = useState("");
   const auth = getAuth();
 
