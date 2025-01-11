@@ -10,7 +10,7 @@ import {
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 
-const AddTask = () => {
+const AddTask = ({ selectedCategory }: { selectedCategory: string | null }) => {
   const [taskName, setTaskName] = useState("");
   const auth = getAuth();
 
@@ -42,7 +42,7 @@ const AddTask = () => {
         createdAt: new Date(),
         uid: user.uid, // Associate the task with the user's UID
         order: maxOrder + 1, // Set the order value
-        categoryId: doc.data().categoryId || null,
+        categoryId: selectedCategory || null,
       });
 
       setTaskName(""); // Clear the input field after adding
