@@ -84,7 +84,7 @@ function App() {
               <h2 className="text-2xl font-bold text-primary mb-4">
                 Add a Task
               </h2>
-              <AddTask />
+              <AddTask selectedCategory={selectedCategory} />
             </section>
 
             <div className="divider"></div>
