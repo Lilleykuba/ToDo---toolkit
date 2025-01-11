@@ -12,7 +12,6 @@ const Register = () => {
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      alert("Registration successful!");
       setEmail("");
       setPassword("");
     } catch (err: any) {

@@ -5,7 +5,6 @@ const GuestLogin = () => {
     try {
       const auth = getAuth();
       await signInAnonymously(auth);
-      alert("Logged in as a guest!");
     } catch (error) {
       console.error("Error during guest login:", error);
       alert("Failed to login as a guest.");

@@ -12,7 +12,6 @@ const Login = () => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      alert("Login successful!");
       setEmail("");
       setPassword("");
     } catch (err: any) {
