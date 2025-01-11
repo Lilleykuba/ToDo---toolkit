@@ -10,7 +10,6 @@ import { db } from "../firebase";
 import React from "react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { auto } from "@cloudinary/url-gen/actions/resize";
-import { autoGravity } from "@cloudinary/url-gen/qualifiers/gravity";
 import { AdvancedImage } from "@cloudinary/react";
 
 const EditProfile = ({ onClose }: { onClose: () => void }) => {
@@ -19,7 +18,12 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
 
   const [username, setUsername] = useState(user?.displayName || "");
   const [newPassword, setNewPassword] = useState("");
-  const [profilePicture, setProfilePicture] = useState<string | null>(null);
+  const [profilePicture, setProfilePicture] = useState<string | null>(
+    user?.photoURL || null
+  );
+  const [uploading, setUploading] = useState(false);
+
+  const cld = new Cloudinary({ cloud: { cloudName: "daqty1nfy" } });
 
   const handleUpdateProfile = async () => {
     if (!user) return;
@@ -98,7 +102,7 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
   const transformedPicture = profilePicture
     ? cld
         .image(profilePicture.replace(/^https?:\/\/[^\/]+\//, "")) // Remove the domain for Cloudinary transformations
-        .resize(auto().width(150).height(150).crop("thumb")) // Adjust size and crop
+        .resize(auto().width(150).height(150)) // Adjust size and crop
     : null;
 
   return (
