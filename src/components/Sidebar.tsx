@@ -95,7 +95,7 @@ const Sidebar = ({
 
         {/* Welcome Message */}
         <p className="text-base text-base-content">
-          Welcome, {user.email || username || "Guest User"}
+          Welcome, {username || user.email || "Guest User"}
         </p>
 
         <button
