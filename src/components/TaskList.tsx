@@ -23,6 +23,7 @@ interface Task {
   completed: boolean;
   order: number;
   categoryId: string | null;
+  priority: string;
 }
 
 const TaskList = ({
