@@ -1,7 +1,7 @@
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
-import { TrashIcon } from "@heroicons/react/24/solid";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 const TaskItem = ({
   task,
@@ -49,7 +49,8 @@ const TaskItem = ({
       style={{ borderColor: categoryColor || "transparent" }}
       {...dragHandleProps} // Enable drag handle for drag-and-drop
     >
-      <div className="flex items-center w-full">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full space-y-2 sm:space-y-0">
+        {/* Task Name and Checkbox */}
         <div className="flex items-center space-x-4">
           <input
             type="checkbox"
@@ -65,27 +66,33 @@ const TaskItem = ({
             {task.name}
           </span>
         </div>
-        <div className="ml-auto space-x-2">
+
+        {/* Priority and Actions */}
+        <div className="flex items-center space-x-2 sm:space-x-4">
           <span
             className={`badge ${
-              task.priority.toLowerCase() === "high"
+              task.priority === "High"
                 ? "badge-error"
-                : task.priority.toLowerCase() === "medium"
+                : task.priority === "Medium"
                 ? "badge-warning"
                 : "badge-success"
             }`}
           >
             {task.priority}
           </span>
-          <button onClick={onEdit} className="btn btn-sm btn-secondary">
-            Edit
+          <button
+            onClick={onEdit}
+            className="btn btn-sm btn-ghost"
+            aria-label="Edit task"
+          >
+            <PencilIcon className="h-5 w-5 text-blue-500 hover:text-blue-700" />
           </button>
           <button
-            className="btn btn-ghost p-2"
+            className="btn btn-sm btn-ghost"
             onClick={handleDelete}
             aria-label="Delete task"
           >
-            <TrashIcon className="h-6 w-6 text-red-500 hover:text-red-700" />
+            <TrashIcon className="h-5 w-5 text-red-500 hover:text-red-700" />
           </button>
         </div>
       </div>
