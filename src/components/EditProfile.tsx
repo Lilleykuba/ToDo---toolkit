@@ -7,6 +7,11 @@ import {
 } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import React from "react";
+import { Cloudinary } from "@cloudinary/url-gen";
+import { auto } from "@cloudinary/url-gen/actions/resize";
+import { autoGravity } from "@cloudinary/url-gen/qualifiers/gravity";
+import { AdvancedImage } from "@cloudinary/react";
 
 const EditProfile = ({ onClose }: { onClose: () => void }) => {
   const auth = getAuth();
@@ -56,39 +61,63 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
     if (!user) return;
 
     if (e.target.files && e.target.files[0]) {
+      setUploading(true);
+
       const formData = new FormData();
       formData.append("file", e.target.files[0]);
-      formData.append("upload_preset", "your_preset_here");
+      formData.append("upload_preset", "your_preset_here"); // Replace with your Cloudinary preset
 
-      const response = await fetch(
-        "https://api.cloudinary.com/v1_1/your_cloud_name/image/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      try {
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/daqty1nfy/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
-      const data = await response.json();
-      const imageUrl = data.secure_url;
+        const data = await response.json();
+        const imageUrl = data.secure_url;
 
-      await updateDoc(doc(db, "users", user.uid), { photoURL: imageUrl });
-      setProfilePicture(imageUrl); // Update local state
+        // Update Firestore and Firebase Authentication
+        await updateProfile(user, { photoURL: imageUrl });
+        await updateDoc(doc(db, "users", user.uid), { photoURL: imageUrl });
+
+        setProfilePicture(imageUrl);
+        alert("Profile picture updated successfully!");
+      } catch (error) {
+        console.error("Error uploading profile picture:", error);
+        alert("Failed to upload profile picture.");
+      } finally {
+        setUploading(false);
+      }
     }
   };
 
-  {
-    profilePicture && (
-      <img
-        src={profilePicture}
-        alt="Profile"
-        className="w-16 h-16 rounded-full"
-      />
-    );
-  }
+  // Transform and display the profile picture
+  const transformedPicture = profilePicture
+    ? cld
+        .image(profilePicture.replace(/^https?:\/\/[^\/]+\//, "")) // Remove the domain for Cloudinary transformations
+        .resize(auto().width(150).height(150).crop("thumb")) // Adjust size and crop
+    : null;
 
   return (
     <div className="max-w-md mx-auto p-6 bg-base-100 shadow-lg rounded">
       <h1 className="text-xl font-bold mb-4">Edit Profile</h1>
+
+      {/* Profile Picture */}
+      <div className="form-control mb-4">
+        <label className="label">Profile Picture</label>
+        {transformedPicture && (
+          <AdvancedImage cldImg={transformedPicture} className="rounded-full" />
+        )}
+        <input
+          type="file"
+          onChange={handleProfilePictureChange}
+          className="file-input file-input-bordered mt-2"
+        />
+        {uploading && <p className="text-sm text-gray-500">Uploading...</p>}
+      </div>
 
       {/* Username */}
       <div className="form-control mb-4">
@@ -98,16 +127,6 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           className="input input-bordered"
-        />
-      </div>
-
-      {/* Profile Picture */}
-      <div className="form-control mb-4">
-        <label className="label">Profile Picture</label>
-        <input
-          type="file"
-          onChange={handleProfilePictureChange}
-          className="file-input file-input-bordered"
         />
       </div>
 
