@@ -48,12 +48,6 @@ const Sidebar = ({
     "retro",
   ];
 
-  const [editingProfile, setEditingProfile] = useState(false);
-
-  if (editingProfile) {
-    return <EditProfile onClose={() => setEditingProfile(false)} />;
-  }
-
   const [username, setUsername] = useState<string | null>(null);
 
   useEffect(() => {
@@ -71,6 +65,12 @@ const Sidebar = ({
 
     fetchUserData();
   }, []);
+
+  const [editingProfile, setEditingProfile] = useState(false);
+
+  if (editingProfile) {
+    return <EditProfile onClose={() => setEditingProfile(false)} />;
+  }
 
   return (
     <>
