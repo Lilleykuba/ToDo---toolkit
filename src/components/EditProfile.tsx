@@ -50,13 +50,39 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
-  const handleProfilePictureChange = (
+  const handleProfilePictureChange = async (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (e.target.files && e.target.files[0]) {
-      setProfilePicture(e.target.files[0]);
+      const formData = new FormData();
+      formData.append("file", e.target.files[0]);
+      formData.append("upload_preset", "your_preset_here");
+
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/your_cloud_name/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      const imageUrl = data.secure_url;
+
+      await updateDoc(doc(db, "users", user.uid), { photoURL: imageUrl });
+      setProfilePicture(imageUrl); // Update local state
     }
   };
+
+  {
+    profilePicture && (
+      <img
+        src={profilePicture}
+        alt="Profile"
+        className="w-16 h-16 rounded-full"
+      />
+    );
+  }
 
   return (
     <div className="max-w-md mx-auto p-6 bg-base-100 shadow-lg rounded">
