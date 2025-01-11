@@ -86,13 +86,13 @@ const Categories = ({
           placeholder="New Category"
           value={categoryName}
           onChange={(e) => setCategoryName(e.target.value)}
-          className="input input-bordered w-full"
+          className="input input-bordered w-36"
         />
         <input
           type="color"
           value={color}
           onChange={(e) => setColor(e.target.value)}
-          className="input input-bordered p-1"
+          className="w-10 h-10 rounded-full border-none p-0 cursor-pointer"
         />
         <button type="submit" className="btn btn-primary">
           Add
