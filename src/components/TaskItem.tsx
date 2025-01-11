@@ -6,9 +6,16 @@ import { TrashIcon } from "@heroicons/react/24/solid";
 const TaskItem = ({
   task,
   dragHandleProps,
+  categoryColor,
 }: {
-  task: { id: string; name: string; completed: boolean };
+  task: {
+    id: string;
+    name: string;
+    completed: boolean;
+    categoryId: string | null;
+  };
   dragHandleProps?: any; // Drag handle props for drag-and-drop functionality
+  categoryColor?: string; // Color of the associated category
 }) => {
   const auth = getAuth();
 
@@ -24,7 +31,6 @@ const TaskItem = ({
 
     if (user) {
       try {
-        // Delete task from Firestore
         const taskRef = doc(db, "tasks", task.id);
         await deleteDoc(taskRef);
         console.log("Task deleted from Firestore!");
@@ -36,7 +42,8 @@ const TaskItem = ({
 
   return (
     <div
-      className="card bg-base-100 shadow-md flex items-center p-4"
+      className="card bg-base-100 shadow-md flex items-center p-4 border-l-4"
+      style={{ borderColor: categoryColor || "transparent" }}
       {...dragHandleProps} // Enable drag handle for drag-and-drop
     >
       <div className="flex justify-between items-center w-full">
