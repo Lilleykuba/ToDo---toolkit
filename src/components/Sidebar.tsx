@@ -1,16 +1,19 @@
 import { getAuth, signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
+import Categories from "./Categories";
 
 const Sidebar = ({
   user,
   isOpen,
   toggleSidebar,
   onSwitchToAccount,
+  onCategorySelect,
 }: {
   user: { email?: string; isAnonymous: boolean };
   isOpen: boolean;
   toggleSidebar: () => void;
   onSwitchToAccount: () => void;
+  onCategorySelect: (id: string | null) => void;
 }) => {
   const handleLogout = async () => {
     const auth = getAuth();
@@ -57,16 +60,8 @@ const Sidebar = ({
           isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 lg:static`}
       >
-        {/* Close Button for Mobile */}
-        <button
-          onClick={toggleSidebar}
-          className="btn btn-primary lg:hidden self-end"
-        >
-          ✕
-        </button>
-
         {/* App Title */}
-        <h1 className="text-2xl font-bold text-primary text-center mb-8 mt-4">
+        <h1 className="text-2xl font-bold text-primary text-center mb-8 mt-16 lg:mt-4">
           Camo ToDo
         </h1>
 
@@ -87,9 +82,7 @@ const Sidebar = ({
 
         <div className="divider w-full"></div>
 
-        <p className="text-sm text-gray-400 text-center">
-          Additional features coming soon...
-        </p>
+        <Categories onCategorySelect={onCategorySelect} />
 
         <div className="mt-auto">
           {/* Theme Switcher */}

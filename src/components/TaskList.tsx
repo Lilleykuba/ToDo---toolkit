@@ -22,9 +22,14 @@ interface Task {
   name: string;
   completed: boolean;
   order: number;
+  categoryId: string | null;
 }
 
-const TaskList = () => {
+const TaskList = ({
+  selectedCategory,
+}: {
+  selectedCategory: string | null;
+}) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const auth = getAuth();
 
@@ -32,21 +37,30 @@ const TaskList = () => {
     const user = auth.currentUser;
 
     if (user) {
-      // Fetch tasks from Firestore for logged-in and guest users
-      const q = query(collection(db, "tasks"), where("uid", "==", user.uid));
+      // Fetch tasks filtered by category from Firestore
+      const tasksRef = collection(db, "tasks");
+      const q = selectedCategory
+        ? query(
+            tasksRef,
+            where("uid", "==", user.uid),
+            where("categoryId", "==", selectedCategory)
+          )
+        : query(tasksRef, where("uid", "==", user.uid));
+
       const unsubscribe = onSnapshot(q, (snapshot) => {
         const tasksArray = snapshot.docs.map((doc) => ({
           id: doc.id,
           name: doc.data().name || "Unnamed Task",
           completed: doc.data().completed || false,
           order: doc.data().order || 0,
+          categoryId: doc.data().categoryId || null,
         }));
         setTasks(tasksArray.sort((a, b) => a.order - b.order));
       });
 
       return () => unsubscribe();
     }
-  }, []);
+  }, [selectedCategory]);
 
   const handleDragEnd = async (result: DropResult) => {
     if (!result.destination) return;

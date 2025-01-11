@@ -12,6 +12,7 @@ function App() {
   const [loading, setLoading] = useState(true); // Loading state while checking auth
   const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar toggle for mobile
   const [isSwitchingFromGuest, setIsSwitchingFromGuest] = useState(false); // Guest to account upgrade state
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
     const auth = getAuth();
@@ -61,6 +62,7 @@ function App() {
         isOpen={sidebarOpen}
         toggleSidebar={toggleSidebar}
         onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
+        onCategorySelect={(id) => setSelectedCategory(id)}
       />
 
       {/* Main Content */}
@@ -91,7 +93,7 @@ function App() {
               <h2 className="text-2xl font-bold text-primary mb-4">
                 Your Tasks
               </h2>
-              <TaskList />
+              <TaskList selectedCategory={selectedCategory} />
             </section>
           </div>
         </div>
