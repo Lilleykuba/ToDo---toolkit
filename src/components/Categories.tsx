@@ -108,21 +108,20 @@ const Categories = ({
           </button>
         </li>
         {categories.map((category) => (
-          <li
+          <button
+            onClick={() => onCategorySelect(category.id)}
             key={category.id}
             className="flex items-center justify-between btn btn-ghost w-full text-left"
             style={{ borderLeft: `4px solid ${category.color}` }}
           >
-            <button onClick={() => onCategorySelect(category.id)} className="">
-              {category.name}
-            </button>
+            {category.name}
             <button
               onClick={() => handleDeleteCategory(category.id)}
               className="btn btn-sm btn-error"
             >
               ✕
             </button>
-          </li>
+          </button>
         ))}
       </ul>
     </div>
