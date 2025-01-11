@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  collection,
+  query,
+  where,
+  onSnapshot,
+} from "firebase/firestore";
 import { db } from "../firebase";
 
 const EditTask = ({
@@ -10,6 +18,7 @@ const EditTask = ({
   onClose: () => void;
 }) => {
   const [task, setTask] = useState<any>(null);
+  const [categories, setCategories] = useState<any[]>([]);
 
   useEffect(() => {
     // Fetch the task details
@@ -23,6 +32,29 @@ const EditTask = ({
 
     fetchTask();
   }, [taskId]);
+
+  useEffect(() => {
+    // Fetch categories for the dropdown
+    const fetchCategories = async () => {
+      const user = getAuth().currentUser;
+      if (!user) return;
+
+      const categoriesRef = collection(db, "categories");
+      const q = query(categoriesRef, where("uid", "==", user.uid));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const categoryList = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          name: doc.data().name,
+          color: doc.data().color,
+        }));
+        setCategories(categoryList);
+      });
+
+      return () => unsubscribe();
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleSave = async () => {
     if (!task) return;
@@ -61,6 +93,21 @@ const EditTask = ({
           <option value="High">High</option>
           <option value="Medium">Medium</option>
           <option value="Low">Low</option>
+        </select>
+      </div>
+      <div className="form-control mb-4">
+        <label className="label">Category</label>
+        <select
+          value={task.categoryId || ""}
+          onChange={(e) => setTask({ ...task, categoryId: e.target.value })}
+          className="select select-bordered"
+        >
+          <option value="">None</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
         </select>
       </div>
       <button onClick={handleSave} className="btn btn-primary w-full">
