@@ -8,6 +8,7 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
 
 const EditTask = ({
