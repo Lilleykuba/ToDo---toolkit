@@ -7,6 +7,7 @@ import Auth from "./components/Auth";
 import Sidebar from "./components/Sidebar";
 import RegisterGuest from "./components/RegisterGuest";
 import EditTask from "./components/EditTask";
+import CookieConsent from "./components/CookieConsent";
 
 function App() {
   const [user, setUser] = useState<User | null>(null); // Store the current user
@@ -76,7 +77,6 @@ function App() {
         onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
         onCategorySelect={(id) => setSelectedCategory(id)}
       />
-
       {/* Main Content */}
       <main
         className={`flex-grow p-6 flex items-start justify-center transition-all sm:items-center mt-12 ${
@@ -113,6 +113,7 @@ function App() {
           </div>
         </div>
       </main>
+      <CookieConsent />
     </div>
   );
 }

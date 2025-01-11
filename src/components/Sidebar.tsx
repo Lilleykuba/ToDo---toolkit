@@ -1,6 +1,7 @@
 import { getAuth, signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
 import Categories from "./Categories";
+import Footer from "./Footer";
 
 const Sidebar = ({
   user,
@@ -84,7 +85,7 @@ const Sidebar = ({
 
         <Categories onCategorySelect={onCategorySelect} />
 
-        <div className="mt-auto">
+        <div className="mt-auto space-y-8">
           {/* Theme Switcher */}
           <div className="mt-4 w-full">
             <label className="label text-xl text-gray-400 mb-2">
@@ -103,13 +104,15 @@ const Sidebar = ({
             </select>
           </div>
 
-          <div className="divider w-full"></div>
-
           {/* Logout Button */}
           <button onClick={handleLogout} className="btn btn-secondary w-full">
             Logout
           </button>
         </div>
+
+        <div className="divider w-full"></div>
+
+        <Footer />
       </aside>
     </>
   );
