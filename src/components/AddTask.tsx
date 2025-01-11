@@ -9,6 +9,7 @@ const AddTask = ({
   selectedCategory?: string | null;
 }) => {
   const [taskName, setTaskName] = useState("");
+  const [priority, setPriority] = useState("Medium");
   const auth = getAuth();
 
   const handleAddTask = async (e: React.FormEvent) => {
@@ -40,9 +41,11 @@ const AddTask = ({
         uid: user.uid, // Associate the task with the user's UID
         order: maxOrder + 1, // Set the order value
         categoryId: selectedCategory || null,
+        priority: priority,
       });
 
       setTaskName(""); // Clear the input field after adding
+      setPriority("Medium");
     } catch (error) {
       console.error("Error adding task:", error);
     }
@@ -60,6 +63,15 @@ const AddTask = ({
         onChange={(e) => setTaskName(e.target.value)}
         className="input input-bordered flex-grow"
       />
+      <select
+        value={priority}
+        onChange={(e) => setPriority(e.target.value)}
+        className="select select-bordered"
+      >
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
       <button type="submit" className="btn btn-primary sm:w-auto">
         Add Task
       </button>

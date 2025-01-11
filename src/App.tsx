@@ -3,9 +3,10 @@ import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import "./App.css";
 import TaskList from "./components/TaskList";
 import AddTask from "./components/AddTask";
-import Auth from "./components/Auth"; // Authentication component
-import Sidebar from "./components/Sidebar"; // Sidebar component
+import Auth from "./components/Auth";
+import Sidebar from "./components/Sidebar";
 import RegisterGuest from "./components/RegisterGuest";
+import EditTask from "./components/EditTask";
 
 function App() {
   const [user, setUser] = useState<User | null>(null); // Store the current user
@@ -13,6 +14,7 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar toggle for mobile
   const [isSwitchingFromGuest, setIsSwitchingFromGuest] = useState(false); // Guest to account upgrade state
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
 
   useEffect(() => {
     const auth = getAuth();
@@ -48,6 +50,16 @@ function App() {
     // Render the Register component for guest-to-account upgrade
     return (
       <RegisterGuest onSwitchComplete={() => setIsSwitchingFromGuest(false)} />
+    );
+  }
+
+  if (editingTaskId) {
+    // Render EditTask component when editingTaskId is set
+    return (
+      <EditTask
+        taskId={editingTaskId}
+        onClose={() => setEditingTaskId(null)} // Go back to the task list
+      />
     );
   }
 
@@ -93,7 +105,10 @@ function App() {
               <h2 className="text-2xl font-bold text-primary mb-4">
                 Your Tasks
               </h2>
-              <TaskList selectedCategory={selectedCategory} />
+              <TaskList
+                selectedCategory={selectedCategory}
+                onEditTask={(taskId) => setEditingTaskId(taskId)}
+              />
             </section>
           </div>
         </div>

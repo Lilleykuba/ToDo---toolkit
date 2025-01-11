@@ -27,8 +27,10 @@ interface Task {
 
 const TaskList = ({
   selectedCategory,
+  onEditTask,
 }: {
   selectedCategory: string | null;
+  onEditTask: (taskId: string) => void;
 }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [categories, setCategories] = useState<Record<string, string>>({});
@@ -68,6 +70,7 @@ const TaskList = ({
           completed: doc.data().completed || false,
           order: doc.data().order || 0,
           categoryId: doc.data().categoryId || null,
+          priority: doc.data().priority || "Medium",
         }));
         setTasks(tasksArray.sort((a, b) => a.order - b.order));
       });
@@ -129,6 +132,7 @@ const TaskList = ({
                           ? categories[task.categoryId]
                           : undefined
                       }
+                      onEdit={() => onEditTask(task.id)}
                     />
                   </div>
                 )}

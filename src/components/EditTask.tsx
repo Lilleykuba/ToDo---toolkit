@@ -1,0 +1,76 @@
+import { useState, useEffect } from "react";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase";
+
+const EditTask = ({
+  taskId,
+  onClose,
+}: {
+  taskId: string;
+  onClose: () => void;
+}) => {
+  const [task, setTask] = useState<any>(null);
+
+  useEffect(() => {
+    // Fetch the task details
+    const fetchTask = async () => {
+      const taskRef = doc(db, "tasks", taskId);
+      const taskSnap = await getDoc(taskRef);
+      if (taskSnap.exists()) {
+        setTask(taskSnap.data());
+      }
+    };
+
+    fetchTask();
+  }, [taskId]);
+
+  const handleSave = async () => {
+    if (!task) return;
+
+    try {
+      const taskRef = doc(db, "tasks", taskId);
+      await updateDoc(taskRef, task);
+      alert("Task updated successfully!");
+      onClose(); // Go back to the task list
+    } catch (error) {
+      console.error("Error updating task:", error);
+    }
+  };
+
+  if (!task) return <p>Loading task...</p>;
+
+  return (
+    <div className="max-w-md mx-auto p-4 bg-base-100 shadow-lg rounded">
+      <h1 className="text-xl font-bold mb-4">Edit Task</h1>
+      <div className="form-control mb-4">
+        <label className="label">Task Name</label>
+        <input
+          type="text"
+          value={task.name}
+          onChange={(e) => setTask({ ...task, name: e.target.value })}
+          className="input input-bordered"
+        />
+      </div>
+      <div className="form-control mb-4">
+        <label className="label">Priority</label>
+        <select
+          value={task.priority || "Medium"}
+          onChange={(e) => setTask({ ...task, priority: e.target.value })}
+          className="select select-bordered"
+        >
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+      </div>
+      <button onClick={handleSave} className="btn btn-primary w-full">
+        Save Changes
+      </button>
+      <button onClick={onClose} className="btn btn-secondary w-full mt-4">
+        Cancel
+      </button>
+    </div>
+  );
+};
+
+export default EditTask;
