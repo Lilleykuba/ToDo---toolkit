@@ -96,6 +96,7 @@ const AddTask = ({
             placeholder="Add subtask"
             value={newSubtask}
             onChange={(e) => setNewSubtask(e.target.value)}
+            className="flex-grow"
           />
           <button
             type="button"
