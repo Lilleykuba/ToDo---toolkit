@@ -33,6 +33,7 @@ const Register = () => {
         uid: user.uid,
         email: user.email,
         displayName: username,
+        photoURL: user.photoURL || null,
       });
 
       alert("Registration successful!");
