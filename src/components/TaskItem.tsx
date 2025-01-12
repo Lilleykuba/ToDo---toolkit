@@ -15,6 +15,7 @@ const TaskItem = ({
     completed: boolean;
     categoryId: string | null;
     priority: string;
+    subtasks?: { id: string; name: string; completed: boolean }[];
   };
   dragHandleProps?: any; // Drag handle props for drag-and-drop functionality
   categoryColor?: string; // Color of the associated category
@@ -41,6 +42,17 @@ const TaskItem = ({
         console.error("Error deleting task from Firestore:", error);
       }
     }
+  };
+
+  const handleSubtaskComplete = async (subtaskId: string) => {
+    const updatedSubtasks = task.subtasks?.map((subtask) =>
+      subtask.id === subtaskId
+        ? { ...subtask, completed: !subtask.completed }
+        : subtask
+    );
+
+    const taskRef = doc(db, "tasks", task.id);
+    await updateDoc(taskRef, { subtasks: updatedSubtasks });
   };
 
   return (
@@ -87,6 +99,7 @@ const TaskItem = ({
           >
             <PencilIcon className="h-5 w-5 text-blue-500 hover:text-blue-700" />
           </button>
+
           <button
             className="btn btn-sm btn-ghost"
             onClick={handleDelete}
@@ -96,6 +109,40 @@ const TaskItem = ({
           </button>
         </div>
       </div>
+      {/* Subtasks */}
+      {task.subtasks && task.subtasks.length > 0 && (
+        <div className="mt-2 ml-8 border-l-2 pl-4 border-gray-300 w-full">
+          <h4 className="text-sm font-semibold text-gray-400 mb-2">
+            Subtasks:
+          </h4>
+          <div className="space-y-2">
+            {task.subtasks.map((subtask) => (
+              <div
+                key={subtask.id}
+                className="flex justify-between items-start"
+              >
+                <div className="flex items-center space-x-4">
+                  <input
+                    type="checkbox"
+                    className="checkbox"
+                    checked={subtask.completed}
+                    onChange={() => handleSubtaskComplete(subtask.id)}
+                  />
+                  <span
+                    className={`text-sm ${
+                      subtask.completed
+                        ? "line-through text-gray-600"
+                        : "text-gray-400"
+                    }`}
+                  >
+                    {subtask.name}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -79,14 +79,14 @@ function App() {
       />
       {/* Main Content */}
       <main
-        className={`flex-grow p-6 flex items-start justify-center transition-all sm:items-center mt-12 ${
+        className={`flex-grow p-0 sm:p-6 flex items-start justify-center transition-all sm:items-center mt-12 ${
           sidebarOpen ? "ml-64" : "ml-0"
         }`}
       >
         <div className="w-full max-w-screen-lg bg-base-100 shadow-xl rounded-lg p-10 relative">
           <button
             onClick={toggleSidebar}
-            className="btn btn-primary lg:hidden fixed top-4 left-4 z-50"
+            className="btn btn-primary btn-sm sm:btn lg:hidden fixed top-2 left-2 sm:left-4 sm:top-4 z-50"
           >
             ☰
           </button>

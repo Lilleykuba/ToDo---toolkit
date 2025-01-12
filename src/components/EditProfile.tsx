@@ -5,7 +5,7 @@ import {
   updatePassword,
   deleteUser,
 } from "firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import React from "react";
 import { Cloudinary } from "@cloudinary/url-gen";
@@ -22,6 +22,7 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
     user?.photoURL || null
   );
   const [uploading, setUploading] = useState(false);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
   const cld = new Cloudinary({ cloud: { cloudName: "daqty1nfy" } });
 
@@ -41,7 +42,6 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
         await updatePassword(user, newPassword);
       }
 
-      alert("Profile updated successfully!");
       onClose();
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -52,11 +52,27 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
     if (!user) return;
 
     try {
+      // Delete user from Firestore
+      const userRef = doc(db, "users", user.uid);
+      await deleteDoc(userRef);
+
+      // Delete user from Firebase Auth
       await deleteUser(user);
-      alert("Account deleted successfully!");
+
+      alert("Your account has been deleted successfully.");
+      // Optionally redirect or handle logout
     } catch (error) {
       console.error("Error deleting account:", error);
+      alert("Failed to delete account. Please try again.");
     }
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirmDelete(false);
+  };
+
+  const handleConfirmDelete = () => {
+    setShowConfirmDelete(true);
   };
 
   const handleProfilePictureChange = async (
@@ -88,7 +104,6 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
         await updateDoc(doc(db, "users", user.uid), { photoURL: imageUrl });
 
         setProfilePicture(imageUrl);
-        alert("Profile picture updated successfully!");
       } catch (error) {
         console.error("Error uploading profile picture:", error);
         alert("Failed to upload profile picture.");
@@ -153,11 +168,34 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
         Cancel
       </button>
       <button
-        onClick={handleDeleteAccount}
+        onClick={handleConfirmDelete}
         className="btn btn-error w-full mt-4"
       >
         Delete Account
       </button>
+      {/* Confirmation Modal */}
+      {showConfirmDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-base-200 p-6 rounded-lg shadow-lg max-w-sm">
+            <h2 className="text-lg font-bold mb-4">Confirm Deletion</h2>
+            <p className="text-sm text-gray-400 mb-4">
+              This action is permanent and cannot be undone. Are you sure you
+              want to delete your account?
+            </p>
+            <div className="flex justify-between">
+              <button
+                onClick={handleCancelDelete}
+                className="btn btn-secondary"
+              >
+                Cancel
+              </button>
+              <button onClick={handleDeleteAccount} className="btn btn-error">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

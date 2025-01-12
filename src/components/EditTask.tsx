@@ -10,6 +10,8 @@ import {
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
+import { TrashIcon } from "@heroicons/react/24/solid";
+import { v4 as uuidv4 } from "uuid";
 
 const EditTask = ({
   taskId,
@@ -19,6 +21,7 @@ const EditTask = ({
   onClose: () => void;
 }) => {
   const [task, setTask] = useState<any>(null);
+  const [newSubtask, setNewSubtask] = useState("");
   const [categories, setCategories] = useState<any[]>([]);
 
   useEffect(() => {
@@ -57,13 +60,30 @@ const EditTask = ({
     fetchCategories();
   }, []);
 
+  const handleAddSubtask = () => {
+    if (newSubtask) {
+      const updatedSubtasks = [
+        ...(task.subtasks || []),
+        { id: uuidv4(), name: newSubtask, completed: false },
+      ];
+      setTask({ ...task, subtasks: updatedSubtasks });
+      setNewSubtask("");
+    }
+  };
+
+  const handleRemoveSubtask = (subtaskId: string) => {
+    const updatedSubtasks = task.subtasks.filter(
+      (subtask: any) => subtask.id !== subtaskId
+    );
+    setTask({ ...task, subtasks: updatedSubtasks });
+  };
+
   const handleSave = async () => {
     if (!task) return;
 
     try {
       const taskRef = doc(db, "tasks", taskId);
       await updateDoc(taskRef, task);
-      alert("Task updated successfully!");
       onClose(); // Go back to the task list
     } catch (error) {
       console.error("Error updating task:", error);
@@ -111,6 +131,36 @@ const EditTask = ({
               </option>
             ))}
           </select>
+        </div>
+        <div className="form-control mb-4">
+          <label className="label">Subtasks</label>
+          <div className="space-y-2">
+            {task.subtasks &&
+              task.subtasks.map((subtask: any) => (
+                <div key={subtask.id} className="flex items-center gap-2">
+                  <span className="text-sm">{subtask.name}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveSubtask(subtask.id)}
+                    className="btn btn-ghost btn-sm"
+                  >
+                    <TrashIcon className="h-5 w-5 text-red-500 hover:text-red-700" />
+                  </button>
+                </div>
+              ))}
+          </div>
+          <div className="flex gap-2 mt-4">
+            <input
+              type="text"
+              placeholder="Add subtask"
+              value={newSubtask}
+              onChange={(e) => setNewSubtask(e.target.value)}
+              className="input input-bordered flex-grow"
+            />
+            <button type="button" onClick={handleAddSubtask} className="btn">
+              Add
+            </button>
+          </div>
         </div>
         <button onClick={handleSave} className="btn btn-primary w-full">
           Save Changes

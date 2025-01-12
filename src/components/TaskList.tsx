@@ -24,6 +24,7 @@ interface Task {
   order: number;
   categoryId: string | null;
   priority: string;
+  subtasks?: { id: string; name: string; completed: boolean }[];
 }
 
 const TaskList = ({
@@ -72,6 +73,7 @@ const TaskList = ({
           order: doc.data().order || 0,
           categoryId: doc.data().categoryId || null,
           priority: doc.data().priority || "Medium",
+          subtasks: doc.data().subtasks || [],
         }));
         setTasks(tasksArray.sort((a, b) => a.order - b.order));
       });
