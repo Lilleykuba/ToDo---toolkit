@@ -161,10 +161,10 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
       </div>
 
       {/* Buttons */}
-      <button onClick={handleUpdateProfile} className="btn btn-primary w-full">
+      <button onClick={handleUpdateProfile} className="btn btn-success w-full">
         Save Changes
       </button>
-      <button onClick={onClose} className="btn btn-secondary w-full mt-4">
+      <button onClick={onClose} className="btn btn-warning w-full mt-4">
         Cancel
       </button>
       <button
