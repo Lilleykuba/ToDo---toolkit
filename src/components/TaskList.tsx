@@ -12,6 +12,7 @@ import {
   onSnapshot,
   doc,
   updateDoc,
+  writeBatch,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
@@ -100,12 +101,15 @@ const TaskList = ({
 
     setTasks(updatedTasks);
 
-    // Persist updated order to Firestore
+    // Use batch writes to update Firestore
+    const batch = writeBatch(db);
+    updatedTasks.forEach((task) => {
+      const taskRef = doc(db, "tasks", task.id);
+      batch.update(taskRef, { order: task.order });
+    });
+
     try {
-      for (const task of updatedTasks) {
-        const taskRef = doc(db, "tasks", task.id);
-        await updateDoc(taskRef, { order: task.order });
-      }
+      await batch.commit();
     } catch (error) {
       console.error("Error updating task order in Firestore:", error);
     }
