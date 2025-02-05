@@ -71,7 +71,7 @@ const AddTask = ({
   return (
     <form
       onSubmit={handleAddTask}
-      className="form-control flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-2"
+      className="form-control flex flex-col gap-4 sm:gap-2 sm:w-[50%]"
     >
       <input
         type="text"
@@ -80,15 +80,28 @@ const AddTask = ({
         onChange={(e) => setTaskName(e.target.value)}
         className="input input-bordered flex-grow"
       />
-      <select
-        value={priority}
-        onChange={(e) => setPriority(e.target.value)}
-        className="select select-bordered"
-      >
-        <option value="High">High</option>
-        <option value="Medium">Medium</option>
-        <option value="Low">Low</option>
-      </select>
+      <div className="dropdown ">
+        <button
+          tabIndex={0}
+          className="btn btn-outline w-full flex justify-between"
+        >
+          Task Priority: {priority}
+        </button>
+        <ul
+          tabIndex={0}
+          className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-2"
+        >
+          <li>
+            <a onClick={() => setPriority("High")}>High</a>
+          </li>
+          <li>
+            <a onClick={() => setPriority("Medium")}>Medium</a>
+          </li>
+          <li>
+            <a onClick={() => setPriority("Low")}>Low</a>
+          </li>
+        </ul>
+      </div>
       <div className="space-y-2">
         <div className="flex gap-2 input input-bordered flex-grow pr-0">
           <input
