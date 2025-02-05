@@ -10,6 +10,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
+import { TrashIcon } from "@heroicons/react/24/solid";
 
 interface Category {
   id: string;
@@ -117,9 +118,9 @@ const Categories = ({
             {category.name}
             <button
               onClick={() => handleDeleteCategory(category.id)}
-              className="btn btn-sm btn-error"
+              className="btn btn-sm btn-ghost w-10 h-10 hover:bg-transparent hover:text-red-700"
             >
-              ✕
+              <TrashIcon className="h-10 w-10 text-red-500 hover:text-red-700" />
             </button>
           </button>
         ))}
