@@ -3,7 +3,7 @@ import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 import { v4 as uuidv4 } from "uuid";
-import { PlusCircleIcon } from "@heroicons/react/24/solid";
+import { PlusCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 const AddTask = ({
   selectedCategory,
@@ -128,7 +128,7 @@ const AddTask = ({
               onClick={() => handleRemoveSubtask(subtask.id)}
               className="btn btn-error btn-sm"
             >
-              Remove
+              <TrashIcon className="h-10 w-10 text-red-500 hover:text-red-700" />
             </button>
           </div>
         ))}
