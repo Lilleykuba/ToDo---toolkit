@@ -121,14 +121,14 @@ const AddTask = ({
           </button>
         </div>
         {subtasks.map((subtask) => (
-          <div key={subtask.id} className="flex items-center gap-2">
+          <div key={subtask.id} className="flex items-center">
             <span className="text-sm">{subtask.name}</span>
             <button
               type="button"
               onClick={() => handleRemoveSubtask(subtask.id)}
-              className="btn btn-error btn-sm"
+              className="btn btn-ghost btn-sm hover:bg-transparent"
             >
-              <TrashIcon className="h-10 w-10 text-red-500 hover:text-red-700" />
+              <TrashIcon className="h-4 w-4 text-red-500 hover:text-red-700" />
             </button>
           </div>
         ))}
