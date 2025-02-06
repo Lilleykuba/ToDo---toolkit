@@ -94,18 +94,18 @@ const TaskItem = ({
           </span>
           <button
             onClick={onEdit}
-            className="btn btn-sm btn-ghost"
+            className="btn btn-sm btn-ghost w-5 h-5 p-0 hover:bg-transparent"
             aria-label="Edit task"
           >
-            <PencilIcon className="h-5 w-5 text-blue-500 hover:text-blue-700" />
+            <PencilIcon className="h-full w-full text-blue-500 hover:text-blue-700" />
           </button>
 
           <button
-            className="btn btn-sm btn-ghost"
+            className="btn btn-sm btn-ghost w-5 h-5 p-0 hover:bg-transparent"
             onClick={handleDelete}
             aria-label="Delete task"
           >
-            <TrashIcon className="h-5 w-5 text-red-500 hover:text-red-700" />
+            <TrashIcon className="h-full w-full text-red-500 hover:text-red-700" />
           </button>
         </div>
       </div>
