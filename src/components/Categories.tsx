@@ -124,6 +124,12 @@ const Categories = ({
             </button>
           </button>
         ))}
+        <button
+          onClick={() => onCategorySelect(null)}
+          className="btn btn-ghost w-full text-center"
+        >
+          Show All Tasks
+        </button>
       </ul>
     </div>
   );
