@@ -121,7 +121,7 @@ const TaskList = ({
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
-            className="space-y-4"
+            className="space-y-4 overflow-auto max-h-96"
           >
             {tasks.map((task, index) => (
               <Draggable key={task.id} draggableId={task.id} index={index}>
