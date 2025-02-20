@@ -183,9 +183,12 @@ const AddTask = ({
           onChange={(e) => setShareSearch(e.target.value)}
           className="input input-bordered"
         />
-        <div className="max-h-40 overflow-auto mt-2 border border-base-200 rounded p-2 my-2">
+        <div className="max-h-40 overflow-auto mt-2 border border-base-200 rounded p-2">
           {filteredUsers.map((user) => (
-            <div key={user.uid} className="flex items-center justify-between">
+            <div
+              key={user.uid}
+              className="flex items-center justify-between my-2"
+            >
               <span>{user.displayName || user.email || user.uid}</span>
               <button
                 type="button"
