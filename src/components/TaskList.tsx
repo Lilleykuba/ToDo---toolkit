@@ -19,12 +19,14 @@ import TaskItem from "./TaskItem";
 
 interface Task {
   id: string;
+  owner: string;
   name: string;
   completed: boolean;
   order: number;
   categoryId: string | null;
   priority: string;
   subtasks?: { id: string; name: string; completed: boolean }[];
+  sharedWith?: string[];
 }
 
 const TaskList = ({

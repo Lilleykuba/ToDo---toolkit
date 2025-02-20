@@ -54,10 +54,12 @@ const AddTask = ({
         completed: false,
         createdAt: new Date(),
         uid: user.uid, // Associate the task with the user's UID
+        owner: user.uid, // Set the owner to the user's UID
         order: maxOrder + 1, // Set the order value
         categoryId: selectedCategory || null,
         priority: priority,
         subtasks: subtasks,
+        sharedWith: [],
       });
 
       setTaskName(""); // Clear the input field after adding
