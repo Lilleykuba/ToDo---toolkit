@@ -108,10 +108,11 @@ const AddTask = ({
   );
 
   return (
-    <form onSubmit={handleAddTask} className="form-control flex gap-4 sm:gap-2">
+    <form
+      onSubmit={handleAddTask}
+      className="form-control flex flex-row gap-4 sm:gap-2"
+    >
       <div className="flex flex-col gap-2  sm:w-[50%]">
-        <h2 className="text-lg font-semibold">Add Task</h2>
-        <label className="label">Task Name</label>
         <input
           type="text"
           placeholder="Enter your task"
@@ -177,7 +178,6 @@ const AddTask = ({
 
       {/* Share Task Section */}
       <div className="form-control flex flex-col gap-2 sm:w-[50%]">
-        <h2 className="text-lg font-semibold">Share Task</h2>
         <label className="label">Share with users</label>
         <input
           type="text"
