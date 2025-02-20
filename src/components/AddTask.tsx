@@ -108,10 +108,7 @@ const AddTask = ({
   );
 
   return (
-    <form
-      onSubmit={handleAddTask}
-      className="form-control flex flex-row gap-4 sm:gap-2"
-    >
+    <form onSubmit={handleAddTask} className="form-control flex gap-4 sm:gap-2">
       <div className="flex flex-col gap-2  sm:w-[50%]">
         <input
           type="text"
