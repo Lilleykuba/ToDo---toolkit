@@ -119,6 +119,7 @@ const AddTask = ({
         />
         <div className="dropdown">
           <button
+            type="button"
             tabIndex={0}
             className="btn btn-outline w-full flex justify-between"
           >
