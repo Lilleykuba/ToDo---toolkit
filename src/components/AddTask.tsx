@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 import { v4 as uuidv4 } from "uuid";
 import { PlusCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
+
+interface User {
+  uid: string;
+  displayName?: string;
+  email?: string;
+}
 
 const AddTask = ({
   selectedCategory,
@@ -14,7 +20,29 @@ const AddTask = ({
   const [priority, setPriority] = useState("Medium");
   const [subtasks, setSubtasks] = useState<{ id: string; name: string }[]>([]);
   const [newSubtask, setNewSubtask] = useState("");
+
+  // States for sharing
+  const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [shareSearch, setShareSearch] = useState("");
+  const [selectedShareUsers, setSelectedShareUsers] = useState<User[]>([]);
+
   const auth = getAuth();
+
+  // Fetch all users from the "users" collection (excluding current user)
+  useEffect(() => {
+    async function fetchUsers() {
+      const usersRef = collection(db, "users");
+      const q = query(usersRef);
+      const snapshot = await getDocs(q);
+      const usersData: User[] = snapshot.docs.map((doc) => ({
+        uid: doc.id,
+        ...doc.data(),
+      })) as User[];
+      const currentUid = auth.currentUser?.uid;
+      setAllUsers(usersData.filter((user) => user.uid !== currentUid));
+    }
+    fetchUsers();
+  }, [auth.currentUser]);
 
   const handleAddSubtask = () => {
     if (newSubtask) {
@@ -31,44 +59,53 @@ const AddTask = ({
     e.preventDefault();
     if (!taskName) return;
 
-    const user = auth.currentUser; // Get the current user
+    const user = auth.currentUser;
     if (!user) {
       console.error("User is not logged in!");
       return;
     }
 
     try {
-      // Fetch the maximum order value for the user's tasks
+      // Fetch tasks to get the maximum order value
       const tasksRef = collection(db, "tasks");
       const q = query(tasksRef, where("uid", "==", user.uid));
       const snapshot = await getDocs(q);
-
       const maxOrder =
         snapshot.docs.length > 0
           ? Math.max(...snapshot.docs.map((doc) => doc.data().order || 0))
           : 0;
 
-      // Add a new task with the next order value
+      // Add the new task, including sharedWith as an array of UIDs from selectedShareUsers
       await addDoc(tasksRef, {
         name: taskName,
         completed: false,
         createdAt: new Date(),
-        uid: user.uid, // Associate the task with the user's UID
-        owner: user.uid, // Set the owner to the user's UID
-        order: maxOrder + 1, // Set the order value
+        uid: user.uid,
+        owner: user.uid,
+        order: maxOrder + 1,
         categoryId: selectedCategory || null,
         priority: priority,
         subtasks: subtasks,
-        sharedWith: [],
+        sharedWith: selectedShareUsers.map((u) => u.uid),
       });
 
-      setTaskName(""); // Clear the input field after adding
+      // Reset the form
+      setTaskName("");
       setPriority("Medium");
       setSubtasks([]);
+      setSelectedShareUsers([]);
+      setShareSearch("");
     } catch (error) {
       console.error("Error adding task:", error);
     }
   };
+
+  // Filter users based on search text
+  const filteredUsers = allUsers.filter((user) =>
+    (user.displayName || user.email || "")
+      .toLowerCase()
+      .includes(shareSearch.toLowerCase())
+  );
 
   return (
     <form
@@ -82,7 +119,8 @@ const AddTask = ({
         onChange={(e) => setTaskName(e.target.value)}
         className="input input-bordered flex-grow"
       />
-      <div className="dropdown ">
+
+      <div className="dropdown">
         <button
           tabIndex={0}
           className="btn btn-outline w-full flex justify-between"
@@ -104,6 +142,8 @@ const AddTask = ({
           </li>
         </ul>
       </div>
+
+      {/* Subtasks Section */}
       <div className="space-y-2">
         <div className="flex gap-2 input input-bordered flex-grow pr-0">
           <input
@@ -135,6 +175,56 @@ const AddTask = ({
           </div>
         ))}
       </div>
+
+      {/* Share Task Section */}
+      <div className="form-control">
+        <label className="label">Share with users</label>
+        <input
+          type="text"
+          placeholder="Search users by name or email"
+          value={shareSearch}
+          onChange={(e) => setShareSearch(e.target.value)}
+          className="input input-bordered"
+        />
+        <div className="max-h-40 overflow-auto mt-2 border border-base-200 rounded p-2">
+          {filteredUsers.map((user) => (
+            <div key={user.uid} className="flex items-center justify-between">
+              <span>{user.displayName || user.email || user.uid}</span>
+              <button
+                type="button"
+                className="btn btn-sm btn-outline"
+                onClick={() => {
+                  // Toggle selection
+                  if (selectedShareUsers.find((u) => u.uid === user.uid)) {
+                    setSelectedShareUsers(
+                      selectedShareUsers.filter((u) => u.uid !== user.uid)
+                    );
+                  } else {
+                    setSelectedShareUsers([...selectedShareUsers, user]);
+                  }
+                }}
+              >
+                {selectedShareUsers.find((u) => u.uid === user.uid)
+                  ? "Remove"
+                  : "Add"}
+              </button>
+            </div>
+          ))}
+        </div>
+        {selectedShareUsers.length > 0 && (
+          <div className="mt-2">
+            <label className="label">Selected Users:</label>
+            <div className="flex flex-wrap gap-2">
+              {selectedShareUsers.map((user) => (
+                <span key={user.uid} className="badge badge-info">
+                  {user.displayName || user.email || user.uid}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
       <button type="submit" className="btn btn-primary sm:w-auto">
         Add Task
       </button>
