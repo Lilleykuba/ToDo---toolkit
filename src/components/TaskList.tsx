@@ -56,17 +56,43 @@ const TaskList = ({
         setCategories(categoriesMap);
       });
 
-      // Fetch tasks
       const tasksRef = collection(db, "tasks");
-      const tasksQuery = selectedCategory
+
+      // Build query for owned tasks
+      const ownedQuery = selectedCategory
         ? query(
             tasksRef,
             where("uid", "==", user.uid),
             where("categoryId", "==", selectedCategory)
           )
         : query(tasksRef, where("uid", "==", user.uid));
-      const unsubscribeTasks = onSnapshot(tasksQuery, (snapshot) => {
-        const tasksArray = snapshot.docs.map((doc) => ({
+
+      // Build query for tasks shared with the user
+      const sharedQuery = selectedCategory
+        ? query(
+            tasksRef,
+            where("sharedWith", "array-contains", user.uid),
+            where("categoryId", "==", selectedCategory)
+          )
+        : query(tasksRef, where("sharedWith", "array-contains", user.uid));
+
+      // Arrays to hold snapshots from both queries
+      let ownedTasks: Task[] = [];
+      let sharedTasks: Task[] = [];
+
+      // Merge the two query snapshots and remove duplicates by task id
+      const mergeTasks = () => {
+        const merged = [...ownedTasks, ...sharedTasks];
+        const unique = merged.filter(
+          (task, index, self) =>
+            index === self.findIndex((t) => t.id === task.id)
+        );
+        // Sort by order (adjust if needed)
+        setTasks(unique.sort((a, b) => a.order - b.order));
+      };
+
+      const unsubscribeOwned = onSnapshot(ownedQuery, (snapshot) => {
+        ownedTasks = snapshot.docs.map((doc) => ({
           id: doc.id,
           name: doc.data().name || "Unnamed Task",
           completed: doc.data().completed || false,
@@ -75,12 +101,26 @@ const TaskList = ({
           priority: doc.data().priority || "Medium",
           subtasks: doc.data().subtasks || [],
         }));
-        setTasks(tasksArray.sort((a, b) => a.order - b.order));
+        mergeTasks();
+      });
+
+      const unsubscribeShared = onSnapshot(sharedQuery, (snapshot) => {
+        sharedTasks = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          name: doc.data().name || "Unnamed Task",
+          completed: doc.data().completed || false,
+          order: doc.data().order || 0,
+          categoryId: doc.data().categoryId || null,
+          priority: doc.data().priority || "Medium",
+          subtasks: doc.data().subtasks || [],
+        }));
+        mergeTasks();
       });
 
       return () => {
         unsubscribeCategories();
-        unsubscribeTasks();
+        unsubscribeOwned();
+        unsubscribeShared();
       };
     }
   }, [selectedCategory]);

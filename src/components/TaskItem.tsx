@@ -1,7 +1,7 @@
-import { doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { doc, updateDoc, deleteDoc, arrayUnion } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { PencilIcon, TrashIcon, ShareIcon } from "@heroicons/react/24/solid";
 
 const TaskItem = ({
   task,
@@ -11,11 +11,13 @@ const TaskItem = ({
 }: {
   task: {
     id: string;
+    owner: string;
     name: string;
     completed: boolean;
     categoryId: string | null;
     priority: string;
     subtasks?: { id: string; name: string; completed: boolean }[];
+    sharedWith?: string[];
   };
   dragHandleProps?: any; // Drag handle props for drag-and-drop functionality
   categoryColor?: string; // Color of the associated category
@@ -53,6 +55,21 @@ const TaskItem = ({
 
     const taskRef = doc(db, "tasks", task.id);
     await updateDoc(taskRef, { subtasks: updatedSubtasks });
+  };
+
+  const handleShare = async () => {
+    const targetUserId = prompt("Enter the UID of the user to share with:");
+    if (!targetUserId) return;
+
+    try {
+      const taskRef = doc(db, "tasks", task.id);
+      await updateDoc(taskRef, {
+        sharedWith: arrayUnion(targetUserId),
+      });
+      console.log("Task shared with", targetUserId);
+    } catch (error) {
+      console.error("Error sharing task:", error);
+    }
   };
 
   return (
@@ -99,7 +116,13 @@ const TaskItem = ({
           >
             <PencilIcon className="h-full w-full text-blue-500 hover:text-blue-700" />
           </button>
-
+          <button
+            onClick={handleShare}
+            className="btn btn-sm btn-ghost w-5 h-5 p-0 hover:bg-transparent"
+            aria-label="Share task"
+          >
+            <ShareIcon className="h-full w-full text-green-500 hover:text-green-700" />
+          </button>
           <button
             className="btn btn-sm btn-ghost w-5 h-5 p-0 hover:bg-transparent"
             onClick={handleDelete}
