@@ -129,13 +129,19 @@ const AddTask = ({
             className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-2"
           >
             <li>
-              <a onClick={() => setPriority("High")}>High</a>
+              <button type="button" onClick={() => setPriority("High")}>
+                High
+              </button>
             </li>
             <li>
-              <a onClick={() => setPriority("Medium")}>Medium</a>
+              <button type="button" onClick={() => setPriority("Medium")}>
+                Medium
+              </button>
             </li>
             <li>
-              <a onClick={() => setPriority("Low")}>Low</a>
+              <button type="button" onClick={() => setPriority("Low")}>
+                Low
+              </button>
             </li>
           </ul>
         </div>
