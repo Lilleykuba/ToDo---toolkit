@@ -109,12 +109,14 @@ const TaskList = ({
       const unsubscribeShared = onSnapshot(sharedQuery, (snapshot) => {
         sharedTasks = snapshot.docs.map((doc) => ({
           id: doc.id,
+          owner: doc.data().owner,
           name: doc.data().name || "Unnamed Task",
           completed: doc.data().completed || false,
           order: doc.data().order || 0,
           categoryId: doc.data().categoryId || null,
           priority: doc.data().priority || "Medium",
           subtasks: doc.data().subtasks || [],
+          sharedWith: doc.data().sharedWith || [],
         }));
         mergeTasks();
       });
