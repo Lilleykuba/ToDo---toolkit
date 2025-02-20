@@ -174,7 +174,7 @@ const AddTask = ({
       </div>
 
       {/* Share Task Section */}
-      <div className="form-control flex flex-col gap-2 sm:w-[50%]">
+      <div className="flex flex-col gap-2 sm:w-[50%]">
         <label className="label">Share with users</label>
         <input
           type="text"
