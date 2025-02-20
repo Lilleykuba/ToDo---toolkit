@@ -110,7 +110,7 @@ const AddTask = ({
   return (
     <form onSubmit={handleAddTask} className="form-control flex gap-4 sm:gap-2">
       <div className="flex flex-col gap-2  sm:w-[50%]">
-        <h2 className="text-lg font-semibold">Add Task</hjson>
+        <h2 className="text-lg font-semibold">Add Task</h2>
         <label className="label">Task Name</label>
         <input
           type="text"
