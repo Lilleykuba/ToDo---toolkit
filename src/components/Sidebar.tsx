@@ -56,10 +56,7 @@ const Sidebar = ({
       const user = auth.currentUser;
 
       if (user) {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists()) {
-          setUsername(userDoc.data().displayName || null);
-        }
+        setUsername(user.displayName);
       }
     };
 
@@ -90,7 +87,7 @@ const Sidebar = ({
       >
         {/* App Title */}
         <h1 className="text-2xl font-bold text-primary text-center mb-8 mt-16 lg:mt-4">
-          Camo ToDo
+          Camo ToDo List
         </h1>
 
         {/* Welcome Message */}

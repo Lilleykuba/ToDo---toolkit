@@ -80,7 +80,7 @@ const Categories = ({
       <h3 className="text-lg font-bold mb-4 text-center">Categories</h3>
       <form
         onSubmit={handleAddCategory}
-        className="flex items-center gap-2 mb-4"
+        className="flex items-center gap-2 mb-4 overflow-auto"
       >
         <input
           type="text"

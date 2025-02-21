@@ -75,6 +75,16 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
     setShowConfirmDelete(true);
   };
 
+  const handleUsernameChange = (value: string) => {
+    try {
+      // Update Firestore with the new username
+      const userRef = doc(db, "users", user?.uid);
+      updateDoc(userRef, { displayName: value });
+    } catch (error) {
+      console.error("Error updating username:", error);
+    }
+  };
+
   const handleProfilePictureChange = async (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -144,7 +154,7 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
         <input
           type="text"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => handleUsernameChange(e.target.value)}
           className="input input-bordered"
         />
       </div>
@@ -155,7 +165,7 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
         <input
           type="password"
           value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
+          onChange={(e) => handleNewPassword(e.target.value)}
           className="input input-bordered"
         />
       </div>
