@@ -109,127 +109,128 @@ const AddTask = ({
 
   return (
     <form onSubmit={handleAddTask} className="form-control flex gap-4 sm:gap-2">
-      <div className="flex flex-col gap-2  sm:w-[50%]">
-        <input
-          type="text"
-          placeholder="Enter your task"
-          value={taskName}
-          onChange={(e) => setTaskName(e.target.value)}
-          className="input input-bordered flex-grow"
-        />
-        <div className="dropdown">
-          <button
-            type="button"
-            tabIndex={0}
-            className="btn btn-outline w-full flex justify-between"
-          >
-            Task Priority: {priority}
-          </button>
-          <ul
-            tabIndex={0}
-            className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-2"
-          >
-            <li>
-              <button type="button" onClick={() => setPriority("High")}>
-                High
-              </button>
-            </li>
-            <li>
-              <button type="button" onClick={() => setPriority("Medium")}>
-                Medium
-              </button>
-            </li>
-            <li>
-              <button type="button" onClick={() => setPriority("Low")}>
-                Low
-              </button>
-            </li>
-          </ul>
-        </div>
-        {/* Subtasks Section */}
-        <div className="space-y-2">
-          <div className="flex gap-2 input input-bordered flex-grow pr-0">
-            <input
-              type="text"
-              placeholder="Add subtask"
-              value={newSubtask}
-              onChange={(e) => setNewSubtask(e.target.value)}
-              className="flex-grow"
-            />
+      <div className="flex flex-col gap-4 sm:flex-row">
+        <div className="flex flex-col gap-2  sm:w-[50%]">
+          <input
+            type="text"
+            placeholder="Enter your task"
+            value={taskName}
+            onChange={(e) => setTaskName(e.target.value)}
+            className="input input-bordered"
+          />
+          <div className="dropdown">
             <button
               type="button"
-              onClick={handleAddSubtask}
-              className="btn btn-circle btn-ghost"
-              title="Add Subtask"
+              tabIndex={0}
+              className="btn btn-outline w-full flex justify-between"
             >
-              <PlusCircleIcon className="h-8 w-8 text-white" />
+              Task Priority: {priority}
             </button>
-          </div>
-          {subtasks.map((subtask) => (
-            <div key={subtask.id} className="flex items-center">
-              <span className="text-sm">{subtask.name}</span>
-              <button
-                type="button"
-                onClick={() => handleRemoveSubtask(subtask.id)}
-                className="btn btn-ghost btn-sm hover:bg-transparent"
-              >
-                <TrashIcon className="h-4 w-4 text-red-500 hover:text-red-700" />
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Share Task Section */}
-      <div className="flex flex-col gap-2 sm:w-[50%]">
-        <label className="label">Share with users</label>
-        <input
-          type="text"
-          placeholder="Search users by name or email"
-          value={shareSearch}
-          onChange={(e) => setShareSearch(e.target.value)}
-          className="input input-bordered"
-        />
-        <div className="max-h-40 overflow-auto mt-2 border border-base-200 rounded p-2">
-          {filteredUsers.map((user) => (
-            <div
-              key={user.uid}
-              className="flex items-center justify-between my-2"
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-2"
             >
-              <span>{user.displayName || user.email || user.uid}</span>
+              <li>
+                <button type="button" onClick={() => setPriority("High")}>
+                  High
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={() => setPriority("Medium")}>
+                  Medium
+                </button>
+              </li>
+              <li>
+                <button type="button" onClick={() => setPriority("Low")}>
+                  Low
+                </button>
+              </li>
+            </ul>
+          </div>
+          {/* Subtasks Section */}
+          <div className="space-y-2">
+            <div className="flex gap-2 input input-bordered flex-grow pr-0">
+              <input
+                type="text"
+                placeholder="Add subtask"
+                value={newSubtask}
+                onChange={(e) => setNewSubtask(e.target.value)}
+                className="flex-grow"
+              />
               <button
                 type="button"
-                className="btn btn-sm btn-outline"
-                onClick={() => {
-                  // Toggle selection
-                  if (selectedShareUsers.find((u) => u.uid === user.uid)) {
-                    setSelectedShareUsers(
-                      selectedShareUsers.filter((u) => u.uid !== user.uid)
-                    );
-                  } else {
-                    setSelectedShareUsers([...selectedShareUsers, user]);
-                  }
-                }}
+                onClick={handleAddSubtask}
+                className="btn btn-circle btn-ghost"
+                title="Add Subtask"
               >
-                {selectedShareUsers.find((u) => u.uid === user.uid)
-                  ? "Remove"
-                  : "Add"}
+                <PlusCircleIcon className="h-8 w-8 text-white" />
               </button>
             </div>
-          ))}
-        </div>
-        {selectedShareUsers.length > 0 && (
-          <div className="mt-2">
-            <label className="label">Selected Users:</label>
-            <div className="flex flex-wrap gap-2">
-              {selectedShareUsers.map((user) => (
-                <span key={user.uid} className="badge badge-info">
-                  {user.displayName || user.email || user.uid}
-                </span>
-              ))}
-            </div>
+            {subtasks.map((subtask) => (
+              <div key={subtask.id} className="flex items-center">
+                <span className="text-sm">{subtask.name}</span>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveSubtask(subtask.id)}
+                  className="btn btn-ghost btn-sm hover:bg-transparent"
+                >
+                  <TrashIcon className="h-4 w-4 text-red-500 hover:text-red-700" />
+                </button>
+              </div>
+            ))}
           </div>
-        )}
+        </div>
+        {/* Share Task Section */}
+        <div className="flex flex-col gap-2 sm:w-[50%]">
+          <label className="label">Share with users</label>
+          <input
+            type="text"
+            placeholder="Search users by name or email"
+            value={shareSearch}
+            onChange={(e) => setShareSearch(e.target.value)}
+            className="input input-bordered"
+          />
+          <div className="max-h-40 overflow-auto mt-2 border border-base-200 rounded p-2">
+            {filteredUsers.map((user) => (
+              <div
+                key={user.uid}
+                className="flex items-center justify-between my-2 overflow-auto"
+              >
+                <span>{user.displayName || user.email || user.uid}</span>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline"
+                  onClick={() => {
+                    // Toggle selection
+                    if (selectedShareUsers.find((u) => u.uid === user.uid)) {
+                      setSelectedShareUsers(
+                        selectedShareUsers.filter((u) => u.uid !== user.uid)
+                      );
+                    } else {
+                      setSelectedShareUsers([...selectedShareUsers, user]);
+                    }
+                  }}
+                >
+                  {selectedShareUsers.find((u) => u.uid === user.uid)
+                    ? "Remove"
+                    : "Add"}
+                </button>
+              </div>
+            ))}
+          </div>
+          {selectedShareUsers.length > 0 && (
+            <div className="mt-2">
+              <label className="label">Selected Users:</label>
+              <div className="flex flex-wrap gap-2">
+                {selectedShareUsers.map((user) => (
+                  <span key={user.uid} className="badge badge-info">
+                    {user.displayName || user.email || user.uid}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       <button type="submit" className="btn btn-primary sm:w-auto">
