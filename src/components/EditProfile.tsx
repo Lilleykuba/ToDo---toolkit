@@ -76,13 +76,11 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
   };
 
   const handleUsernameChange = (value: string) => {
-    try {
-      // Update Firestore with the new username
-      const userRef = doc(db, "users", user?.uid);
-      updateDoc(userRef, { displayName: value });
-    } catch (error) {
-      console.error("Error updating username:", error);
-    }
+    setUsername(value);
+  };
+
+  const handleNewPassword = (value: string) => {
+    setNewPassword(value);
   };
 
   const handleProfilePictureChange = async (
