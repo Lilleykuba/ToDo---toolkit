@@ -93,9 +93,6 @@ function App() {
           {/* Content */}
           <div className="flex flex-col gap-10">
             <section>
-              <h2 className="text-2xl font-bold text-primary mb-4">
-                Add a Task
-              </h2>
               <AddTask selectedCategory={selectedCategory} />
             </section>
 

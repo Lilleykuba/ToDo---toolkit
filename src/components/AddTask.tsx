@@ -110,7 +110,8 @@ const AddTask = ({
   return (
     <form onSubmit={handleAddTask} className="form-control flex gap-4 sm:gap-2">
       <div className="flex flex-col gap-4 sm:flex-row">
-        <div className="flex flex-col gap-2  sm:w-[50%]">
+        <div className="flex flex-col gap-2 sm:w-[50%]">
+          <h2 className="text-3xl font-bold text-primary mb-4">Add a Task</h2>
           <input
             type="text"
             placeholder="Enter your task"
@@ -181,8 +182,10 @@ const AddTask = ({
           </div>
         </div>
         {/* Share Task Section */}
-        <div className="flex flex-col gap-2 sm:w-[50%]">
-          <label className="label">Share with users</label>
+        <div className="flex flex-col gap-2 sm:w-[50%] mt-4">
+          <h2 className="text-xl font-bold text-primary mb-2">
+            Share task with users
+          </h2>
           <input
             type="text"
             placeholder="Search users by name or email"
@@ -190,7 +193,7 @@ const AddTask = ({
             onChange={(e) => setShareSearch(e.target.value)}
             className="input input-bordered"
           />
-          <div className="max-h-40 overflow-auto mt-2 border border-base-200 rounded p-2">
+          <div className="max-h-40 overflow-auto mt-2 border border-base-200 rounded px-2">
             {filteredUsers.map((user) => (
               <div
                 key={user.uid}
