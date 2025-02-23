@@ -236,7 +236,7 @@ const AddTask = ({
         </div>
       </div>
 
-      <button type="submit" className="btn btn-primary sm:w-auto">
+      <button type="submit" className="btn btn-primary sm:w-auto mt-4">
         Add Task
       </button>
     </form>
