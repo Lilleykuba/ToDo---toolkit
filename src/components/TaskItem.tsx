@@ -1,4 +1,4 @@
-import { doc, updateDoc, deleteDoc, arrayUnion } from "firebase/firestore";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 import { PencilIcon, TrashIcon, ShareIcon } from "@heroicons/react/24/solid";

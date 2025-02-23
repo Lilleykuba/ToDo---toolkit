@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import {
   collection,
-  addDoc,
   query,
-  where,
   getDocs,
   doc,
   getDoc,
@@ -11,7 +9,6 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
-import { v4 as uuidv4 } from "uuid";
 import { PlusCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 interface User {
