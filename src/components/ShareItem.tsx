@@ -134,7 +134,7 @@ const ShareItem = ({
           {selectedShareUsers.length > 0 && (
             <div className="mt-2">
               <label className="label">Selected Users:</label>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 mb-4">
                 {selectedShareUsers.map((user) => (
                   <span key={user.uid} className="badge badge-info">
                     {user.displayName || user.email || user.uid}
