@@ -1,6 +1,6 @@
 import { getAuth, signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
+// import { doc, getDoc } from "firebase/firestore";
 import Categories from "./Categories";
 import Footer from "./Footer";
 import EditProfile from "./EditProfile";

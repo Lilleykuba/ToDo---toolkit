@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
-import { PlusCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
+// import { PlusCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 interface User {
   uid: string;
