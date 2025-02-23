@@ -100,14 +100,6 @@ const Categories = ({
         </button>
       </form>
       <ul className="space-y-2 mt-4 flex flex-col">
-        <li>
-          <button
-            onClick={() => onCategorySelect(null)}
-            className="btn btn-ghost w-full text-center"
-          >
-            Show All Tasks
-          </button>
-        </li>
         {categories.map((category) => (
           <button
             onClick={() => onCategorySelect(category.id)}
