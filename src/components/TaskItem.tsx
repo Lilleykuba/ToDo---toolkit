@@ -8,6 +8,7 @@ const TaskItem = ({
   dragHandleProps,
   categoryColor,
   onEdit,
+  onShare,
 }: {
   task: {
     id: string;
@@ -22,6 +23,7 @@ const TaskItem = ({
   dragHandleProps?: any; // Drag handle props for drag-and-drop functionality
   categoryColor?: string; // Color of the associated category
   onEdit: () => void;
+  onShare: () => void;
 }) => {
   const auth = getAuth();
 
@@ -55,21 +57,6 @@ const TaskItem = ({
 
     const taskRef = doc(db, "tasks", task.id);
     await updateDoc(taskRef, { subtasks: updatedSubtasks });
-  };
-
-  const handleShare = async () => {
-    const targetUserId = prompt("Enter the UID of the user to share with:");
-    if (!targetUserId) return;
-
-    try {
-      const taskRef = doc(db, "tasks", task.id);
-      await updateDoc(taskRef, {
-        sharedWith: arrayUnion(targetUserId),
-      });
-      console.log("Task shared with", targetUserId);
-    } catch (error) {
-      console.error("Error sharing task:", error);
-    }
   };
 
   return (
@@ -117,7 +104,7 @@ const TaskItem = ({
             <PencilIcon className="h-full w-full text-blue-500 hover:text-blue-700" />
           </button>
           <button
-            onClick={handleShare}
+            onClick={onShare}
             className="btn btn-sm btn-ghost w-5 h-5 p-0 hover:bg-transparent"
             aria-label="Share task"
           >

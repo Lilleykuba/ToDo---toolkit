@@ -7,6 +7,7 @@ import Auth from "./components/Auth";
 import Sidebar from "./components/Sidebar";
 import RegisterGuest from "./components/RegisterGuest";
 import EditTask from "./components/EditTask";
+import ShareItem from "./components/ShareItem";
 import CookieConsent from "./components/CookieConsent";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
   const [isSwitchingFromGuest, setIsSwitchingFromGuest] = useState(false); // Guest to account upgrade state
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const [sharingTaskId, setSharingTaskId] = useState<string | null>(null);
 
   useEffect(() => {
     const auth = getAuth();
@@ -64,6 +66,16 @@ function App() {
     );
   }
 
+  if (sharingTaskId) {
+    // Render ShareItem component when sharingTaskId is set
+    return (
+      <ShareItem
+        taskId={sharingTaskId}
+        onClose={() => setSharingTaskId(null)} // Go back to the task list
+      />
+    );
+  }
+
   return (
     <div className="flex min-h-screen bg-base-200">
       {/* Sidebar */}
@@ -105,6 +117,7 @@ function App() {
               <TaskList
                 selectedCategory={selectedCategory}
                 onEditTask={(taskId) => setEditingTaskId(taskId)}
+                onShareTask={(taskId) => setSharingTaskId(taskId)}
               />
             </section>
           </div>
