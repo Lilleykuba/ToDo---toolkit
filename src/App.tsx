@@ -92,11 +92,26 @@ function App() {
           onCategorySelect={(id) => setSelectedCategory(id)}
           onOpenDashboard={() => setOpenDashboard(false)}
         />
-        <Dashboard
-          selectedCategory={selectedCategory}
-          onEditTask={(taskId) => setEditingTaskId(taskId)}
-          onShareTask={(taskId) => setSharingTaskId(taskId)}
-        />
+        <main
+          className={`flex-grow p-2 sm:p-6 flex-col items-start justify-center transition-all mt-10 sm:items-center sm:mt-4 ${
+            sidebarOpen ? "ml-64" : "ml-0"
+          }`}
+        >
+          <div className="w-full max-w-screen-lg bg-base-100 shadow-xl rounded-lg p-10 relative">
+            <button
+              onClick={toggleSidebar}
+              className="btn btn-primary btn-sm sm:btn lg:hidden fixed top-2 left-2 sm:left-4 sm:top-4 z-50"
+            >
+              ☰
+            </button>
+
+            <Dashboard
+              selectedCategory={selectedCategory}
+              onEditTask={(taskId) => setEditingTaskId(taskId)}
+              onShareTask={(taskId) => setSharingTaskId(taskId)}
+            />
+          </div>
+        </main>
       </div>
     );
   }
