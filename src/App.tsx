@@ -93,6 +93,7 @@ function App() {
           onOpenDashboard={() => setOpenDashboard(false)}
         />
         <Dashboard
+          onClose={() => setOpenDashboard(false)} // Pass onClose to close Dashboard
           selectedCategory={selectedCategory}
           onEditTask={(taskId) => setEditingTaskId(taskId)}
           onShareTask={(taskId) => setSharingTaskId(taskId)}
