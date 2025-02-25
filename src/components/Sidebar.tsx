@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Categories from "./Categories";
 import Footer from "./Footer";
 import EditProfile from "./EditProfile";
-import Dashboard from "./Dashboard";
 
 const Sidebar = ({
   user,
