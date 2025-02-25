@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Categories from "./Categories";
 import Footer from "./Footer";
 import EditProfile from "./EditProfile";
+import Dashboard from "./Dashboard";
 
 const Sidebar = ({
   user,
@@ -11,12 +12,14 @@ const Sidebar = ({
   toggleSidebar,
   onSwitchToAccount,
   onCategorySelect,
+  onOpenDashboard,
 }: {
   user: { email?: string; isAnonymous: boolean };
   isOpen: boolean;
   toggleSidebar: () => void;
   onSwitchToAccount: () => void;
   onCategorySelect: (id: string | null) => void;
+  onOpenDashboard: () => void;
 }) => {
   const handleLogout = async () => {
     const auth = getAuth();
@@ -110,6 +113,12 @@ const Sidebar = ({
             Upgrade to Account
           </button>
         )}
+
+        <div className="divider w-full"></div>
+
+        <button onClick={onOpenDashboard} className="btn">
+          {isOpen ? "Tasks" : "Dashboard"}
+        </button>
 
         <div className="divider w-full"></div>
 

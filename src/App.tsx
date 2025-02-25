@@ -9,6 +9,7 @@ import RegisterGuest from "./components/RegisterGuest";
 import EditTask from "./components/EditTask";
 import ShareItem from "./components/ShareItem";
 import CookieConsent from "./components/CookieConsent";
+import Dashboard from "./components/Dashboard";
 
 function App() {
   const [user, setUser] = useState<User | null>(null); // Store the current user
@@ -18,6 +19,7 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   const [sharingTaskId, setSharingTaskId] = useState<string | null>(null);
+  const [openDashboard, setOpenDashboard] = useState(false);
 
   useEffect(() => {
     const auth = getAuth();
@@ -76,6 +78,25 @@ function App() {
     );
   }
 
+  if (openDashboard) {
+    return (
+      <div className="flex min-h-screen bg-base-200">
+        <Sidebar
+          user={{
+            email: user?.email || undefined,
+            isAnonymous: user?.isAnonymous || false,
+          }}
+          isOpen={sidebarOpen}
+          toggleSidebar={toggleSidebar}
+          onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
+          onCategorySelect={(id) => setSelectedCategory(id)}
+          onOpenDashboard={() => setOpenDashboard(true)}
+        />
+        <Dashboard onClose={() => setOpenDashboard(false)} />;
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen bg-base-200">
       {/* Sidebar */}
@@ -88,6 +109,7 @@ function App() {
         toggleSidebar={toggleSidebar}
         onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
         onCategorySelect={(id) => setSelectedCategory(id)}
+        onOpenDashboard={() => setOpenDashboard(true)}
       />
       {/* Main Content */}
       <main
