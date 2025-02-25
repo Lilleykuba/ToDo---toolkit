@@ -92,7 +92,11 @@ function App() {
           onCategorySelect={(id) => setSelectedCategory(id)}
           onOpenDashboard={() => setOpenDashboard(false)}
         />
-        <Dashboard />
+        <Dashboard
+          selectedCategory={selectedCategory}
+          onEditTask={(taskId) => setEditingTaskId(taskId)}
+          onShareTask={(taskId) => setSharingTaskId(taskId)}
+        />
       </div>
     );
   }

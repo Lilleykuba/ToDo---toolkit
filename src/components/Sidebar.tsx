@@ -115,7 +115,7 @@ const Sidebar = ({
 
         <div className="divider w-full"></div>
 
-        <button onClick={onOpenDashboard} className="btn">
+        <button onClick={() => onOpenDashboard(true)} className="btn">
           {isOpen ? "Tasks" : "Dashboard"}
         </button>
 
