@@ -18,7 +18,7 @@ const Sidebar = ({
   toggleSidebar: () => void;
   onSwitchToAccount: () => void;
   onCategorySelect: (id: string | null) => void;
-  onOpenDashboard: () => void;
+  onOpenDashboard: (isOpen: boolean) => void;
 }) => {
   const handleLogout = async () => {
     const auth = getAuth();

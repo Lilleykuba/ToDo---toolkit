@@ -67,18 +67,28 @@ const TaskList = ({
         ? query(
             tasksRef,
             where("uid", "==", user.uid),
-            where("categoryId", "==", selectedCategory)
+            where("categoryId", "==", selectedCategory),
+            where("completed", "==", false)
           )
-        : query(tasksRef, where("uid", "==", user.uid));
+        : query(
+            tasksRef,
+            where("uid", "==", user.uid),
+            where("completed", "==", false)
+          );
 
       // Build query for tasks shared with the user
       const sharedQuery = selectedCategory
         ? query(
             tasksRef,
             where("sharedWith", "array-contains", user.uid),
-            where("categoryId", "==", selectedCategory)
+            where("categoryId", "==", selectedCategory),
+            where("completed", "==", false)
           )
-        : query(tasksRef, where("sharedWith", "array-contains", user.uid));
+        : query(
+            tasksRef,
+            where("sharedWith", "array-contains", user.uid),
+            where("completed", "==", false)
+          );
 
       // Arrays to hold snapshots from both queries
       let ownedTasks: Task[] = [];

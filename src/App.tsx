@@ -90,9 +90,9 @@ function App() {
           toggleSidebar={toggleSidebar}
           onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
           onCategorySelect={(id) => setSelectedCategory(id)}
-          onOpenDashboard={() => setOpenDashboard(true)}
+          onOpenDashboard={() => setOpenDashboard(false)}
         />
-        <Dashboard onClose={() => setOpenDashboard(false)} />;
+        <Dashboard />
       </div>
     );
   }
