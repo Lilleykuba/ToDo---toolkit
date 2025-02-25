@@ -30,12 +30,10 @@ interface Task {
 }
 
 const Dashboard = ({
-  onClose,
   selectedCategory,
   onEditTask,
   onShareTask,
 }: {
-  onClose: () => void;
   selectedCategory: string | null;
   onEditTask: (taskId: string) => void;
   onShareTask: (taskId: string) => void;
