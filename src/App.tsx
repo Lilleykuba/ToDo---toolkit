@@ -92,7 +92,7 @@ function App() {
           onCategorySelect={(id) => setSelectedCategory(id)}
           onOpenDashboard={() => setOpenDashboard(true)}
         />
-        <Dashboard />;
+        <Dashboard onClose={() => setOpenDashboard(false)} />;
       </div>
     );
   }
