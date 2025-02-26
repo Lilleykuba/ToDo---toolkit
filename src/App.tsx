@@ -98,6 +98,7 @@ function App() {
             sidebarOpen ? "ml-64" : "ml-0"
           }`}
         >
+          <h1 className="text-4xl text-center text-primary mb-4">Dashboard</h1>
           <div className="w-full max-w-screen-lg bg-base-100 shadow-xl rounded-lg p-10 relative">
             <button
               onClick={toggleSidebar}
@@ -105,7 +106,6 @@ function App() {
             >
               ☰
             </button>
-
             <Dashboard
               selectedCategory={selectedCategory}
               onEditTask={(taskId) => setEditingTaskId(taskId)}

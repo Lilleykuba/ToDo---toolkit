@@ -174,8 +174,10 @@ const Dashboard = ({
 
   return (
     <div className="flex flex-col w-full mt-4">
-      <h1 className="text-4xl text-center text-primary">Dashboard</h1>
       <div>
+        <h2 className="text-primary text-3xl mb-3">
+          Completed Tasks: {tasks.length}
+        </h2>
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="tasks">
             {(provided) => (
