@@ -91,9 +91,10 @@ function App() {
           onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
           onCategorySelect={(id) => setSelectedCategory(id)}
           onOpenDashboard={() => setOpenDashboard(false)}
+          openDashboard={openDashboard}
         />
         <main
-          className={`flex-grow p-2 sm:p-6 flex-col items-start justify-center transition-all mt-10 sm:items-center sm:mt-4 ${
+          className={`flex-grow p-2 sm:p-6 flex-col items-start  transition-all mt-10 sm:items-center sm:mt-4 ${
             sidebarOpen ? "ml-64" : "ml-0"
           }`}
         >
@@ -129,6 +130,7 @@ function App() {
         onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
         onCategorySelect={(id) => setSelectedCategory(id)}
         onOpenDashboard={() => setOpenDashboard(true)}
+        openDashboard={openDashboard}
       />
       {/* Main Content */}
       <main

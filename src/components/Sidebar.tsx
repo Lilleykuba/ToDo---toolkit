@@ -12,6 +12,7 @@ const Sidebar = ({
   onSwitchToAccount,
   onCategorySelect,
   onOpenDashboard,
+  openDashboard,
 }: {
   user: { email?: string; isAnonymous: boolean };
   isOpen: boolean;
@@ -19,6 +20,7 @@ const Sidebar = ({
   onSwitchToAccount: () => void;
   onCategorySelect: (id: string | null) => void;
   onOpenDashboard: (isOpen: boolean) => void;
+  openDashboard: boolean;
 }) => {
   const handleLogout = async () => {
     const auth = getAuth();
@@ -115,8 +117,8 @@ const Sidebar = ({
 
         <div className="divider w-full"></div>
 
-        <button onClick={() => onOpenDashboard(true)} className="btn">
-          {isOpen ? "Tasks" : "Dashboard"}
+        <button onClick={() => onOpenDashboard(!openDashboard)} className="btn">
+          {openDashboard ? "Tasks" : "Dashboard"}
         </button>
 
         <div className="divider w-full"></div>
