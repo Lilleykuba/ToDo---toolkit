@@ -5,13 +5,22 @@ const CookieConsent = () => {
 
   useEffect(() => {
     const cookiesAccepted = localStorage.getItem("cookiesAccepted");
+    const cookiesDeclined = localStorage.getItem("cookiesDeclined");
     if (!cookiesAccepted) {
       setIsVisible(true);
+    }
+    if (cookiesDeclined) {
+      setIsVisible(false);
     }
   }, []);
 
   const acceptCookies = () => {
     localStorage.setItem("cookiesAccepted", "true");
+    setIsVisible(false);
+  };
+
+  const declineCookies = () => {
+    localStorage.setItem("cookiesDeclined", "true");
     setIsVisible(false);
   };
 
@@ -27,9 +36,14 @@ const CookieConsent = () => {
         </a>
         .
       </p>
-      <button className="btn btn-primary btn-sm" onClick={acceptCookies}>
-        Accept
-      </button>
+      <div className="flex gap-2">
+        <button className="btn btn-error btn-sm" onClick={declineCookies}>
+          Decline
+        </button>
+        <button className="btn btn-primary btn-sm" onClick={acceptCookies}>
+          Accept
+        </button>
+      </div>
     </div>
   );
 };
