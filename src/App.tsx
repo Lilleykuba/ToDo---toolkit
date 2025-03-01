@@ -166,7 +166,7 @@ function App() {
           </div>
         </div>
       </main>
-      <CookieConsent />
+      {/* <CookieConsent /> */}
     </div>
   );
 }
