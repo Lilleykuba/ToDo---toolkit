@@ -40,6 +40,7 @@ const TaskList = ({
 }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [categories, setCategories] = useState<Record<string, string>>({});
+  const [sortMethod, setSortMethod] = useState<"newest" | "priority">("newest");
   const auth = getAuth();
 
   useEffect(() => {
@@ -172,42 +173,85 @@ const TaskList = ({
     }
   };
 
+  const handleSort = (method: "newest" | "priority") => {
+    setSortMethod(method);
+    const sortedTasks = [...tasks];
+
+    if (method === "newest") {
+      sortedTasks.sort((a, b) => b.order - a.order);
+    } else {
+      // Priority sorting (High > Medium > Low)
+      const priorityWeight = { High: 3, Medium: 2, Low: 1 };
+      sortedTasks.sort(
+        (a, b) =>
+          (priorityWeight[b.priority as keyof typeof priorityWeight] || 0) -
+          (priorityWeight[a.priority as keyof typeof priorityWeight] || 0)
+      );
+    }
+
+    setTasks(sortedTasks);
+  };
+
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <Droppable droppableId="tasks">
-        {(provided) => (
-          <div
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-            className="space-y-4 overflow-auto max-h-96"
-          >
-            {tasks.map((task, index) => (
-              <Draggable key={task.id} draggableId={task.id} index={index}>
-                {(provided) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                  >
-                    <TaskItem
-                      task={task}
-                      categoryColor={
-                        task.categoryId
-                          ? categories[task.categoryId]
-                          : undefined
-                      }
-                      onEdit={() => onEditTask(task.id)}
-                      onShare={() => onShareTask(task.id)}
-                    />
-                  </div>
-                )}
-              </Draggable>
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+    <>
+      <div className="mb-4 flex gap-2">
+        <button
+          className={`px-4 py-2 rounded ${
+            sortMethod === "newest"
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200 text-gray-700"
+          }`}
+          onClick={() => handleSort("newest")}
+        >
+          Newest
+        </button>
+        <button
+          className={`px-4 py-2 rounded ${
+            sortMethod === "priority"
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200 text-gray-700"
+          }`}
+          onClick={() => handleSort("priority")}
+        >
+          Priority
+        </button>
+      </div>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="tasks">
+          {(provided) => (
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              className="space-y-4 overflow-auto max-h-96"
+            >
+              {tasks.map((task, index) => (
+                <Draggable key={task.id} draggableId={task.id} index={index}>
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <TaskItem
+                        task={task}
+                        categoryColor={
+                          task.categoryId
+                            ? categories[task.categoryId]
+                            : undefined
+                        }
+                        onEdit={() => onEditTask(task.id)}
+                        onShare={() => onShareTask(task.id)}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </>
   );
 };
 
