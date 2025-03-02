@@ -158,6 +158,7 @@ const TaskList = ({
     }));
 
     setTasks(updatedTasks);
+    handleSort(sortMethod);
 
     // Use batch writes to update Firestore
     const batch = writeBatch(db);
