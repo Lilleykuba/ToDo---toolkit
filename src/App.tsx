@@ -8,7 +8,6 @@ import Sidebar from "./components/Sidebar";
 import RegisterGuest from "./components/RegisterGuest";
 import EditTask from "./components/EditTask";
 import ShareItem from "./components/ShareItem";
-import CookieConsent from "./components/CookieConsent";
 import Dashboard from "./components/Dashboard";
 
 function App() {
