@@ -195,7 +195,7 @@ const TaskList = ({
 
   return (
     <>
-      <div className="mb-4 flex gap-2">
+      <div className="mb-4 flex gap-2 justify-end mt-[-50px]">
         <button
           className={`px-4 py-2 rounded ${
             sortMethod === "newest"
