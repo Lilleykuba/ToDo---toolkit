@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Categories from "./Categories";
 import Footer from "./Footer";
 import EditProfile from "./EditProfile";
+import { PencilIcon } from "@heroicons/react/24/solid";
 
 const Sidebar = ({
   user,
@@ -93,17 +94,18 @@ const Sidebar = ({
           Camo ToDo List
         </h1>
 
-        {/* Welcome Message */}
-        <p className="text-base text-base-content">
-          Welcome, {username || user.email || "Guest User"}
-        </p>
-
-        <button
-          onClick={() => setEditingProfile(true)} // Trigger the edit profile view
-          className="btn btn-sm btn-outline mt-2"
-        >
-          Edit Profile
-        </button>
+        <div className="flex gap-2 items-center">
+          {/* Welcome Message */}
+          <p className="text-base text-base-content">
+            Welcome, {username || user.email || "Guest User"}
+          </p>
+          <button
+            onClick={() => setEditingProfile(true)} // Trigger the edit profile view
+            className="btn btn-sm btn-ghost w-4 h-4 p-0 hover:bg-transparent mt-[-10px]"
+          >
+            <PencilIcon className="h-full w-full text-blue-500 hover:text-blue-700" />
+          </button>
+        </div>
 
         {/* Upgrade to Account Button */}
         {user.isAnonymous && (
