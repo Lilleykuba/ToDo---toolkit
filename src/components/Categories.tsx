@@ -100,6 +100,12 @@ const Categories = ({
         </button>
       </form>
       <ul className="space-y-2 mt-4 flex flex-col">
+        <button
+          onClick={() => onCategorySelect(null)}
+          className="btn btn-ghost w-full text-center"
+        >
+          Show All Tasks
+        </button>
         {categories.map((category) => (
           <button
             onClick={() => onCategorySelect(category.id)}
@@ -116,12 +122,6 @@ const Categories = ({
             </button>
           </button>
         ))}
-        <button
-          onClick={() => onCategorySelect(null)}
-          className="btn btn-ghost w-full text-center"
-        >
-          Show All Tasks
-        </button>
       </ul>
     </div>
   );
