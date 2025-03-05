@@ -91,7 +91,7 @@ const Sidebar = ({
       >
         {/* App Title */}
         <h1 className="text-2xl font-bold text-primary text-center mb-8 mt-16 lg:mt-4">
-          Camo ToDo List
+          Todo-san
         </h1>
 
         <div className="flex gap-2 items-center">
