@@ -197,7 +197,7 @@ const AddTask = ({
             {filteredUsers.map((user) => (
               <div
                 key={user.uid}
-                className="flex items-center justify-between my-2 overflow-auto"
+                className="flex items-center justify-between my-2 overflow-auto max-h-40"
               >
                 <span>{user.displayName || user.email || user.uid}</span>
                 <button
