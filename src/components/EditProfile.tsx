@@ -7,7 +7,6 @@ import {
 } from "firebase/auth";
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import React from "react";
 
 const EditProfile = ({ onClose }: { onClose: () => void }) => {
   const auth = getAuth();
