@@ -79,7 +79,7 @@ function App() {
 
   if (openDashboard) {
     return (
-      <div className="flex min-h-screen bg-base-200">
+      <div className="flex min-h-screen bg-base-200 justify-center">
         <Sidebar
           user={{
             email: user?.email || undefined,
