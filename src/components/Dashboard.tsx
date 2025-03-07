@@ -173,7 +173,7 @@ const Dashboard = ({
   };
 
   return (
-    <div className="flex flex-col w-full mt-4">
+    <div className="flex flex-col w-full mt-4 justify-center items-start">
       <div>
         <h2 className="text-primary text-3xl mb-3">
           Completed Tasks: {tasks.length}
