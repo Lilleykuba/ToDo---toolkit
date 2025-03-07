@@ -12,6 +12,7 @@ import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { v4 as uuidv4 } from "uuid";
+import ReactModal from "react-modal";
 
 const EditTask = ({
   taskId,
@@ -93,83 +94,85 @@ const EditTask = ({
   if (!task) return <p>Loading task...</p>;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-base-100 max-w-md mx-auto rounded">
-      <div className="card bg-base-200 shadow-xl w-full max-w-md p-6">
-        <h1 className="text-xl font-bold mb-4">Edit Task</h1>
-        <div className="form-control mb-4">
-          <label className="label">Task Name</label>
-          <input
-            type="text"
-            value={task.name}
-            onChange={(e) => setTask({ ...task, name: e.target.value })}
-            className="input input-bordered"
-          />
-        </div>
-        <div className="form-control mb-4">
-          <label className="label">Priority</label>
-          <select
-            value={task.priority || "Medium"}
-            onChange={(e) => setTask({ ...task, priority: e.target.value })}
-            className="select select-bordered"
-          >
-            <option value="High">High</option>
-            <option value="Medium">Medium</option>
-            <option value="Low">Low</option>
-          </select>
-        </div>
-        <div className="form-control mb-4">
-          <label className="label">Category</label>
-          <select
-            value={task.categoryId || ""}
-            onChange={(e) => setTask({ ...task, categoryId: e.target.value })}
-            className="select select-bordered"
-          >
-            <option value="">None</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form-control mb-4">
-          <label className="label">Subtasks</label>
-          <div className="space-y-2">
-            {task.subtasks &&
-              task.subtasks.map((subtask: any) => (
-                <div key={subtask.id} className="flex items-center gap-2">
-                  <span className="text-sm">{subtask.name}</span>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveSubtask(subtask.id)}
-                    className="btn btn-ghost btn-sm"
-                  >
-                    <TrashIcon className="h-5 w-5 text-red-500 hover:text-red-700" />
-                  </button>
-                </div>
-              ))}
-          </div>
-          <div className="flex gap-2 mt-4">
+    <ReactModal isOpen={false}>
+      <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-base-100 max-w-md mx-auto rounded">
+        <div className="card bg-base-200 shadow-xl w-full max-w-md p-6">
+          <h1 className="text-xl font-bold mb-4">Edit Task</h1>
+          <div className="form-control mb-4">
+            <label className="label">Task Name</label>
             <input
               type="text"
-              placeholder="Add subtask"
-              value={newSubtask}
-              onChange={(e) => setNewSubtask(e.target.value)}
-              className="input input-bordered flex-grow"
+              value={task.name}
+              onChange={(e) => setTask({ ...task, name: e.target.value })}
+              className="input input-bordered"
             />
-            <button type="button" onClick={handleAddSubtask} className="btn">
-              Add
-            </button>
           </div>
+          <div className="form-control mb-4">
+            <label className="label">Priority</label>
+            <select
+              value={task.priority || "Medium"}
+              onChange={(e) => setTask({ ...task, priority: e.target.value })}
+              className="select select-bordered"
+            >
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+          <div className="form-control mb-4">
+            <label className="label">Category</label>
+            <select
+              value={task.categoryId || ""}
+              onChange={(e) => setTask({ ...task, categoryId: e.target.value })}
+              className="select select-bordered"
+            >
+              <option value="">None</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-control mb-4">
+            <label className="label">Subtasks</label>
+            <div className="space-y-2">
+              {task.subtasks &&
+                task.subtasks.map((subtask: any) => (
+                  <div key={subtask.id} className="flex items-center gap-2">
+                    <span className="text-sm">{subtask.name}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveSubtask(subtask.id)}
+                      className="btn btn-ghost btn-sm"
+                    >
+                      <TrashIcon className="h-5 w-5 text-red-500 hover:text-red-700" />
+                    </button>
+                  </div>
+                ))}
+            </div>
+            <div className="flex gap-2 mt-4">
+              <input
+                type="text"
+                placeholder="Add subtask"
+                value={newSubtask}
+                onChange={(e) => setNewSubtask(e.target.value)}
+                className="input input-bordered flex-grow"
+              />
+              <button type="button" onClick={handleAddSubtask} className="btn">
+                Add
+              </button>
+            </div>
+          </div>
+          <button onClick={handleSave} className="btn btn-primary w-full">
+            Save Changes
+          </button>
+          <button onClick={onClose} className="btn btn-secondary w-full mt-4">
+            Cancel
+          </button>
         </div>
-        <button onClick={handleSave} className="btn btn-primary w-full">
-          Save Changes
-        </button>
-        <button onClick={onClose} className="btn btn-secondary w-full mt-4">
-          Cancel
-        </button>
       </div>
-    </div>
+    </ReactModal>
   );
 };
 
