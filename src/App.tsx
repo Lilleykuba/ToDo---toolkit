@@ -98,7 +98,7 @@ function App() {
           }`}
         >
           <h1 className="text-4xl text-center text-primary mb-4">Dashboard</h1>
-          <div className="w-full max-w-screen-lg bg-base-100 shadow-xl rounded-lg p-10 relative">
+          <div className="w-full max-w-screen-lg bg-base-100 shadow-xl rounded-lg p-10 relative flex justify-center">
             <button
               onClick={toggleSidebar}
               className="btn btn-primary btn-sm sm:btn lg:hidden fixed top-2 left-2 sm:left-4 sm:top-4 z-50"
@@ -109,7 +109,6 @@ function App() {
               selectedCategory={selectedCategory}
               onEditTask={(taskId) => setEditingTaskId(taskId)}
               onShareTask={(taskId) => setSharingTaskId(taskId)}
-              className="flex justify-center"
             />
           </div>
         </main>
