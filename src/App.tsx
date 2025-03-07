@@ -109,6 +109,7 @@ function App() {
               selectedCategory={selectedCategory}
               onEditTask={(taskId) => setEditingTaskId(taskId)}
               onShareTask={(taskId) => setSharingTaskId(taskId)}
+              className="flex justify-center"
             />
           </div>
         </main>
