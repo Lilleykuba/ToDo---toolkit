@@ -190,7 +190,9 @@ const AddTask = ({
             onClick={() => setShowShareTask((prev) => !prev)}
             className="text-xl font-bold text-primary mb-2 cursor-pointer"
           >
-            {showShareTask ? {"∨"} Share task with users : {">"} Share task with users}
+            {showShareTask
+              ? "∨ Share task with users"
+              : "> Share task with users"}
           </h2>
           {showShareTask && (
             <>
