@@ -162,7 +162,7 @@ const AddTask = ({
       </div>
 
       <div className="flex flex-col sm:flex-row gap-2">
-        <div className="flex flex-col gap-2 w-[50%]">
+        <div className="flex flex-col gap-2 w-full sm:w-[50%]">
           {/* Task Name Section */}
           <input
             type="text"
@@ -273,7 +273,7 @@ const AddTask = ({
             )}
           </div>
         </div>
-        <div className="dropdown w-[50%]">
+        <div className="dropdown w-full sm:w-[50%]">
           <button
             type="button"
             tabIndex={0}

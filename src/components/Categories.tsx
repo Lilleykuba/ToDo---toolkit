@@ -92,7 +92,7 @@ const Categories = ({
           type="color"
           value={color}
           onChange={(e) => setColor(e.target.value)}
-          className="w-12 h-10 rounded-full border-none p-0 cursor-pointer"
+          className="w-10 h-10 rounded-full border-none p-0 cursor-pointer"
         />
         <button type="submit" className="btn btn-primary w-20">
           Add
