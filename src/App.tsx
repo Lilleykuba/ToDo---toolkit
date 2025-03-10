@@ -93,7 +93,7 @@ function App() {
           openDashboard={openDashboard}
         />
         <main
-          className={`flex-grow p-2 sm:p-6 flex-col items-start justify-center transition-all mt-10 sm:mt-4 mx-auto ${
+          className={`flex-grow p-2 sm:p-6 flex-col items-start justify-center transition-all mt-10 sm:mt-4 ${
             sidebarOpen ? "ml-64" : "ml-0"
           }`}
         >
