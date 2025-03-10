@@ -1,7 +1,7 @@
 import { getAuth, signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
 // import { doc, getDoc } from "firebase/firestore";
-import Categories from "./Categories";
+
 import Footer from "./Footer";
 import EditProfile from "./EditProfile";
 import { PencilIcon } from "@heroicons/react/24/solid";
@@ -11,7 +11,7 @@ const Sidebar = ({
   isOpen,
   toggleSidebar,
   onSwitchToAccount,
-  onCategorySelect,
+
   onOpenDashboard,
   openDashboard,
 }: {
@@ -19,7 +19,7 @@ const Sidebar = ({
   isOpen: boolean;
   toggleSidebar: () => void;
   onSwitchToAccount: () => void;
-  onCategorySelect: (id: string | null) => void;
+
   onOpenDashboard: (isOpen: boolean) => void;
   openDashboard: boolean;
 }) => {
@@ -124,8 +124,6 @@ const Sidebar = ({
         </button>
 
         <div className="divider w-full"></div>
-
-        <Categories onCategorySelect={onCategorySelect} />
 
         <div className="mt-auto space-y-8">
           {/* Theme Switcher */}

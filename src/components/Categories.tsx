@@ -77,25 +77,24 @@ const Categories = ({
 
   return (
     <div>
-      <h3 className="text-lg font-bold mb-4 text-center">Categories</h3>
       <form
         onSubmit={handleAddCategory}
-        className="flex items-center gap-2 mb-4 overflow-auto"
+        className="flex items-center gap-2 mb-4 mt-4 overflow-auto"
       >
         <input
           type="text"
           placeholder="New Category"
           value={categoryName}
           onChange={(e) => setCategoryName(e.target.value)}
-          className="input input-bordered w-36"
+          className="input input-bordered w-full"
         />
         <input
           type="color"
           value={color}
           onChange={(e) => setColor(e.target.value)}
-          className="w-10 h-10 rounded-full border-none p-0 cursor-pointer"
+          className="w-12 h-10 rounded-full border-none p-0 cursor-pointer"
         />
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary w-20">
           Add
         </button>
       </form>

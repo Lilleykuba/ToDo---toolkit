@@ -88,7 +88,6 @@ function App() {
           isOpen={sidebarOpen}
           toggleSidebar={toggleSidebar}
           onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
-          onCategorySelect={(id) => setSelectedCategory(id)}
           onOpenDashboard={() => setOpenDashboard(false)}
           openDashboard={openDashboard}
         />
@@ -117,7 +116,7 @@ function App() {
   }
 
   return (
-    <div className="flex min-h-screen bg-base-200">
+    <div className="flex max-h-screen bg-base-200">
       {/* Sidebar */}
       <Sidebar
         user={{
@@ -127,7 +126,6 @@ function App() {
         isOpen={sidebarOpen}
         toggleSidebar={toggleSidebar}
         onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
-        onCategorySelect={(id) => setSelectedCategory(id)}
         onOpenDashboard={() => setOpenDashboard(true)}
         openDashboard={openDashboard}
       />
@@ -147,7 +145,10 @@ function App() {
           {/* Content */}
           <div className="flex flex-col gap-10">
             <section>
-              <AddTask selectedCategory={selectedCategory} />
+              <AddTask
+                selectedCategory={selectedCategory}
+                onCategorySelect={(id) => setSelectedCategory(id)}
+              />
             </section>
 
             <div className="divider"></div>
