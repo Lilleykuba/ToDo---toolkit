@@ -25,6 +25,7 @@ const AddTask = ({
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [shareSearch, setShareSearch] = useState("");
   const [selectedShareUsers, setSelectedShareUsers] = useState<User[]>([]);
+  const [showShareTask, setShowShareTask] = useState(false); // new state to toggle share section
 
   const auth = getAuth();
 
@@ -101,15 +102,17 @@ const AddTask = ({
   };
 
   // Filter users based on search text
-  const filteredUsers = allUsers.filter((user) =>
-    (user.displayName || user.email || "")
-      .toLowerCase()
-      .includes(shareSearch.toLowerCase())
-  );
+  const filteredUsers = shareSearch
+    ? allUsers.filter((user) =>
+        (user.displayName || user.email || "")
+          .toLowerCase()
+          .includes(shareSearch.toLowerCase())
+      )
+    : [];
 
   return (
     <form onSubmit={handleAddTask} className="form-control flex gap-4 sm:gap-2">
-      <div className="flex flex-col gap-4 sm:flex-row">
+      <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2 sm:w-[50%]">
           <h2 className="text-3xl font-bold text-primary mb-4">Add a Task</h2>
           <input
@@ -183,55 +186,64 @@ const AddTask = ({
         </div>
         {/* Share Task Section */}
         <div className="flex flex-col gap-2 sm:w-[50%] mt-4">
-          <h2 className="text-xl font-bold text-primary mb-2">
+          <h2
+            onClick={() => setShowShareTask((prev) => !prev)}
+            className="text-xl font-bold text-primary mb-2 cursor-pointer"
+          >
             Share task with users
           </h2>
-          <input
-            type="text"
-            placeholder="Search users by name or email"
-            value={shareSearch}
-            onChange={(e) => setShareSearch(e.target.value)}
-            className="input input-bordered"
-          />
-          <div className="max-h-40 overflow-auto mt-2 border border-base-200 rounded px-2">
-            {filteredUsers.map((user) => (
-              <div
-                key={user.uid}
-                className="flex items-center justify-between my-2 overflow-auto max-h-40"
-              >
-                <span>{user.displayName || user.email || user.uid}</span>
-                <button
-                  type="button"
-                  className="btn btn-sm btn-outline"
-                  onClick={() => {
-                    // Toggle selection
-                    if (selectedShareUsers.find((u) => u.uid === user.uid)) {
-                      setSelectedShareUsers(
-                        selectedShareUsers.filter((u) => u.uid !== user.uid)
-                      );
-                    } else {
-                      setSelectedShareUsers([...selectedShareUsers, user]);
-                    }
-                  }}
-                >
-                  {selectedShareUsers.find((u) => u.uid === user.uid)
-                    ? "Remove"
-                    : "Add"}
-                </button>
-              </div>
-            ))}
-          </div>
-          {selectedShareUsers.length > 0 && (
-            <div className="mt-2">
-              <label className="label">Selected Users:</label>
-              <div className="flex flex-wrap gap-2">
-                {selectedShareUsers.map((user) => (
-                  <span key={user.uid} className="badge badge-info">
-                    {user.displayName || user.email || user.uid}
-                  </span>
+          {showShareTask && (
+            <>
+              <input
+                type="text"
+                placeholder="Search users by name or email"
+                value={shareSearch}
+                onChange={(e) => setShareSearch(e.target.value)}
+                className="input input-bordered"
+              />
+              <div className="max-h-40 overflow-auto mt-2 border border-base-200 rounded px-2">
+                {filteredUsers.map((user) => (
+                  <div
+                    key={user.uid}
+                    className="flex items-center justify-between my-2 overflow-auto max-h-40"
+                  >
+                    <span>{user.displayName || user.email || user.uid}</span>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-outline"
+                      onClick={() => {
+                        // Toggle selection
+                        if (
+                          selectedShareUsers.find((u) => u.uid === user.uid)
+                        ) {
+                          setSelectedShareUsers(
+                            selectedShareUsers.filter((u) => u.uid !== user.uid)
+                          );
+                        } else {
+                          setSelectedShareUsers([...selectedShareUsers, user]);
+                        }
+                      }}
+                    >
+                      {selectedShareUsers.find((u) => u.uid === user.uid)
+                        ? "Remove"
+                        : "Add"}
+                    </button>
+                  </div>
                 ))}
               </div>
-            </div>
+              {selectedShareUsers.length > 0 && (
+                <div className="mt-2">
+                  <label className="label">Selected Users:</label>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedShareUsers.map((user) => (
+                      <span key={user.uid} className="badge badge-info">
+                        {user.displayName || user.email || user.uid}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
