@@ -79,7 +79,7 @@ function App() {
 
   if (openDashboard) {
     return (
-      <div className="flex min-h-screen bg-base-200 justify-center">
+      <div className="flex min-h-screen bg-base-200">
         <Sidebar
           user={{
             email: user?.email || undefined,
@@ -98,7 +98,7 @@ function App() {
           }`}
         >
           <h1 className="text-4xl text-center text-primary mb-4">Dashboard</h1>
-          <div className="w-full max-w-screen-lg bg-base-100 shadow-xl rounded-lg p-10 relative flex justify-center mx-auto">
+          <div className="w-full max-w-screen-lg bg-base-100 shadow-xl rounded-lg p-10 relative flex justify-center">
             <button
               onClick={toggleSidebar}
               className="btn btn-primary btn-sm sm:btn lg:hidden fixed top-2 left-2 sm:left-4 sm:top-4 z-50"
