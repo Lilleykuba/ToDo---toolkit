@@ -92,7 +92,7 @@ function App() {
           onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
           onOpenDashboard={() => setOpenDashboard(false)}
           openDashboard={openDashboard}
-          onOpenNotes={() => setOpenNotes(false)}
+          onOpenNotes={() => setOpenNotes(true)}
           openNotes={openNotes}
         />
         <main
@@ -130,7 +130,7 @@ function App() {
           isOpen={sidebarOpen}
           toggleSidebar={toggleSidebar}
           onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
-          onOpenDashboard={() => setOpenDashboard(false)}
+          onOpenDashboard={() => setOpenDashboard(true)}
           openDashboard={openDashboard}
           onOpenNotes={() => setOpenNotes(false)}
           openNotes={openNotes}
@@ -169,7 +169,7 @@ function App() {
           onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
           onOpenDashboard={() => setOpenDashboard(true)}
           openDashboard={openDashboard}
-          onOpenNotes={() => setOpenNotes(false)}
+          onOpenNotes={() => setOpenNotes(true)}
           openNotes={openNotes}
         />
       </div>
