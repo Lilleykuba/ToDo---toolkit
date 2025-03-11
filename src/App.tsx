@@ -9,6 +9,7 @@ import RegisterGuest from "./components/RegisterGuest";
 import EditTask from "./components/EditTask";
 import ShareItem from "./components/ShareItem";
 import Dashboard from "./components/Dashboard";
+import Notes from "./components/Notes.tsx";
 
 function App() {
   const [user, setUser] = useState<User | null>(null); // Store the current user
@@ -19,6 +20,7 @@ function App() {
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   const [sharingTaskId, setSharingTaskId] = useState<string | null>(null);
   const [openDashboard, setOpenDashboard] = useState(false);
+  const [openNotes, setOpenNotes] = useState(false);
 
   useEffect(() => {
     const auth = getAuth();
@@ -90,6 +92,8 @@ function App() {
           onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
           onOpenDashboard={() => setOpenDashboard(false)}
           openDashboard={openDashboard}
+          onOpenNotes={() => setOpenNotes(false)}
+          openNotes={openNotes}
         />
         <main
           className={`flex-grow p-2 sm:p-6 flex-col items-start sm:items-center transition-all mt-10 sm:mt-4 ${
@@ -115,6 +119,42 @@ function App() {
     );
   }
 
+  if (openNotes) {
+    return (
+      <div className="flex min-h-screen bg-base-200">
+        <Sidebar
+          user={{
+            email: user?.email || undefined,
+            isAnonymous: user?.isAnonymous || false,
+          }}
+          isOpen={sidebarOpen}
+          toggleSidebar={toggleSidebar}
+          onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
+          onOpenDashboard={() => setOpenDashboard(false)}
+          openDashboard={openDashboard}
+          onOpenNotes={() => setOpenNotes(false)}
+          openNotes={openNotes}
+        />
+        <main
+          className={`flex-grow p-2 sm:p-6 flex-col items-start sm:items-center transition-all mt-10 sm:mt-4 ${
+            sidebarOpen ? "ml-64" : "ml-0"
+          }`}
+        >
+          <h1 className="text-4xl text-center text-primary mb-4">Notes</h1>
+          <div className="w-full max-w-screen-lg bg-base-100 shadow-xl rounded-lg p-10 relative flex justify-center mx-auto">
+            <button
+              onClick={toggleSidebar}
+              className="btn btn-primary btn-sm sm:btn lg:hidden fixed top-2 left-2 sm:left-4 sm:top-4 z-50"
+            >
+              ☰
+            </button>
+            <Notes />
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen bg-base-200">
       {/* Sidebar */}
@@ -129,6 +169,8 @@ function App() {
           onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
           onOpenDashboard={() => setOpenDashboard(true)}
           openDashboard={openDashboard}
+          onOpenNotes={() => setOpenNotes(false)}
+          openNotes={openNotes}
         />
       </div>
       {/* Main Content */}

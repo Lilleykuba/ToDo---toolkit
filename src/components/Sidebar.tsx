@@ -11,7 +11,8 @@ const Sidebar = ({
   isOpen,
   toggleSidebar,
   onSwitchToAccount,
-
+  onOpenNotes,
+  openNotes,
   onOpenDashboard,
   openDashboard,
 }: {
@@ -19,7 +20,8 @@ const Sidebar = ({
   isOpen: boolean;
   toggleSidebar: () => void;
   onSwitchToAccount: () => void;
-
+  onOpenNotes: (isOpen: boolean) => void;
+  openNotes: boolean;
   onOpenDashboard: (isOpen: boolean) => void;
   openDashboard: boolean;
 }) => {
@@ -124,6 +126,10 @@ const Sidebar = ({
         </button>
 
         <div className="divider w-full"></div>
+
+        <button onClick={() => onOpenNotes(!openNotes)} className="btn">
+          {openNotes ? "Tasks" : "Notes"}
+        </button>
 
         <div className="mt-auto space-y-8">
           {/* Theme Switcher */}
