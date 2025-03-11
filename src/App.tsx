@@ -116,19 +116,21 @@ function App() {
   }
 
   return (
-    <div className="flex max-h-screen bg-base-200">
+    <div className="flex min-h-screen bg-base-200">
       {/* Sidebar */}
-      <Sidebar
-        user={{
-          email: user?.email || undefined,
-          isAnonymous: user?.isAnonymous || false,
-        }}
-        isOpen={sidebarOpen}
-        toggleSidebar={toggleSidebar}
-        onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
-        onOpenDashboard={() => setOpenDashboard(true)}
-        openDashboard={openDashboard}
-      />
+      <div className="max-h-screen">
+        <Sidebar
+          user={{
+            email: user?.email || undefined,
+            isAnonymous: user?.isAnonymous || false,
+          }}
+          isOpen={sidebarOpen}
+          toggleSidebar={toggleSidebar}
+          onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
+          onOpenDashboard={() => setOpenDashboard(true)}
+          openDashboard={openDashboard}
+        />
+      </div>
       {/* Main Content */}
       <main
         className={`flex-grow p-2 sm:p-6 flex items-start justify-center transition-all mt-10 sm:mt-4 ${

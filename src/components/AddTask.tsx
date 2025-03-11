@@ -146,7 +146,7 @@ const AddTask = ({
         <button
           type="button"
           className={
-            "btn btn-outline text-2xl font-bold text-primary mb-4 w-48 ${showCategories ? 'btn-secondary' : ''}"
+            "btn btn-outline sm:text-2xl text-xl font-bold text-primary mb-4 sm:w-48 w-40 ${showCategories ? 'btn-secondary' : ''}"
           }
           onClick={() => setShowCategories(false)}
         >
