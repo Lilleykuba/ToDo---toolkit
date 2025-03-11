@@ -120,14 +120,14 @@ const AddTask = ({
         <div className="flex gap-2 justify-center">
           <button
             type="button"
-            className="btn btn-outline sm:text-2xl text-xl font-bold text-primary mb-4 sm:w-48 w-40"
+            className="btn btn-outline sm:text-xl text-lg font-bold text-primary mb-4 sm:w-44 w-36"
             onClick={() => setShowCategories(false)}
           >
             Add a Task
           </button>
           <button
             type="button"
-            className="btn btn-outline sm:text-2xl text-xl font-bold text-primary mb-4 sm:w-48 w-40"
+            className="btn btn-outline sm:text-xl text-lg font-bold text-primary mb-4 sm:w-44 w-36"
             onClick={() => setShowCategories(true)}
           >
             Add Category
@@ -143,14 +143,14 @@ const AddTask = ({
       <div className="flex gap-2 justify-center">
         <button
           type="button"
-          className="btn btn-outline sm:text-2xl text-xl font-bold text-primary mb-4 sm:w-48 w-40"
+          className="btn btn-outline sm:text-xl text-lg font-bold text-primary mb-4 sm:w-44 w-36"
           onClick={() => setShowCategories(false)}
         >
           Add a Task
         </button>
         <button
           type="button"
-          className="btn btn-outline sm:text-2xl text-xl font-bold text-primary mb-4 sm:w-48 w-40"
+          className="btn btn-outline sm:text-xl text-lg font-bold text-primary mb-4 sm:w-44 w-36"
           onClick={() => setShowCategories(true)}
         >
           Add Category
