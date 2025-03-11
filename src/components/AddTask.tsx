@@ -158,7 +158,7 @@ const AddTask = ({
       </div>
 
       <div className="flex flex-col sm:flex-row gap-2">
-        <div className="flex flex-col gap-2 w-full sm:w-[48%]">
+        <div className="flex flex-col gap-2 w-full sm:w-[50%]">
           {/* Task Name Section */}
           <input
             type="text"
@@ -269,7 +269,7 @@ const AddTask = ({
             )}
           </div>
         </div>
-        <div className="dropdown w-full sm:w-[48%]">
+        <div className="dropdown w-full sm:w-[50%]">
           <button
             type="button"
             tabIndex={0}
@@ -279,7 +279,7 @@ const AddTask = ({
           </button>
           <ul
             tabIndex={0}
-            className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-full mt-2"
+            className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-2"
           >
             <li>
               <button type="button" onClick={() => setPriority("High")}>
