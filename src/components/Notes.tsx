@@ -1,22 +1,3 @@
-import { useState, useEffect } from "react";
-import {
-  collection,
-  query,
-  where,
-  onSnapshot,
-  doc,
-  writeBatch,
-} from "firebase/firestore";
-import { db } from "../firebase";
-import { getAuth } from "firebase/auth";
-
-interface Note {
-  id: string;
-  owner: string;
-  name: string;
-  content: string;
-}
-
 const Notes = () => {
   return (
     <div className="flex flex-col w-full mt-4">
