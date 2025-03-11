@@ -90,7 +90,7 @@ function App() {
           isOpen={sidebarOpen}
           toggleSidebar={toggleSidebar}
           onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
-          onOpenDashboard={(() => setOpenDashboard(false), setOpenNotes(false))}
+          onOpenDashboard={(() => setOpenDashboard(false) setOpenNotes(false))}
           openDashboard={openDashboard}
           onOpenNotes={() => setOpenNotes(true) setOpenDashboard(false)}
           openNotes={openNotes}
@@ -130,9 +130,9 @@ function App() {
           isOpen={sidebarOpen}
           toggleSidebar={toggleSidebar}
           onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
-          onOpenDashboard={() => setOpenDashboard(true), setOpenNotes(false)}
+          onOpenDashboard={() => setOpenDashboard(true) setOpenNotes(false)}
           openDashboard={openDashboard}
-          onOpenNotes={() => setOpenNotes(false), setOpenDashboard(false)}
+          onOpenNotes={() => setOpenNotes(false) setOpenDashboard(false)}
           openNotes={openNotes}
         />
         <main
@@ -167,9 +167,9 @@ function App() {
         isOpen={sidebarOpen}
         toggleSidebar={toggleSidebar}
         onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
-        onOpenDashboard={() => setOpenDashboard(true)}
+        onOpenDashboard={() => setOpenDashboard(true) setOpenNotes(false)}
         openDashboard={openDashboard}
-        onOpenNotes={() => setOpenNotes(true)}
+        onOpenNotes={() => setOpenNotes(true) setOpenDashboard(false)}
         openNotes={openNotes}
       />
 
