@@ -9,7 +9,7 @@ import RegisterGuest from "./components/RegisterGuest";
 import EditTask from "./components/EditTask";
 import ShareItem from "./components/ShareItem";
 import Dashboard from "./components/Dashboard";
-import Notes from "./components/Notes.tsx";
+import Notes from "./components/Notes";
 
 function App() {
   const [user, setUser] = useState<User | null>(null); // Store the current user
