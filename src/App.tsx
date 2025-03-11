@@ -197,7 +197,7 @@ function App() {
           sidebarOpen ? "ml-64" : "ml-0"
         }`}
       >
-        <div className="bg-base-100 shadow-xl rounded-lg p-10 relative">
+        <div className="w-full max-w-screen-lg bg-base-100 shadow-xl rounded-lg p-10 relative flex justify-center mx-auto">
           <button
             onClick={toggleSidebar}
             className="btn btn-primary btn-sm sm:btn lg:hidden fixed top-2 left-2 sm:left-4 sm:top-4 z-50"
@@ -205,7 +205,7 @@ function App() {
             ☰
           </button>
           {/* Content */}
-          <div className="flex flex-col gap-10">
+          <div className="">
             <section>
               <AddTask
                 selectedCategory={selectedCategory}
