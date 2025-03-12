@@ -120,14 +120,14 @@ const AddTask = ({
         <div className="flex gap-2 justify-center">
           <button
             type="button"
-            className="btn btn-outline sm:text-xl text-lg font-bold text-primary mb-4 sm:w-44 w-36"
+            className="btn btn-outline sm:text-xl text-lg font-bold text-primary mb-4 sm:w-44 w-40"
             onClick={() => setShowCategories(false)}
           >
             Add a Task
           </button>
           <button
             type="button"
-            className={`btn btn-outline sm:text-xl text-lg font-bold text-primary mb-4 sm:w-44 w-36" ${
+            className={`btn btn-outline sm:text-xl text-lg font-bold text-primary mb-4 sm:w-44 w-40" ${
               showCategories ? "btn-active" : ""
             }`}
             onClick={() => setShowCategories(true)}
@@ -145,7 +145,7 @@ const AddTask = ({
       <div className="flex gap-2 justify-center">
         <button
           type="button"
-          className={`btn btn-outline sm:text-xl text-lg font-bold text-primary mb-4 sm:w-44 w-36" ${
+          className={`btn btn-outline sm:text-xl text-lg font-bold text-primary mb-4 sm:w-44 w-40" ${
             showCategories ? "" : "btn-active"
           }`}
           onClick={() => setShowCategories(false)}
@@ -154,7 +154,7 @@ const AddTask = ({
         </button>
         <button
           type="button"
-          className="btn btn-outline sm:text-xl text-lg font-bold text-primary mb-4 sm:w-44 w-36"
+          className="btn btn-outline sm:text-xl text-lg font-bold text-primary mb-4 sm:w-44 w-40"
           onClick={() => setShowCategories(true)}
         >
           Add Category
