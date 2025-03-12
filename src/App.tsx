@@ -193,7 +193,7 @@ function App() {
 
       {/* Main Content */}
       <main
-        className={`flex-grow p-2 sm:p-6 flex items-start justify-center transition-all mt-10 sm:mt-4 ${
+        className={`flex-grow p-2 sm:p-6 flex items-start justify-center transition-all mt-10 sm:mt-4 mx-auto ${
           sidebarOpen ? "ml-64" : "ml-0"
         }`}
       >

@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
-import { TrashIcon } from "@heroicons/react/24/solid";
+import { TrashIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
 
 interface Category {
   id: string;
@@ -92,10 +92,10 @@ const Categories = ({
           type="color"
           value={color}
           onChange={(e) => setColor(e.target.value)}
-          className="w-10 h-10 rounded-full border-none p-0 cursor-pointer"
+          className="w-12 h-10 rounded-full border-none p-0 cursor-pointer"
         />
-        <button type="submit" className="btn btn-primary w-20">
-          Add
+        <button type="submit" className="btn btn-ghost w-15">
+          <PlusCircleIcon className="h-8 w-8 text-white" />
         </button>
       </form>
       <ul className="space-y-2 mt-4 flex flex-col">

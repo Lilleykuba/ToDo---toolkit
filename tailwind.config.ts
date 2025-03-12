@@ -7,14 +7,7 @@ const config: Config = {
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: [
-      "light",
-      "dark",
-      "cupcake", // Add more themes as needed
-      "corporate",
-      "synthwave",
-      "retro",
-    ],
+    themes: ["light", "dark", "cupcake", "corporate", "synthwave", "retro"],
   },
 };
 
