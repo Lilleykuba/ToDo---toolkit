@@ -15,6 +15,8 @@ const Sidebar = ({
   openNotes,
   onOpenDashboard,
   openDashboard,
+  onOpenHabits,
+  openHabits,
 }: {
   user: { email?: string; isAnonymous: boolean };
   isOpen: boolean;
@@ -24,6 +26,8 @@ const Sidebar = ({
   openNotes: boolean;
   onOpenDashboard: (isOpen: boolean) => void;
   openDashboard: boolean;
+  onOpenHabits: (isOpen: boolean) => void;
+  openHabits: boolean;
 }) => {
   const handleLogout = async () => {
     const auth = getAuth();
@@ -129,6 +133,12 @@ const Sidebar = ({
 
         <button onClick={() => onOpenNotes(!openNotes)} className="btn">
           {openNotes ? "Tasks" : "Notes"}
+        </button>
+
+        <div className="divider w-full"></div>
+
+        <button onClick={() => onOpenHabits(!openHabits)} className="btn">
+          {openHabits "Tasks" : "Habits"}
         </button>
 
         <div className="mt-auto space-y-8">
