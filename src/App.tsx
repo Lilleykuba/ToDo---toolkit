@@ -159,7 +159,7 @@ function App() {
           }}
           openNotes={openNotes}
           onOpenHabits={() => {
-            setOpenHabits(false);
+            setOpenHabits(true);
             setOpenDashboard(false);
             setOpenNotes(false);
           }}
@@ -209,7 +209,7 @@ function App() {
           }}
           openNotes={openNotes}
           onOpenHabits={() => {
-            setOpenHabits(true);
+            setOpenHabits(false);
             setOpenDashboard(false);
             setOpenNotes(false);
           }}
@@ -220,7 +220,7 @@ function App() {
             sidebarOpen ? "ml-64" : "ml-0"
           }`}
         >
-          <h1 className="text-4xl text-center text-primary mb-4">Notes</h1>
+          <h1 className="text-4xl text-center text-primary mb-4">Habits</h1>
           <div className="w-full max-w-screen-lg bg-base-100 shadow-xl rounded-lg p-10 relative flex justify-center mx-auto">
             <button
               onClick={toggleSidebar}
