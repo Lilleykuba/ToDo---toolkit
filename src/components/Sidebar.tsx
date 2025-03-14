@@ -138,7 +138,7 @@ const Sidebar = ({
         <div className="divider w-full"></div>
 
         <button onClick={() => onOpenHabits(!openHabits)} className="btn">
-          {openHabits "Tasks" : "Habits"}
+          {openHabits ? "Tasks" : "Habits"}
         </button>
 
         <div className="mt-auto space-y-8">
