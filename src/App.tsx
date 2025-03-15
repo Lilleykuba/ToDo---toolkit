@@ -281,7 +281,7 @@ function App() {
             ☰
           </button>
           {/* Content */}
-          <div className="">
+          <div className="w-full">
             <section>
               <AddTask
                 selectedCategory={selectedCategory}
