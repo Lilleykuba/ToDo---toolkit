@@ -5,6 +5,7 @@ const Habits = () => {
         <h2 className="text-primary text-3xl mb-3">
           Habits are a work in progress
         </h2>
+        <p>Here you will be able to create and track your habits</p>
       </div>
     </div>
   );
