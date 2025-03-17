@@ -90,19 +90,18 @@ const Notes = () => {
   return (
     <div className="flex flex-col w-full">
       <div className="flex flex-col items-start gap-2 w-full">
-        <h2 className="text-primary text-3xl mb-3">Add a new note</h2>
         <input
           type="text"
-          placeholder="Title"
+          placeholder="Note title"
           value={noteTitle}
           onChange={(e) => setNoteTitle(e.target.value)}
-          className="input input-bordered w-full"
+          className="input input-bordered input-primary w-full"
         />
         <textarea
-          placeholder="Content"
+          placeholder="Note content"
           value={noteContent}
           onChange={(e) => setNoteContent(e.target.value)}
-          className="textarea h-36 textarea-bordered mb-4 w-full"
+          className="textarea h-36 textarea-primary textarea-bordered mb-4 w-full"
         />
         <button
           onClick={handleAddNote}
