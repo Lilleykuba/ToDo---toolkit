@@ -1,7 +1,6 @@
 import {
   doc,
   addDoc,
-  updateDoc,
   deleteDoc,
   collection,
   query,
@@ -10,15 +9,9 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
-import { cat } from "@cloudinary/url-gen/qualifiers/focusOn";
+
 import { useEffect, useState } from "react";
 import { TrashIcon } from "@heroicons/react/24/solid";
-
-interface User {
-  uid: string;
-  displayName?: string;
-  email?: string;
-}
 
 interface Note {
   id: string;
@@ -28,17 +21,7 @@ interface Note {
   sharedWith?: string[];
 }
 
-const Notes = ({
-  note,
-}: {
-  note: {
-    id: string;
-    owner: string;
-    title: string;
-    content: string;
-    sharedWith?: string[];
-  };
-}) => {
+const Notes = () => {
   const [noteTitle, setNoteTitle] = useState("");
   const [noteContent, setNoteContent] = useState("");
   const [Notes, setNotes] = useState<Note[]>([]);
@@ -132,7 +115,7 @@ const Notes = ({
 
       <div className="divider"></div>
 
-      <divider className="flex justify-center items-wrap flex-wrap gap-2 w-full mt-8">
+      <div className="flex justify-center items-wrap flex-wrap gap-2 w-full mt-8">
         {Notes.map((note) => (
           <div
             key={note.id}
@@ -148,7 +131,7 @@ const Notes = ({
             </button>
           </div>
         ))}
-      </divider>
+      </div>
     </div>
   );
 };
