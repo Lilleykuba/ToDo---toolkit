@@ -1,5 +1,4 @@
 import "cally";
-import { CalendarDate } from "cally";
 import { useState } from "react";
 
 const Habits = () => {

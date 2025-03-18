@@ -14,12 +14,6 @@ declare module "react" {
     interface IntrinsicElements {
       "calendar-month": MapEvents<CalendarMonthProps> &
         React.HTMLAttributes<HTMLElement>;
-      "calendar-range": MapEvents<CalendarRangeProps> &
-        React.HTMLAttributes<HTMLElement>;
-      "calendar-date": MapEvents<CalendarDateProps> &
-        React.HTMLAttributes<HTMLElement>;
-      "calendar-multi": MapEvents<CalendarMultiProps> &
-        React.HTMLAttributes<HTMLElement>;
     }
   }
 }
