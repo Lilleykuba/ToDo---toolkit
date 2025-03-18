@@ -8,8 +8,12 @@ const Habits = () => {
 
   const handleDateClick = (arg: any) => {
     setDate(arg.dateStr);
-    const modal = document.getElementById("habitModal");
-    modal.showModal();
+    const modal = document.getElementById(
+      "habitModal"
+    ) as HTMLDialogElement | null;
+    if (modal) {
+      modal.showModal();
+    }
   };
 
   return (
