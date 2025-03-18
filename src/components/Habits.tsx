@@ -13,7 +13,7 @@ const Habits = () => {
         <calendar-date
           value={date}
           class="cally bg-base-100 border border-base-300 shadow-lg rounded-box"
-          onchange={(event) => setDate(event.target.value)}
+          onchange={(event): any => setDate(event.target.value)}
         >
           <svg
             aria-label="Previous"
