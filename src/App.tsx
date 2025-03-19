@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import "./App.css";
 import TaskList from "./components/TaskList";
@@ -8,9 +8,9 @@ import Sidebar from "./components/Sidebar";
 import RegisterGuest from "./components/RegisterGuest";
 import EditTask from "./components/EditTask";
 import ShareItem from "./components/ShareItem";
-import Dashboard from "./components/Dashboard";
-import Notes from "./components/Notes";
-import Habits from "./components/Habits";
+const Dashboard = React.lazy(() => import("./components/Dashboard"));
+const Notes = React.lazy(() => import("./components/Notes"));
+const Habits = React.lazy(() => import("./components/Habits"));
 
 function App() {
   const [user, setUser] = useState<User | null>(null); // Store the current user
@@ -36,9 +36,9 @@ function App() {
     return () => unsubscribe(); // Cleanup the listener
   }, []);
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+  const toggleSidebar = useCallback(() => {
+    setSidebarOpen((prev) => !prev);
+  }, []);
 
   if (loading) {
     // Show a loading spinner while Firebase checks authentication state
@@ -124,11 +124,13 @@ function App() {
             >
               ☰
             </button>
-            <Dashboard
-              selectedCategory={selectedCategory}
-              onEditTask={(taskId) => setEditingTaskId(taskId)}
-              onShareTask={(taskId) => setSharingTaskId(taskId)}
-            />
+            <Suspense fallback={<div>Loading Dashboard...</div>}>
+              <Dashboard
+                selectedCategory={selectedCategory}
+                onEditTask={(taskId) => setEditingTaskId(taskId)}
+                onShareTask={(taskId) => setSharingTaskId(taskId)}
+              />
+            </Suspense>
           </div>
         </main>
       </div>
@@ -178,7 +180,9 @@ function App() {
             >
               ☰
             </button>
-            <Notes />
+            <Suspense fallback={<div>Loading Notes...</div>}>
+              <Notes />
+            </Suspense>
           </div>
         </main>
       </div>
@@ -228,7 +232,9 @@ function App() {
             >
               ☰
             </button>
-            <Habits />
+            <Suspense fallback={<div>Loading Notes...</div>}>
+              <Habits />
+            </Suspense>
           </div>
         </main>
       </div>

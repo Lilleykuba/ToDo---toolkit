@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
@@ -54,4 +54,4 @@ const Habits = () => {
   );
 };
 
-export default Habits;
+export default React.memo(Habits);

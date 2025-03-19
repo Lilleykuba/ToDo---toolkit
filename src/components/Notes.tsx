@@ -10,7 +10,7 @@ import {
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TrashIcon } from "@heroicons/react/24/solid";
 
 interface Note {
@@ -135,4 +135,4 @@ const Notes = () => {
   );
 };
 
-export default Notes;
+export default React.memo(Notes);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   DragDropContext,
   Droppable,
@@ -218,4 +218,4 @@ const Dashboard = ({
   );
 };
 
-export default Dashboard;
+export default React.memo(Dashboard); // Using React.memo to prevent unnecessary re-renders

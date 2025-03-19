@@ -1,5 +1,5 @@
 import { getAuth, signOut } from "firebase/auth";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { doc, getDoc } from "firebase/firestore";
 
 import Footer from "./Footer";
@@ -174,4 +174,4 @@ const Sidebar = ({
   );
 };
 
-export default Sidebar;
+export default React.memo(Sidebar);
