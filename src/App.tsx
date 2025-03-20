@@ -6,7 +6,6 @@ import AddTask from "./components/AddTask";
 import Auth from "./components/Auth";
 import Sidebar from "./components/Sidebar";
 import RegisterGuest from "./components/RegisterGuest";
-import EditTask from "./components/EditTask";
 import ShareItem from "./components/ShareItem";
 const Dashboard = React.lazy(() => import("./components/Dashboard"));
 const Notes = React.lazy(() => import("./components/Notes"));
@@ -18,7 +17,6 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar toggle for mobile
   const [isSwitchingFromGuest, setIsSwitchingFromGuest] = useState(false); // Guest to account upgrade state
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   const [sharingTaskId, setSharingTaskId] = useState<string | null>(null);
   const [openDashboard, setOpenDashboard] = useState(false);
   const [openNotes, setOpenNotes] = useState(false);
@@ -117,7 +115,6 @@ function App() {
             <Suspense fallback={<div>Loading Dashboard...</div>}>
               <Dashboard
                 selectedCategory={selectedCategory}
-                onEditTask={(taskId) => setEditingTaskId(taskId)}
                 onShareTask={(taskId) => setSharingTaskId(taskId)}
               />
             </Suspense>

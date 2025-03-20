@@ -60,7 +60,12 @@ const TaskItem = ({
   };
 
   const showTaskModal = () => {
-    document.getElementById("editTaskModal").showModal();
+    const modal = document.getElementById(
+      "editTaskModal"
+    ) as HTMLDialogElement | null;
+    if (modal) {
+      modal.showModal();
+    }
   };
 
   return (

@@ -31,11 +31,9 @@ interface Task {
 
 const Dashboard = ({
   selectedCategory,
-  onEditTask,
   onShareTask,
 }: {
   selectedCategory: string | null;
-  onEditTask: (taskId: string) => void;
   onShareTask: (taskId: string) => void;
 }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
