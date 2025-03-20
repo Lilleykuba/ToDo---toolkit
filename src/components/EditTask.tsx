@@ -78,6 +78,12 @@ const EditTask = ({ taskId }: { taskId: string }) => {
     try {
       const taskRef = doc(db, "tasks", taskId);
       await updateDoc(taskRef, task);
+      const modal = document.getElementById(
+        "editTaskModal"
+      ) as HTMLDialogElement | null;
+      if (modal) {
+        modal.close();
+      }
     } catch (error) {
       console.error("Error updating task:", error);
     }
