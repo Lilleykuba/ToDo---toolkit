@@ -74,7 +74,9 @@ const TaskItem = ({
         <div className="modal-box p-0">
           <EditTask
             taskId={task.id}
-            onClose={() => document.getElementById("editTaskModal")?.close()}
+            onClose={() =>
+              document.getElementById("editTaskModal")?.closeModal()
+            }
           />
         </div>
         <form method="dialog" className="modal-backdrop">
