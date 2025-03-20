@@ -13,13 +13,7 @@ import { db } from "../firebase";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { v4 as uuidv4 } from "uuid";
 
-const EditTask = ({
-  taskId,
-  onClose,
-}: {
-  taskId: string;
-  onClose: () => void;
-}) => {
+const EditTask = ({ taskId }: { taskId: string }) => {
   const [task, setTask] = useState<any>(null);
   const [newSubtask, setNewSubtask] = useState("");
   const [categories, setCategories] = useState<any[]>([]);
@@ -164,9 +158,6 @@ const EditTask = ({
         </div>
         <button onClick={handleSave} className="btn btn-primary w-full">
           Save Changes
-        </button>
-        <button onClick={onClose} className="btn btn-secondary w-full mt-4">
-          Cancel
         </button>
       </div>
     </div>
