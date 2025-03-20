@@ -94,7 +94,9 @@ const EditTask = ({ taskId }: { taskId: string }) => {
   return (
     <div className="min-w-full min-h-full flex flex-col items-center justify-center bg-base-100 m-0 rounded">
       <div className="card bg-base-200 shadow-xl w-full p-6">
-        <h1 className="text-xl font-bold mb-4">Edit Task</h1>
+        <h1 className="text-xl font-bold mb-4 text-center text-primary">
+          Edit Task
+        </h1>
         <div className="form-control mb-4">
           <label className="label">Task Name</label>
           <input
