@@ -199,7 +199,6 @@ const Dashboard = ({
                               ? categories[task.categoryId]
                               : undefined
                           }
-                          onEdit={() => onEditTask(task.id)}
                           onShare={() => onShareTask(task.id)}
                         />
                       </div>
