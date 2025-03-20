@@ -93,8 +93,8 @@ const EditTask = ({
   if (!task) return <p>Loading task...</p>;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-base-100 max-w-md mx-auto rounded">
-      <div className="card bg-base-200 shadow-xl w-full max-w-md p-6">
+    <div className="min-w-full min-h-full flex flex-col items-center justify-center bg-base-100 m-0 rounded">
+      <div className="card bg-base-200 shadow-xl w-full p-6">
         <h1 className="text-xl font-bold mb-4">Edit Task</h1>
         <div className="form-control mb-4">
           <label className="label">Task Name</label>

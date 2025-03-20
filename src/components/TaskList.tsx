@@ -31,11 +31,11 @@ interface Task {
 
 const TaskList = ({
   selectedCategory,
-  onEditTask,
+
   onShareTask,
 }: {
   selectedCategory: string | null;
-  onEditTask: (taskId: string) => void;
+
   onShareTask: (taskId: string) => void;
 }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -240,7 +240,6 @@ const TaskList = ({
                             ? categories[task.categoryId]
                             : undefined
                         }
-                        onEdit={() => onEditTask(task.id)}
                         onShare={() => onShareTask(task.id)}
                       />
                     </div>

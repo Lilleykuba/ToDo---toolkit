@@ -61,16 +61,6 @@ function App() {
     );
   }
 
-  if (editingTaskId) {
-    // Render EditTask component when editingTaskId is set
-    return (
-      <EditTask
-        taskId={editingTaskId}
-        onClose={() => setEditingTaskId(null)} // Go back to the task list
-      />
-    );
-  }
-
   if (sharingTaskId) {
     // Render ShareItem component when sharingTaskId is set
     return (
@@ -303,7 +293,6 @@ function App() {
               </h2>
               <TaskList
                 selectedCategory={selectedCategory}
-                onEditTask={(taskId) => setEditingTaskId(taskId)}
                 onShareTask={(taskId) => setSharingTaskId(taskId)}
               />
             </section>
