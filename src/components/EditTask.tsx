@@ -78,7 +78,6 @@ const EditTask = ({ taskId }: { taskId: string }) => {
     try {
       const taskRef = doc(db, "tasks", taskId);
       await updateDoc(taskRef, task);
-      onClose(); // Go back to the task list
     } catch (error) {
       console.error("Error updating task:", error);
     }
