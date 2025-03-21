@@ -13,7 +13,7 @@ import EditNote from "./EditNote";
 import React, { useEffect, useState } from "react";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
-interface Note {
+interface note {
   id: string;
   owner: string;
   title: string;
@@ -24,7 +24,7 @@ interface Note {
 const Notes = () => {
   const [noteTitle, setNoteTitle] = useState("");
   const [noteContent, setNoteContent] = useState("");
-  const [Notes, setNotes] = useState<Note[]>([]);
+  const [notes, setNotes] = useState<note[]>([]);
 
   const auth = getAuth();
 
@@ -34,7 +34,7 @@ const Notes = () => {
       const notesRef = collection(db, "notes");
       const notesQuery = query(notesRef, where("uid", "==", user.uid));
       const unsubscribe = onSnapshot(notesQuery, (snapshot) => {
-        let ownedNotes: Note[] = [];
+        let ownedNotes: note[] = [];
         snapshot.forEach((doc) => {
           ownedNotes.push({
             id: doc.id,
@@ -89,7 +89,7 @@ const Notes = () => {
 
   const showNotesModal = () => {
     const modal = document.getElementById(
-      "editNotesModal"
+      "editNoteModal"
     ) as HTMLDialogElement | null;
     if (modal) {
       modal.showModal();
@@ -98,7 +98,7 @@ const Notes = () => {
 
   return (
     <>
-      <dialog id="editTaskModal" className="modal">
+      <dialog id="editNoteModal" className="modal">
         <div className="modal-box p-0">
           <form method="dialog"></form>
           <EditNote noteId={note.id} />
@@ -134,7 +134,7 @@ const Notes = () => {
         <div className="divider"></div>
 
         <div className="flex justify-center items-wrap flex-wrap gap-2 w-full mt-8">
-          {Notes.map((note) => (
+          {notes.map((note) => (
             <div
               key={note.id}
               className="flex flex-col min-w-48 w-auto items-start gap-2 w-full border p-4 rounded-lg shadow-md relative"
@@ -142,7 +142,7 @@ const Notes = () => {
               <h2 className="text-primary text-3xl mb-3">{note.title}</h2>
               <p className="whitespace-pre-line">{note.content}</p>
               <button
-                onClick={showNotesModal}
+                onClick={showNoteModal}
                 className="btn btn-ghost btn-sm absolute bottom-2 right-9"
               >
                 <PencilIcon className="h-5 w-5" />

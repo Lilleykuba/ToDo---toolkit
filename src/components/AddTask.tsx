@@ -204,17 +204,17 @@ const AddTask = ({
             ))}
           </div>
           {/* Share Task Section */}
-          <div className="collapse flex flex-col gap-2 mt-4">
+          <div className="min-w-full flex flex-col gap-2 mt-4">
             <h2
               onClick={() => setShowShareTask((prev) => !prev)}
-              className="collapse-title text-xl font-bold text-primary mb-2 cursor-pointer"
+              className="text-xl font-bold text-primary mb-2 cursor-pointer"
             >
               {showShareTask
                 ? "∨ Share task with users"
                 : "> Share task with users"}
             </h2>
             {showShareTask && (
-              <div className="collapse-content">
+              <div className="flex flex-col gap-2">
                 <input
                   type="text"
                   placeholder="Search users by name or email"
