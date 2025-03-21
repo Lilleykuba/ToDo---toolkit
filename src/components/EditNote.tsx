@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
-const EditNote = ({ noteId }: { noteId: string }) => {
+interface EditNoteProps {
+  noteId: string | null;
+}
+
+const EditNote = ({ noteId }: EditNoteProps) => {
   const [note, setNote] = useState<any>(null);
 
   useEffect(() => {
@@ -55,7 +59,6 @@ const EditNote = ({ noteId }: { noteId: string }) => {
         <div className="form-control mb-4">
           <label className="label">Note Content</label>
           <textarea
-            type="text"
             value={note.content}
             onChange={(e) => setNote({ ...note, content: e.target.value })}
             className="textarea h-36 textarea-bordered"
