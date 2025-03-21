@@ -48,7 +48,6 @@ const Notes = () => {
             title: doc.data().title,
             content: doc.data().content,
             sharedWith: doc.data().sharedWith,
-
             deleted: doc.data().deleted as boolean,
           });
         });
