@@ -10,6 +10,7 @@ const EditNote = ({ noteId }: EditNoteProps) => {
   const [note, setNote] = useState<any>(null);
 
   useEffect(() => {
+    if (!noteId) return; // Guard: do nothing if noteId is null
     // Fetch the note details
     const fetchNote = async () => {
       const noteRef = doc(db, "notes", noteId);
@@ -23,7 +24,7 @@ const EditNote = ({ noteId }: EditNoteProps) => {
   }, [noteId]);
 
   const handleSave = async () => {
-    if (!note) return;
+    if (!noteId || !note) return; // Guard: ensure noteId is valid before saving
 
     try {
       const noteRef = doc(db, "notes", noteId);
