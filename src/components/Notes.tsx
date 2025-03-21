@@ -25,6 +25,7 @@ const Notes = () => {
   const [noteTitle, setNoteTitle] = useState("");
   const [noteContent, setNoteContent] = useState("");
   const [notes, setNotes] = useState<note[]>([]);
+  const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
 
   const auth = getAuth();
 
@@ -87,7 +88,8 @@ const Notes = () => {
     }
   };
 
-  const showNotesModal = () => {
+  const showNotesModal = (id: string) => {
+    setSelectedNoteId(id);
     const modal = document.getElementById(
       "editNoteModal"
     ) as HTMLDialogElement | null;
@@ -101,7 +103,7 @@ const Notes = () => {
       <dialog id="editNoteModal" className="modal">
         <div className="modal-box p-0">
           <form method="dialog"></form>
-          <EditNote noteId={note.id} />
+          <EditNote noteId={selectedNoteId} />
         </div>
         <form method="dialog" className="modal-backdrop">
           <button>close</button>
@@ -142,8 +144,8 @@ const Notes = () => {
               <h2 className="text-primary text-3xl mb-3">{note.title}</h2>
               <p className="whitespace-pre-line">{note.content}</p>
               <button
-                onClick={showNoteModal}
-                className="btn btn-ghost btn-sm absolute bottom-2 right-9"
+                onClick={() => showNotesModal(note.id)}
+                className="btn btn-ghost btn-sm absolute bottom-2 right-14"
               >
                 <PencilIcon className="h-5 w-5" />
               </button>
