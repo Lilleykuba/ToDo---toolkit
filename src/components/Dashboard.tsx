@@ -16,6 +16,12 @@ import {
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 import TaskItem from "./TaskItem";
+import {
+  PencilIcon,
+  TrashIcon,
+  ArrowRightCircleIcon,
+  ArrowDownCircleIcon,
+} from "@heroicons/react/24/solid";
 
 interface Task {
   id: string;
@@ -29,6 +35,15 @@ interface Task {
   sharedWith?: string[];
 }
 
+interface note {
+  id: string;
+  owner: string;
+  title: string;
+  content: string;
+  sharedWith?: string[];
+  deleted: boolean;
+}
+
 const Dashboard = ({
   selectedCategory,
   onShareTask,
@@ -38,6 +53,10 @@ const Dashboard = ({
 }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [categories, setCategories] = useState<Record<string, string>>({});
+  const [showCompletedTasks, setShowCompletedTasks] = useState(false);
+  const [showCompletedNotes, setShowCompletedNotes] = useState(false);
+  const [notes, setNotes] = useState<note[]>([]);
+
   const auth = getAuth();
 
   useEffect(() => {
@@ -170,10 +189,47 @@ const Dashboard = ({
     }
   };
 
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      const notesRef = collection(db, "notes");
+      const notesQuery = query(
+        notesRef,
+        where("uid", "==", user.uid),
+        where("deleted", "==", true)
+      );
+      const unsubscribe = onSnapshot(notesQuery, (snapshot) => {
+        let ownedNotes: note[] = [];
+        snapshot.forEach((doc) => {
+          ownedNotes.push({
+            id: doc.id,
+            owner: doc.data().owner,
+            title: doc.data().title,
+            content: doc.data().content,
+            sharedWith: doc.data().sharedWith,
+          });
+        });
+        setNotes(ownedNotes);
+      });
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [auth.currentUser]);
+
   return (
     <div className="flex flex-col w-full mt-4">
-      <div>
-        <h2 className="text-primary text-3xl mb-3">
+      <div className="collapse w-full">
+        <input
+          type="checkbox"
+          onClick={() => setShowCompletedTasks(!showCompletedTasks)}
+        />
+        <h2 className="text-primary text-3xl mb-3 collapse-title">
+          {showCompletedTasks ? (
+            <ArrowDownCircleIcon className="h-8 w-8 inline-block" />
+          ) : (
+            <ArrowRightCircleIcon className="h-8 w-8 inline-block" />
+          )}{" "}
           Completed Tasks: {tasks.length}
         </h2>
         <DragDropContext onDragEnd={handleDragEnd}>
@@ -182,7 +238,7 @@ const Dashboard = ({
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="space-y-4 overflow-auto max-h-96"
+                className="space-y-4 overflow-auto max-h-96 collapse-content"
               >
                 {tasks.map((task, index) => (
                   <Draggable key={task.id} draggableId={task.id} index={index}>
@@ -210,6 +266,44 @@ const Dashboard = ({
             )}
           </Droppable>
         </DragDropContext>
+      </div>
+      <div className="divider"></div>
+      <div className="collapse w-full">
+        <input
+          type="checkbox"
+          onClick={() => setShowCompletedNotes(!showCompletedNotes)}
+        />
+        <h2 className="text-primary text-3xl mb-3 collapse-title">
+          {showCompletedNotes ? (
+            <ArrowDownCircleIcon className="h-8 w-8 inline-block" />
+          ) : (
+            <ArrowRightCircleIcon className="h-8 w-8 inline-block" />
+          )}{" "}
+          Deleted Notes: {notes.length}
+        </h2>
+        <div className="space-y-4 overflow-auto max-h-96 collapse-content">
+          {notes.map((note) => (
+            <div
+              key={note.id}
+              className="flex flex-col min-w-48 w-auto items-start gap-2 w-full border p-4 rounded-lg shadow-md relative"
+            >
+              <h2 className="text-primary text-3xl mb-3">{note.title}</h2>
+              <p className="whitespace-pre-line">{note.content}</p>
+              <button
+                onClick={() => showNotesModal(note.id)}
+                className="btn btn-ghost btn-sm absolute bottom-2 right-14"
+              >
+                <PencilIcon className="h-5 w-5" />
+              </button>
+              <button
+                onClick={() => handleDelete(note.id)}
+                className="btn btn-ghost btn-sm absolute bottom-2 right-2"
+              >
+                <TrashIcon className="h-5 w-5" />
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

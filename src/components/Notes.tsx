@@ -6,6 +6,7 @@ import {
   query,
   where,
   onSnapshot,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
@@ -19,6 +20,7 @@ interface note {
   title: string;
   content: string;
   sharedWith?: string[];
+  deleted: boolean;
 }
 
 const Notes = () => {
@@ -33,7 +35,11 @@ const Notes = () => {
     const user = auth.currentUser;
     if (user) {
       const notesRef = collection(db, "notes");
-      const notesQuery = query(notesRef, where("uid", "==", user.uid));
+      const notesQuery = query(
+        notesRef,
+        where("uid", "==", user.uid),
+        where("deleted", "==", false)
+      );
       const unsubscribe = onSnapshot(notesQuery, (snapshot) => {
         let ownedNotes: note[] = [];
         snapshot.forEach((doc) => {
@@ -54,13 +60,14 @@ const Notes = () => {
   }, [auth.currentUser]);
 
   const handleDelete = async (id: string) => {
-    // modified to accept id
     const user = auth.currentUser;
     if (user) {
       try {
         const noteRef = doc(db, "notes", id);
-        await deleteDoc(noteRef);
-        console.log("Note deleted from Firestore!");
+        await updateDoc(noteRef, {
+          deleted: true,
+        });
+        console.log("Note deleted from Notes!");
       } catch (error) {
         console.error("Error deleting note from Firestore:", error);
       }
@@ -79,6 +86,8 @@ const Notes = () => {
         createdAt: new Date(),
         title: noteTitle,
         content: noteContent,
+        deleted: false,
+        sharedWith: [],
       });
 
       setNoteTitle("");
