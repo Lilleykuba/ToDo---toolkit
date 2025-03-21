@@ -1,7 +1,6 @@
 import {
   doc,
   addDoc,
-  deleteDoc,
   collection,
   query,
   where,
@@ -49,6 +48,8 @@ const Notes = () => {
             title: doc.data().title,
             content: doc.data().content,
             sharedWith: doc.data().sharedWith,
+
+            deleted: doc.data().deleted as boolean,
           });
         });
         setNotes(ownedNotes);
