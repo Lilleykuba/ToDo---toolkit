@@ -1,13 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  doc,
-  getDoc,
-  updateDoc,
-  collection,
-  query,
-  where,
-  onSnapshot,
-} from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 const EditNote = ({ noteId }: { noteId: string }) => {
