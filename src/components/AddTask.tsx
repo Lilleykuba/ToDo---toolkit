@@ -214,9 +214,17 @@ const AddTask = ({
               onClick={() => setShowShareTask((prev) => !prev)}
               className="text-xl font-bold text-primary mb-2 cursor-pointer"
             >
-              {showShareTask
-                ? <ArrowRightCircleIcon />{" Share task with users"}
-                : <ArrowDownCircleIcon />{" Share task with users"}}
+              {showShareTask ? (
+                <>
+                  <ArrowRightCircleIcon />
+                  <span> Share task with users</span>
+                </>
+              ) : (
+                <>
+                  <ArrowDownCircleIcon />
+                  <span> Share task with users</span>
+                </>
+              )}
             </h2>
             {showShareTask && (
               <div className="flex flex-col gap-2">
