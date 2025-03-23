@@ -215,9 +215,9 @@ const AddTask = ({
               className="text-xl font-bold text-primary mb-2 cursor-pointer"
             >
               {showShareTask ? (
-                <ArrowRightCircleIcon className="h-8 w-8 inline-block" />
+                <ArrowDownCircleIcon className="h-6 w-6 inline-block" />
               ) : (
-                <ArrowDownCircleIcon className="h-8 w-8 inline-block" />
+                <ArrowRightCircleIcon className="h-6 w-6 inline-block" />
               )}
               {` `}Share Task with Users
             </h2>
