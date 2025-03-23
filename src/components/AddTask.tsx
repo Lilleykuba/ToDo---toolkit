@@ -215,8 +215,8 @@ const AddTask = ({
               className="text-xl font-bold text-primary mb-2 cursor-pointer"
             >
               {showShareTask
-                ? <ArrowRightCircleIcon />" Share task with users"
-                : <ArrowDownCircleIcon />" Share task with users"}
+                ? <ArrowRightCircleIcon />{" Share task with users"}
+                : <ArrowDownCircleIcon />{" Share task with users"}}
             </h2>
             {showShareTask && (
               <div className="flex flex-col gap-2">
