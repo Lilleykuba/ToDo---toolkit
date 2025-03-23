@@ -3,7 +3,12 @@ import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 import { v4 as uuidv4 } from "uuid";
-import { PlusCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
+import {
+  PlusCircleIcon,
+  TrashIcon,
+  ArrowRightCircleIcon,
+  ArrowDownCircleIcon,
+} from "@heroicons/react/24/solid";
 import Categories from "./Categories";
 
 interface User {
@@ -210,8 +215,8 @@ const AddTask = ({
               className="text-xl font-bold text-primary mb-2 cursor-pointer"
             >
               {showShareTask
-                ? "∨ Share task with users"
-                : "> Share task with users"}
+                ? <ArrowRightCircleIcon />" Share task with users"
+                : <ArrowDownCircleIcon />" Share task with users"}
             </h2>
             {showShareTask && (
               <div className="flex flex-col gap-2">
