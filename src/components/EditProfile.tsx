@@ -75,7 +75,9 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <div className="max-w-80 mx-auto p-4 bg-base-300 shadow-lg rounded">
-      <h1 className="text-xl text-primary font-bold mb-4">Edit Profile</h1>
+      <h1 className="text-2xl font-bold text-primary text-center mb-8 mt-16 lg:mt-4">
+        Edit Profile
+      </h1>
 
       {/* Username */}
       <div className="form-control mb-4">
