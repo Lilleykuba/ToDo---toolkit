@@ -16,6 +16,10 @@ const Habits = () => {
     }
   };
 
+  const handleAddEvent = () => {
+    return;
+  };
+
   return (
     <div className="flex flex-col w-full mt-4">
       <div className="flex flex-col items-start gap-4 w-full">
@@ -38,16 +42,20 @@ const Habits = () => {
       <p className="mt-4">Selected date: {date}</p>
       <dialog id="habitModal" className="modal">
         <div className="modal-box">
-          <h3 className="font-bold text-lg text-primary">Add event</h3>
-          <p className="py-4">
-            Events are not yet implemented. This is just a placeholder.
-          </p>
-          <div className="modal-action">
-            <form method="dialog">
-              {/* if there is a button in form, it will close the modal */}
-              <button className="btn">Close</button>
-            </form>
-          </div>
+          <h3 className="font-bold text-lg text-primary mb-4">Add event</h3>
+          <form className="form-control flex flex-col gap-4">
+            <input type="text" placeholder="Event name" className="input" />
+            <input type="time" className="input" />
+            <button className="btn" onClick={handleAddEvent}>
+              Add
+            </button>
+            <div className="modal-action">
+              <form method="dialog">
+                {/* if there is a button in form, it will close the modal */}
+                <button className="btn">Close</button>
+              </form>
+            </div>
+          </form>
         </div>
       </dialog>
     </div>
