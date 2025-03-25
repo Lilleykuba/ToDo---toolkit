@@ -9,6 +9,7 @@ import {
   getDocs,
   where,
   doc,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
@@ -41,7 +42,6 @@ const Habits = () => {
   const [description, setDescription] = useState<string>("");
 
   const [frequencyDays, setFrequencyDays] = useState<string[]>([]);
-  const [startDate, setStartDate] = useState<string>("");
 
   const auth = getAuth();
 
