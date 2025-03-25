@@ -122,7 +122,7 @@ const Habits = () => {
         <div>
           {/* Habit list */}
           <div className="flex flex-col gap-4">
-            {habits.map((habit, index) => (
+            {habits.map((habit) => (
               <div
                 key={habit.id}
                 className="flex flex-col gap-2 p-4 bg-base-200 rounded-lg"
