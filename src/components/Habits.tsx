@@ -25,6 +25,12 @@ interface Habit {
   completion?: { [day: string]: boolean };
 }
 
+interface HabitCompletion {
+  date: string;
+  completed: boolean;
+  completedAt: string;
+}
+
 const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const Habits = () => {
