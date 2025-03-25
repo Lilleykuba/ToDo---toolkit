@@ -109,8 +109,11 @@ const Habits = () => {
       return;
     }
 
+    // Generate a new document reference to get a unique Firebase doc id
+    const habitRef = doc(collection(db, "habits"));
+
     const habit: Habit = {
-      id: doc.id,
+      id: habitRef.id, // use generated doc id
       name: habitName,
       frequency: frequency,
       frequencyDays: frequencyDays,
@@ -122,7 +125,8 @@ const Habits = () => {
     };
 
     try {
-      await addDoc(collection(db, "habits"), {
+      // Use setDoc with the generated doc reference
+      await setDoc(habitRef, {
         ...habit,
         uid: currentUser.uid, // changed from userId to uid to match security rule
       });
@@ -273,9 +277,9 @@ const Habits = () => {
               <option value="monthly">Monthly</option>
               <option value="custom">Custom</option>
             </select>
-            {(frequency === "weekly") |
-              (frequency === "monthly") |
-              (frequency === "custom") && (
+            {(frequency === "weekly" ||
+              frequency === "monthly" ||
+              frequency === "custom") && (
               <div className="flex gap-2 items-center justify-center">
                 {weekDays.map((day) => (
                   <label key={day} className="flex items-center gap-2">
