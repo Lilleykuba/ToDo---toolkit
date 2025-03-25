@@ -280,4 +280,4 @@ const Habits = () => {
   );
 };
 
-export default React.memo(Habits);
+export default Habits;
