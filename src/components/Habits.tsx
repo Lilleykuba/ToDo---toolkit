@@ -4,7 +4,6 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
 import {
   collection,
-  addDoc,
   query,
   getDocs,
   where,
@@ -287,7 +286,13 @@ const Habits = () => {
                       type="checkbox"
                       value={day}
                       onChange={(e) =>
-                        setFrequencyDays(frequencyDays.push(e.target.value))
+                        setFrequencyDays((prev) => {
+                          if (e.target.checked) {
+                            return [...prev, e.target.value];
+                          } else {
+                            return prev.filter((d) => d !== e.target.value);
+                          }
+                        })
                       }
                     />
                     {day}
