@@ -44,22 +44,22 @@ const Habits = () => {
 
   const auth = getAuth();
 
-  useEffect(() => {
+  // Extract fetchHabits for reuse
+  const fetchHabits = async () => {
     const user = auth.currentUser;
-
     if (user) {
-      const fetchHabits = async () => {
-        const q = query(collection(db, "habits"), where("uid", "==", user.uid));
-        const querySnapshot = await getDocs(q);
-        const habits: Habit[] = [];
-        querySnapshot.forEach((doc) => {
-          habits.push(doc.data() as Habit);
-        });
-        setHabits(habits);
-      };
-
-      fetchHabits();
+      const q = query(collection(db, "habits"), where("uid", "==", user.uid));
+      const querySnapshot = await getDocs(q);
+      const habits: Habit[] = [];
+      querySnapshot.forEach((doc) => {
+        habits.push(doc.data() as Habit);
+      });
+      setHabits(habits);
     }
+  };
+
+  useEffect(() => {
+    fetchHabits();
   }, []);
 
   useEffect(() => {
@@ -135,6 +135,10 @@ const Habits = () => {
       setTime("");
       setColor("#000000");
       setDescription("");
+      setFrequencyDays([]);
+
+      // Reload habits after successful add
+      fetchHabits();
     } catch (error) {
       console.error("Error adding habit: ", error);
     }
