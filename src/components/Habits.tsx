@@ -9,6 +9,7 @@ import {
   where,
   doc,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
@@ -19,10 +20,15 @@ interface Habit {
   frequency: string;
   frequencyDays?: string[];
   startDate?: string;
-  time: string;
   color: string;
   description: string;
   completion?: { [day: string]: boolean };
+}
+
+interface HabitCompletion {
+  date: string;
+  completed: boolean;
+  completedAt: string;
 }
 
 const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -36,7 +42,6 @@ const Habits = () => {
 
   const [habitName, setHabitName] = useState<string>("");
   const [frequency, setFrequency] = useState<string>("daily");
-  const [time, setTime] = useState<string>("");
   const [color, setColor] = useState<string>("#000000");
   const [description, setDescription] = useState<string>("");
 
@@ -44,37 +49,34 @@ const Habits = () => {
 
   const auth = getAuth();
 
-  // Extract fetchHabits for reuse
   const fetchHabits = async () => {
     const user = auth.currentUser;
     if (user) {
       const q = query(collection(db, "habits"), where("uid", "==", user.uid));
       const querySnapshot = await getDocs(q);
       const habits: Habit[] = [];
-      querySnapshot.forEach((doc) => {
-        habits.push(doc.data() as Habit);
+      const completionStatus: {
+        [habitId: string]: { [day: string]: boolean };
+      } = {};
+
+      querySnapshot.forEach((habitDoc) => {
+        const habit = { ...habitDoc.data(), id: habitDoc.id } as Habit;
+        habits.push(habit);
+        completionStatus[habit.id] = weekDays.reduce((acc, day) => {
+          // Use the habit's completion field if available, otherwise default to false
+          acc[day] = habit.completion ? habit.completion[day] || false : false;
+          return acc;
+        }, {} as { [day: string]: boolean });
       });
+
       setHabits(habits);
+      setHabitCompletion(completionStatus);
     }
   };
 
   useEffect(() => {
     fetchHabits();
   }, []);
-
-  useEffect(() => {
-    // Initialize completion status for each habit when habits update
-    const initialCompletion = { ...habitCompletion };
-    habits.forEach((habit) => {
-      if (!initialCompletion[habit.id]) {
-        initialCompletion[habit.id] = weekDays.reduce((acc, day) => {
-          acc[day] = false;
-          return acc;
-        }, {} as { [day: string]: boolean });
-      }
-    });
-    setHabitCompletion(initialCompletion);
-  }, [habits]);
 
   const handleDateClick = (arg: any) => {
     setDate(arg.dateStr);
@@ -117,7 +119,6 @@ const Habits = () => {
       frequency: frequency,
       frequencyDays: frequencyDays,
       startDate: new Date().toISOString(),
-      time: time,
       color: color,
       description: description,
       completion: {},
@@ -132,7 +133,6 @@ const Habits = () => {
 
       setHabitName("");
       setFrequency("daily");
-      setTime("");
       setColor("#000000");
       setDescription("");
       setFrequencyDays([]);
@@ -151,28 +151,41 @@ const Habits = () => {
     }
   };
 
-  const toggleCompletion = (habitId: string, day: string) => {
-    setHabitCompletion((prev) => ({
-      ...prev,
-      [habitId]: {
-        ...prev[habitId],
-        [day]: !prev[habitId][day],
-      },
-    }));
-
+  const toggleCompletion = async (habitId: string, day: string) => {
     const currentUser = getAuth().currentUser;
     if (!currentUser) {
       console.error("User is not logged in!");
       return;
     }
 
-    // Update habit completion status in Firestore
-    const habitRef = doc(db, "habits", habitId);
-    const habitCompletionRef = doc(habitRef, "completion", day);
-    setDoc(habitCompletionRef, {
-      completed: !habitCompletion[habitId][day],
-      uid: currentUser.uid,
-    });
+    // Compute new status
+    const newStatus = !habitCompletion[habitId][day];
+
+    // Update local state
+    setHabitCompletion((prev) => ({
+      ...prev,
+      [habitId]: {
+        ...prev[habitId],
+        [day]: newStatus,
+      },
+    }));
+
+    try {
+      // Update the habit document's completion field directly
+      await updateDoc(doc(db, "habits", habitId), {
+        [`completion.${day}`]: newStatus,
+      });
+    } catch (error) {
+      console.error("Error updating habit completion:", error);
+      // Revert local state if update fails
+      setHabitCompletion((prev) => ({
+        ...prev,
+        [habitId]: {
+          ...prev[habitId],
+          [day]: !newStatus,
+        },
+      }));
+    }
   };
 
   return (
@@ -187,12 +200,12 @@ const Habits = () => {
         <div className="divider"></div>
         <div className="w-full">
           {/* Habit table replacing habit list */}
-          <table className="table-auto border-collapse w-full">
+          <table className="table-auto w-full">
             <thead>
               <tr>
-                <th className="border px-4 py-2">Habits</th>
+                <th className="border-none px-4 py-2">Habits</th>
                 {weekDays.map((day) => (
-                  <th key={day} className="border px-4 py-2">
+                  <th key={day} className="border-none px-4 py-2">
                     {day}
                   </th>
                 ))}
@@ -201,7 +214,7 @@ const Habits = () => {
             <tbody>
               {habits.map((habit) => (
                 <tr key={habit.id}>
-                  <td className="border px-4 py-2 flex items-center gap-2">
+                  <td className="border-none px-4 py-2 flex items-center gap-2 text-left">
                     {habit.name}
                     <div
                       className="w-4 h-4 rounded-full"
@@ -209,11 +222,12 @@ const Habits = () => {
                     ></div>
                   </td>
                   {weekDays.map((day) => (
-                    <td key={day} className="border px-4 py-2 text-center">
+                    <td key={day} className="border-none px-4 py-2 text-center">
                       <input
                         type="checkbox"
                         checked={habitCompletion[habit.id]?.[day] || false}
                         onChange={() => toggleCompletion(habit.id, day)}
+                        className="form-checkbox h-5 w-5 text-primary border-primary rounded-full mt-1"
                       />
                     </td>
                   ))}
@@ -304,13 +318,6 @@ const Habits = () => {
                 ))}
               </div>
             )}
-            <input
-              type="time"
-              placeholder="Time"
-              className="input"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-            />
             <input
               type="color"
               placeholder="Color"

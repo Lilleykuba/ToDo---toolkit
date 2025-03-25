@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { supabase } from "../supabaseClient";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -8,16 +8,14 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) {
-      setError(error.message);
-    } else {
+    const auth = getAuth();
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
       setEmail("");
       setPassword("");
-      // Optionally, handle successful login (e.g. redirect)
+    } catch (err: any) {
+      setError(err.message);
     }
   };
 

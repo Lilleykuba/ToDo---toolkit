@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../supabaseClient";
-import { getAuth } from "firebase/auth"; // Remove if not needed; using supabase for auth
+import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
+import { getAuth } from "firebase/auth";
 import { v4 as uuidv4 } from "uuid";
 import {
   PlusCircleIcon,
@@ -27,32 +28,31 @@ const AddTask = ({
   const [priority, setPriority] = useState("Medium");
   const [subtasks, setSubtasks] = useState<{ id: string; name: string }[]>([]);
   const [newSubtask, setNewSubtask] = useState("");
+
+  // States for sharing
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [shareSearch, setShareSearch] = useState("");
   const [selectedShareUsers, setSelectedShareUsers] = useState<User[]>([]);
-  const [showShareTask, setShowShareTask] = useState(false);
-  const [showCategories, setShowCategories] = useState(false);
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [showShareTask, setShowShareTask] = useState(false); // new state to toggle share section
+  const [showCategories, setShowCategories] = useState(false); // new state to toggle categories section
 
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      setCurrentUser(session?.user ?? null);
-    };
-    getUser();
-  }, []);
+  const auth = getAuth();
 
+  // Fetch all users from the "users" collection (excluding current user)
   useEffect(() => {
-    const fetchUsers = async () => {
-      let { data, error } = await supabase.from("users").select("*");
-      if (!error && data) {
-        setAllUsers(data.filter((user: any) => user.id !== currentUser?.id));
-      }
-    };
+    async function fetchUsers() {
+      const usersRef = collection(db, "users");
+      const q = query(usersRef);
+      const snapshot = await getDocs(q);
+      const usersData: User[] = snapshot.docs.map((doc) => ({
+        uid: doc.id,
+        ...doc.data(),
+      })) as User[];
+      const currentUid = auth.currentUser?.uid;
+      setAllUsers(usersData.filter((user) => user.uid !== currentUid));
+    }
     fetchUsers();
-  }, [currentUser]);
+  }, [auth.currentUser]);
 
   const handleAddSubtask = () => {
     if (newSubtask) {
@@ -62,46 +62,55 @@ const AddTask = ({
   };
 
   const handleRemoveSubtask = (id: string) => {
-    setSubtasks(subtasks.filter((sub) => sub.id !== id));
+    setSubtasks(subtasks.filter((subtask) => subtask.id !== id));
   };
 
   const handleAddTask = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!taskName || !currentUser) return;
+    if (!taskName) return;
 
-    let { data: tasksData, error } = await supabase
-      .from("tasks")
-      .select("order");
-    const maxOrder =
-      tasksData && tasksData.length > 0
-        ? Math.max(...tasksData.map((t: any) => t.order || 0))
-        : 0;
+    const user = auth.currentUser;
+    if (!user) {
+      console.error("User is not logged in!");
+      return;
+    }
 
-    const newTask = {
-      name: taskName,
-      completed: false,
-      uid: currentUser.id,
-      owner: currentUser.id,
-      order: maxOrder + 1,
-      categoryId: selectedCategory || null,
-      priority: priority,
-      subtasks: subtasks,
-      sharedWith: selectedShareUsers.map((u) => u.uid),
-    };
+    try {
+      // Fetch tasks to get the maximum order value
+      const tasksRef = collection(db, "tasks");
+      const q = query(tasksRef, where("uid", "==", user.uid));
+      const snapshot = await getDocs(q);
+      const maxOrder =
+        snapshot.docs.length > 0
+          ? Math.max(...snapshot.docs.map((doc) => doc.data().order || 0))
+          : 0;
 
-    const { error: insertError } = await supabase.from("tasks").insert(newTask);
-    if (insertError) {
-      console.error("Error adding task:", insertError);
-    } else {
-      console.log("Task created:", newTask);
+      // Add the new task, including sharedWith as an array of UIDs from selectedShareUsers
+      await addDoc(tasksRef, {
+        name: taskName,
+        completed: false,
+        createdAt: new Date(),
+        uid: user.uid,
+        owner: user.uid,
+        order: maxOrder + 1,
+        categoryId: selectedCategory || null,
+        priority: priority,
+        subtasks: subtasks,
+        sharedWith: selectedShareUsers.map((u) => u.uid),
+      });
+
+      // Reset the form
       setTaskName("");
       setPriority("Medium");
       setSubtasks([]);
       setSelectedShareUsers([]);
       setShareSearch("");
+    } catch (error) {
+      console.error("Error adding task:", error);
     }
   };
 
+  // Filter users based on search text
   const filteredUsers = shareSearch
     ? allUsers.filter((user) =>
         (user.displayName || user.email || "")
@@ -159,6 +168,7 @@ const AddTask = ({
 
       <div className="flex flex-col sm:flex-row gap-2">
         <div className="flex flex-col gap-2 w-full sm:w-[50%]">
+          {/* Task Name Section */}
           <input
             type="text"
             placeholder="Enter your task"
@@ -166,6 +176,7 @@ const AddTask = ({
             onChange={(e) => setTaskName(e.target.value)}
             className="input input-bordered"
           />
+          {/* Subtasks Section */}
           <div className="space-y-2">
             <div className="flex gap-2 input input-bordered flex-grow pr-0">
               <input
@@ -197,6 +208,7 @@ const AddTask = ({
               </div>
             ))}
           </div>
+          {/* Share Task Section */}
           <div className="min-w-full flex flex-col gap-2 mt-4">
             <h2
               onClick={() => setShowShareTask((prev) => !prev)}
@@ -229,6 +241,7 @@ const AddTask = ({
                         type="button"
                         className="btn btn-sm btn-outline"
                         onClick={() => {
+                          // Toggle selection
                           if (
                             selectedShareUsers.find((u) => u.uid === user.uid)
                           ) {

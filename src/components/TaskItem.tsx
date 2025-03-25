@@ -1,4 +1,6 @@
-import { supabase } from "../supabaseClient";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import { getAuth } from "firebase/auth";
 import { PencilIcon, TrashIcon, ShareIcon } from "@heroicons/react/24/solid";
 import EditTask from "./EditTask";
 
@@ -9,6 +11,7 @@ const TaskItem = ({
   onShare,
 }: {
   task: {
+    id: string;
     owner: string;
     name: string;
     completed: boolean;
@@ -17,23 +20,31 @@ const TaskItem = ({
     subtasks?: { id: string; name: string; completed: boolean }[];
     sharedWith?: string[];
   };
-  dragHandleProps?: any;
-  categoryColor?: string;
+  dragHandleProps?: any; // Drag handle props for drag-and-drop functionality
+  categoryColor?: string; // Color of the associated category
+
   onShare: () => void;
 }) => {
+  const auth = getAuth();
+
   const handleComplete = async () => {
-    await supabase
-      .from("tasks")
-      .update({ completed: !task.completed })
-      .eq("id", task.id);
+    const taskRef = doc(db, "tasks", task.id);
+    await updateDoc(taskRef, {
+      completed: !task.completed,
+    });
   };
 
   const handleDelete = async () => {
-    try {
-      await supabase.from("tasks").delete().eq("id", task.id);
-      console.log("Task deleted from Supabase!");
-    } catch (error) {
-      console.error("Error deleting task:", error);
+    const user = auth.currentUser;
+
+    if (user) {
+      try {
+        const taskRef = doc(db, "tasks", task.id);
+        await deleteDoc(taskRef);
+        console.log("Task deleted from Firestore!");
+      } catch (error) {
+        console.error("Error deleting task from Firestore:", error);
+      }
     }
   };
 
@@ -43,17 +54,18 @@ const TaskItem = ({
         ? { ...subtask, completed: !subtask.completed }
         : subtask
     );
-    await supabase
-      .from("tasks")
-      .update({ subtasks: updatedSubtasks })
-      .eq("id", task.id);
+
+    const taskRef = doc(db, "tasks", task.id);
+    await updateDoc(taskRef, { subtasks: updatedSubtasks });
   };
 
   const showTaskModal = () => {
     const modal = document.getElementById(
       "editTaskModal"
     ) as HTMLDialogElement | null;
-    if (modal) modal.showModal();
+    if (modal) {
+      modal.showModal();
+    }
   };
 
   return (
@@ -70,9 +82,10 @@ const TaskItem = ({
       <div
         className="card bg-base-100 shadow-md flex items-center p-4 border-l-4"
         style={{ borderColor: categoryColor || "transparent" }}
-        {...dragHandleProps}
+        {...dragHandleProps} // Enable drag handle for drag-and-drop
       >
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full space-y-2 sm:space-y-0">
+          {/* Task Name and Checkbox */}
           <div className="flex items-center space-x-4">
             <input
               type="checkbox"
@@ -88,6 +101,8 @@ const TaskItem = ({
               {task.name}
             </span>
           </div>
+
+          {/* Priority and Actions */}
           <div className="flex items-center space-x-2 sm:space-x-4">
             <span
               className={`badge ${
@@ -115,14 +130,15 @@ const TaskItem = ({
               <ShareIcon className="h-full w-full text-green-500 hover:text-green-700" />
             </button>
             <button
-              onClick={handleDelete}
               className="btn btn-sm btn-ghost w-5 h-5 p-0 hover:bg-transparent"
+              onClick={handleDelete}
               aria-label="Delete task"
             >
               <TrashIcon className="h-full w-full text-red-500 hover:text-red-700" />
             </button>
           </div>
         </div>
+        {/* Subtasks */}
         {task.subtasks && task.subtasks.length > 0 && (
           <div className="mt-2 ml-8 border-l-2 pl-4 border-gray-300 w-full">
             <h4 className="text-sm font-semibold text-gray-400 mb-2">
