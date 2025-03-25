@@ -15,7 +15,7 @@ interface Habit {
   description: string;
 }
 
-const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const Habits = () => {
   const [date, setDate] = useState<string | null>(null);
