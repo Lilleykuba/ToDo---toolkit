@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
-import { collection, addDoc, query, getDocs, where } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  query,
+  getDocs,
+  where,
+  doc,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 
@@ -10,9 +17,12 @@ interface Habit {
   id: string;
   name: string;
   frequency: string;
+  frequencyDays?: string[];
+  startDate?: string;
   time: string;
   color: string;
   description: string;
+  completion?: { [day: string]: boolean };
 }
 
 const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -29,6 +39,9 @@ const Habits = () => {
   const [time, setTime] = useState<string>("");
   const [color, setColor] = useState<string>("#000000");
   const [description, setDescription] = useState<string>("");
+
+  const [frequencyDays, setFrequencyDays] = useState<string[]>([]);
+  const [startDate, setStartDate] = useState<string>("");
 
   const auth = getAuth();
 
@@ -62,7 +75,6 @@ const Habits = () => {
       }
     });
     setHabitCompletion(initialCompletion);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [habits]);
 
   const handleDateClick = (arg: any) => {
@@ -98,12 +110,15 @@ const Habits = () => {
     }
 
     const habit: Habit = {
-      id: "",
+      id: doc.id,
       name: habitName,
       frequency: frequency,
+      frequencyDays: frequencyDays,
+      startDate: new Date().toISOString(),
       time: time,
       color: color,
       description: description,
+      completion: {},
     };
 
     try {
@@ -137,6 +152,20 @@ const Habits = () => {
         [day]: !prev[habitId][day],
       },
     }));
+
+    const currentUser = getAuth().currentUser;
+    if (!currentUser) {
+      console.error("User is not logged in!");
+      return;
+    }
+
+    // Update habit completion status in Firestore
+    const habitRef = doc(db, "habits", habitId);
+    const habitCompletionRef = doc(habitRef, "completion", day);
+    setDoc(habitCompletionRef, {
+      completed: !habitCompletion[habitId][day],
+      uid: currentUser.uid,
+    });
   };
 
   return (
@@ -242,7 +271,26 @@ const Habits = () => {
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
               <option value="monthly">Monthly</option>
+              <option value="custom">Custom</option>
             </select>
+            {(frequency === "weekly") |
+              (frequency === "monthly") |
+              (frequency === "custom") && (
+              <div className="flex gap-2 items-center justify-center">
+                {weekDays.map((day) => (
+                  <label key={day} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      value={day}
+                      onChange={(e) =>
+                        setFrequencyDays(frequencyDays.push(e.target.value))
+                      }
+                    />
+                    {day}
+                  </label>
+                ))}
+              </div>
+            )}
             <input
               type="time"
               placeholder="Time"
