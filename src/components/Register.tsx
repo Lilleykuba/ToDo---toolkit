@@ -1,11 +1,5 @@
 import { useState } from "react";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase";
+import { supabase } from "../supabaseClient"; // new import
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -15,33 +9,18 @@ const Register = () => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    const auth = getAuth();
-
-    try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
-
-      // Update Firebase Auth Profile
-      await updateProfile(user, { displayName: username });
-
-      // Save user data to Firestore
-      await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        email: user.email,
-        displayName: username,
-        photoURL: user.photoURL || null,
-      });
-
+    const { error, user } = await supabase.auth.signUp(
+      { email, password },
+      { data: { displayName: username } }
+    );
+    if (error) {
+      setError(error.message);
+    } else {
       alert("Registration successful!");
       setEmail("");
       setPassword("");
       setUsername("");
-    } catch (err: any) {
-      setError(err.message);
+      // Optionally, add further logic to complete registration
     }
   };
 
@@ -61,6 +40,13 @@ const Register = () => {
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        className="input input-bordered mb-4"
+      />
+      <input
+        type="text"
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
         className="input input-bordered mb-4"
       />
       <button type="submit" className="btn btn-primary w-full">

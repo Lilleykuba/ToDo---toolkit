@@ -5,16 +5,7 @@ import {
   Draggable,
   DropResult,
 } from "react-beautiful-dnd";
-import {
-  collection,
-  query,
-  where,
-  onSnapshot,
-  doc,
-  writeBatch,
-} from "firebase/firestore";
-import { db } from "../firebase";
-import { getAuth } from "firebase/auth";
+import { supabase } from "../supabaseClient";
 import TaskItem from "./TaskItem";
 
 interface Task {
@@ -31,166 +22,93 @@ interface Task {
 
 const TaskList = ({
   selectedCategory,
-
   onShareTask,
 }: {
   selectedCategory: string | null;
-
   onShareTask: (taskId: string) => void;
 }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [categories, setCategories] = useState<Record<string, string>>({});
   const [sortMethod, setSortMethod] = useState<"newest" | "priority">("newest");
-  const auth = getAuth();
 
   useEffect(() => {
-    const user = auth.currentUser;
-
-    if (user) {
-      // Fetch categories and store in a map
-      const categoriesRef = collection(db, "categories");
-      const categoriesQuery = query(
-        categoriesRef,
-        where("uid", "==", user.uid)
-      );
-      const unsubscribeCategories = onSnapshot(categoriesQuery, (snapshot) => {
-        const categoriesMap: Record<string, string> = {};
-        snapshot.forEach((doc) => {
-          categoriesMap[doc.id] = doc.data().color;
+    const fetchData = async () => {
+      // Fetch categories
+      let { data: cats, error: catError } = await supabase
+        .from("categories")
+        .select("*")
+        .eq("uid", supabase.auth.getSession()?.user?.id);
+      if (!catError && cats) {
+        const map: Record<string, string> = {};
+        cats.forEach((cat: any) => {
+          map[cat.id] = cat.color;
         });
-        setCategories(categoriesMap);
-      });
+        setCategories(map);
+      }
+      // Fetch owned tasks
+      const baseQuery = supabase
+        .from("tasks")
+        .select("*")
+        .eq("completed", false);
+      let { data: ownedTasks, error: ownedError } = selectedCategory
+        ? await baseQuery
+            .eq("uid", supabase.auth.getSession()?.user?.id)
+            .eq("categoryId", selectedCategory)
+        : await baseQuery.eq("uid", supabase.auth.getSession()?.user?.id);
+      // Fetch shared tasks
+      let { data: sharedTasks, error: sharedError } = selectedCategory
+        ? await baseQuery
+            .contains("sharedWith", [supabase.auth.getSession()?.user?.id])
+            .eq("categoryId", selectedCategory)
+        : await baseQuery.contains("sharedWith", [
+            supabase.auth.getSession()?.user?.id,
+          ]);
 
-      const tasksRef = collection(db, "tasks");
-
-      // Build query for owned tasks
-      const ownedQuery = selectedCategory
-        ? query(
-            tasksRef,
-            where("uid", "==", user.uid),
-            where("categoryId", "==", selectedCategory),
-            where("completed", "==", false)
-          )
-        : query(
-            tasksRef,
-            where("uid", "==", user.uid),
-            where("completed", "==", false)
-          );
-
-      // Build query for tasks shared with the user
-      const sharedQuery = selectedCategory
-        ? query(
-            tasksRef,
-            where("sharedWith", "array-contains", user.uid),
-            where("categoryId", "==", selectedCategory),
-            where("completed", "==", false)
-          )
-        : query(
-            tasksRef,
-            where("sharedWith", "array-contains", user.uid),
-            where("completed", "==", false)
-          );
-
-      // Arrays to hold snapshots from both queries
-      let ownedTasks: Task[] = [];
-      let sharedTasks: Task[] = [];
-
-      // Merge the two query snapshots and remove duplicates by task id
-      const mergeTasks = () => {
-        const merged = [...ownedTasks, ...sharedTasks];
+      if (!ownedError && !sharedError) {
+        const merged = [...(ownedTasks || []), ...(sharedTasks || [])];
+        // Remove duplicates based on id
         const unique = merged.filter(
-          (task, index, self) =>
-            index === self.findIndex((t) => t.id === task.id)
+          (t: any, i: number, arr: any[]) =>
+            i === arr.findIndex((item) => item.id === t.id)
         );
-        // Sort by order (adjust if needed)
-        setTasks(unique.sort((a, b) => a.order - b.order));
-      };
-
-      const unsubscribeOwned = onSnapshot(ownedQuery, (snapshot) => {
-        ownedTasks = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          owner: doc.data().uid, // mapping owner from uid
-          name: doc.data().name || "Unnamed Task",
-          completed: doc.data().completed || false,
-          order: doc.data().order || 0,
-          categoryId: doc.data().categoryId || null,
-          priority: doc.data().priority || "Medium",
-          subtasks: doc.data().subtasks || [],
-          sharedWith: doc.data().sharedWith || [],
-        }));
-        mergeTasks();
-      });
-
-      const unsubscribeShared = onSnapshot(sharedQuery, (snapshot) => {
-        sharedTasks = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          owner: doc.data().uid, // mapping owner from uid
-          name: doc.data().name || "Unnamed Task",
-          completed: doc.data().completed || false,
-          order: doc.data().order || 0,
-          categoryId: doc.data().categoryId || null,
-          priority: doc.data().priority || "Medium",
-          subtasks: doc.data().subtasks || [],
-          sharedWith: doc.data().sharedWith || [],
-        }));
-        mergeTasks();
-      });
-
-      return () => {
-        unsubscribeCategories();
-        unsubscribeOwned();
-        unsubscribeShared();
-      };
-    }
+        setTasks(unique.sort((a: Task, b: Task) => a.order - b.order));
+      }
+    };
+    fetchData();
   }, [selectedCategory]);
 
   const handleDragEnd = async (result: DropResult) => {
     if (!result.destination) return;
-
     const reorderedTasks = Array.from(tasks);
-    const [movedTask] = reorderedTasks.splice(result.source.index, 1);
-    reorderedTasks.splice(result.destination.index, 0, movedTask);
-
-    // Update the order field for each task
-    const updatedTasks = reorderedTasks.map((task, index) => ({
+    const [moved] = reorderedTasks.splice(result.source.index, 1);
+    reorderedTasks.splice(result.destination.index, 0, moved);
+    const updatedTasks = reorderedTasks.map((task, idx) => ({
       ...task,
-      order: index,
+      order: idx,
     }));
-
     setTasks(updatedTasks);
-    handleSort(sortMethod);
-
-    // Use batch writes to update Firestore
-    const batch = writeBatch(db);
-    updatedTasks.forEach((task) => {
-      const taskRef = doc(db, "tasks", task.id);
-      batch.update(taskRef, { order: task.order });
+    // Update orders in Supabase (batch update simulation)
+    updatedTasks.forEach(async (task) => {
+      await supabase
+        .from("tasks")
+        .update({ order: task.order })
+        .eq("id", task.id);
     });
-
-    try {
-      await batch.commit();
-    } catch (error) {
-      console.error("Error updating task order in Firestore:", error);
-    }
+    handleSort(sortMethod);
   };
 
   const handleSort = (method: "newest" | "priority") => {
     setSortMethod(method);
-    const sortedTasks = [...tasks];
-
+    const sorted = [...tasks];
     if (method === "newest") {
-      sortedTasks.sort((a, b) => b.order - a.order);
+      sorted.sort((a, b) => b.order - a.order);
     } else {
-      // Priority sorting (High > Medium > Low)
-      const priorityWeight = { High: 3, Medium: 2, Low: 1 };
-      sortedTasks.sort(
-        (a, b) =>
-          (priorityWeight[b.priority as keyof typeof priorityWeight] || 0) -
-          (priorityWeight[a.priority as keyof typeof priorityWeight] || 0)
+      const weight: Record<string, number> = { High: 3, Medium: 2, Low: 1 };
+      sorted.sort(
+        (a, b) => (weight[b.priority] || 0) - (weight[a.priority] || 0)
       );
     }
-
-    setTasks(sortedTasks);
+    setTasks(sorted);
   };
 
   return (

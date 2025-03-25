@@ -1,5 +1,5 @@
 import React, { Suspense, useCallback, useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { supabase } from "./supabaseClient";
 import "./App.css";
 import TaskList from "./components/TaskList";
 import AddTask from "./components/AddTask";
@@ -12,10 +12,10 @@ const Notes = React.lazy(() => import("./components/Notes"));
 const Habits = React.lazy(() => import("./components/Habits"));
 
 function App() {
-  const [user, setUser] = useState<User | null>(null); // Store the current user
-  const [loading, setLoading] = useState(true); // Loading state while checking auth
-  const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar toggle for mobile
-  const [isSwitchingFromGuest, setIsSwitchingFromGuest] = useState(false); // Guest to account upgrade state
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isSwitchingFromGuest, setIsSwitchingFromGuest] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [sharingTaskId, setSharingTaskId] = useState<string | null>(null);
   const [openDashboard, setOpenDashboard] = useState(false);
@@ -23,15 +23,23 @@ function App() {
   const [openHabits, setOpenHabits] = useState(false);
 
   useEffect(() => {
-    const auth = getAuth();
-
-    // Listen for authentication state changes
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false); // Stop showing the loader
-    });
-
-    return () => unsubscribe(); // Cleanup the listener
+    const getSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      setUser(session?.user ?? null);
+      setLoading(false);
+    };
+    getSession();
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+    return () => {
+      // Unsubscribe if available
+      authListener?.subscription?.unsubscribe();
+    };
   }, []);
 
   const toggleSidebar = useCallback(() => {
@@ -39,7 +47,6 @@ function App() {
   }, []);
 
   if (loading) {
-    // Show a loading spinner while Firebase checks authentication state
     return (
       <div className="min-h-screen flex items-center justify-center bg-base-200">
         <p className="text-xl text-primary">Loading...</p>
@@ -48,23 +55,20 @@ function App() {
   }
 
   if (!user) {
-    // If no user is logged in, show the authentication screen
     return <Auth />;
   }
 
   if (isSwitchingFromGuest) {
-    // Render the Register component for guest-to-account upgrade
     return (
       <RegisterGuest onSwitchComplete={() => setIsSwitchingFromGuest(false)} />
     );
   }
 
   if (sharingTaskId) {
-    // Render ShareItem component when sharingTaskId is set
     return (
       <ShareItem
         taskId={sharingTaskId}
-        onClose={() => setSharingTaskId(null)} // Go back to the task list
+        onClose={() => setSharingTaskId(null)}
       />
     );
   }
@@ -75,7 +79,7 @@ function App() {
         <Sidebar
           user={{
             email: user?.email || undefined,
-            isAnonymous: user?.isAnonymous || false,
+            isAnonymous: user?.app_metadata?.provider === "anonymous" || false,
           }}
           isOpen={sidebarOpen}
           toggleSidebar={toggleSidebar}
@@ -130,7 +134,7 @@ function App() {
         <Sidebar
           user={{
             email: user?.email || undefined,
-            isAnonymous: user?.isAnonymous || false,
+            isAnonymous: user?.app_metadata?.provider === "anonymous" || false,
           }}
           isOpen={sidebarOpen}
           toggleSidebar={toggleSidebar}
@@ -182,7 +186,7 @@ function App() {
         <Sidebar
           user={{
             email: user?.email || undefined,
-            isAnonymous: user?.isAnonymous || false,
+            isAnonymous: user?.app_metadata?.provider === "anonymous" || false,
           }}
           isOpen={sidebarOpen}
           toggleSidebar={toggleSidebar}
@@ -230,12 +234,10 @@ function App() {
 
   return (
     <div className="flex min-h-screen bg-base-200">
-      {/* Sidebar */}
-
       <Sidebar
         user={{
           email: user?.email || undefined,
-          isAnonymous: user?.isAnonymous || false,
+          isAnonymous: user?.app_metadata?.provider === "anonymous" || false,
         }}
         isOpen={sidebarOpen}
         toggleSidebar={toggleSidebar}
@@ -259,8 +261,6 @@ function App() {
         }}
         openHabits={openHabits}
       />
-
-      {/* Main Content */}
       <main
         className={`flex-grow p-2 sm:p-6 flex items-start justify-center transition-all mt-10 sm:mt-4 mx-auto ${
           sidebarOpen ? "ml-64" : "ml-0"
@@ -273,7 +273,6 @@ function App() {
           >
             ☰
           </button>
-          {/* Content */}
           <div className="w-full">
             <section>
               <AddTask
@@ -281,9 +280,7 @@ function App() {
                 onCategorySelect={(id) => setSelectedCategory(id)}
               />
             </section>
-
             <div className="divider"></div>
-
             <section>
               <h2 className="text-2xl font-bold text-primary mb-4">
                 Your Tasks
@@ -296,7 +293,6 @@ function App() {
           </div>
         </div>
       </main>
-      {/* <CookieConsent /> */}
     </div>
   );
 }
