@@ -78,6 +78,7 @@ const Habits = () => {
     }
 
     const habit: Habit = {
+      id: "",
       name: habitName,
       frequency: frequency,
       time: time,
@@ -124,7 +125,6 @@ const Habits = () => {
             {habits.map((habit, index) => (
               <div
                 key={habit.id}
-                index={index}
                 className="flex flex-col gap-2 p-4 bg-base-200 rounded-lg"
               >
                 <div className="flex items-center justify-between">
