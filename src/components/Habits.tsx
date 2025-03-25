@@ -15,9 +15,14 @@ interface Habit {
   description: string;
 }
 
+const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
 const Habits = () => {
   const [date, setDate] = useState<string | null>(null);
   const [habits, setHabits] = useState<Habit[]>([]);
+  const [habitCompletion, setHabitCompletion] = useState<{
+    [habitId: string]: { [day: string]: boolean };
+  }>({});
 
   const [habitName, setHabitName] = useState<string>("");
   const [frequency, setFrequency] = useState<string>("daily");
@@ -44,6 +49,21 @@ const Habits = () => {
       fetchHabits();
     }
   }, []);
+
+  useEffect(() => {
+    // Initialize completion status for each habit when habits update
+    const initialCompletion = { ...habitCompletion };
+    habits.forEach((habit) => {
+      if (!initialCompletion[habit.id]) {
+        initialCompletion[habit.id] = weekDays.reduce((acc, day) => {
+          acc[day] = false;
+          return acc;
+        }, {} as { [day: string]: boolean });
+      }
+    });
+    setHabitCompletion(initialCompletion);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [habits]);
 
   const handleDateClick = (arg: any) => {
     setDate(arg.dateStr);
@@ -109,6 +129,16 @@ const Habits = () => {
     }
   };
 
+  const toggleCompletion = (habitId: string, day: string) => {
+    setHabitCompletion((prev) => ({
+      ...prev,
+      [habitId]: {
+        ...prev[habitId],
+        [day]: !prev[habitId][day],
+      },
+    }));
+  };
+
   return (
     <div className="flex flex-col w-full mt-4">
       <div className="flex flex-col items-start gap-4 w-full">
@@ -119,25 +149,42 @@ const Habits = () => {
           Create a Habit
         </button>
         <div className="divider"></div>
-        <div>
-          {/* Habit list */}
-          <div className="flex flex-col gap-4">
-            {habits.map((habit) => (
-              <div
-                key={habit.id}
-                className="flex flex-col gap-2 p-4 bg-base-200 rounded-lg"
-              >
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-bold">{habit.name}</h3>
-                  <div
-                    className="w-4 h-4 rounded-full"
-                    style={{ backgroundColor: habit.color }}
-                  ></div>
-                </div>
-                <p>{habit.description}</p>
-              </div>
-            ))}
-          </div>
+        <div className="w-full">
+          {/* Habit table replacing habit list */}
+          <table className="table-auto border-collapse w-full">
+            <thead>
+              <tr>
+                <th className="border px-4 py-2">Habits</th>
+                {weekDays.map((day) => (
+                  <th key={day} className="border px-4 py-2">
+                    {day}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {habits.map((habit) => (
+                <tr key={habit.id}>
+                  <td className="border px-4 py-2 flex items-center gap-2">
+                    {habit.name}
+                    <div
+                      className="w-4 h-4 rounded-full"
+                      style={{ backgroundColor: habit.color }}
+                    ></div>
+                  </td>
+                  {weekDays.map((day) => (
+                    <td key={day} className="border px-4 py-2 text-center">
+                      <input
+                        type="checkbox"
+                        checked={habitCompletion[habit.id]?.[day] || false}
+                        onChange={() => toggleCompletion(habit.id, day)}
+                      />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
         <div className="divider"></div>
         <div className="w-full">
