@@ -11,14 +11,14 @@ const Sidebar = ({
   isOpen,
   toggleSidebar,
   onSwitchToAccount,
-  activeSection,
+
   setActiveSection,
 }: {
   user: { email?: string; isAnonymous: boolean };
   isOpen: boolean;
   toggleSidebar: () => void;
   onSwitchToAccount: () => void;
-  activeSection: "tasks" | "dashboard" | "notes" | "habits";
+
   setActiveSection: (
     section: "tasks" | "dashboard" | "notes" | "habits"
   ) => void;

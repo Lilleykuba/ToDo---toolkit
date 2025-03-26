@@ -159,9 +159,6 @@ function App() {
           sidebarOpen ? "ml-64" : "ml-0"
         }`}
       >
-        {activeSection === "Dashboard" && (
-          <h1 className="text-4xl text-center text-primary mb-4">Dashboard</h1>
-        )}
         {renderContent()}
       </main>
     </div>
