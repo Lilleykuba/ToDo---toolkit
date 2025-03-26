@@ -118,19 +118,31 @@ const Sidebar = ({
         )}
 
         <div className="divider w-full"></div>
-        <button onClick={() => setActiveSection("tasks")} className="btn">
+        <button
+          onClick={() => setActiveSection("tasks")}
+          className={`btn ${activeSection === "tasks" ? "btn-active" : ""}`}
+        >
           Tasks
         </button>
         <div className="divider w-full"></div>
-        <button onClick={() => setActiveSection("dashboard")} className="btn">
+        <button
+          onClick={() => setActiveSection("dashboard")}
+          className={`btn ${activeSection === "dashboard" ? "btn-active" : ""}`}
+        >
           Dashboard
         </button>
         <div className="divider w-full"></div>
-        <button onClick={() => setActiveSection("notes")} className="btn">
+        <button
+          onClick={() => setActiveSection("notes")}
+          className={`btn ${activeSection === "notes" ? "btn-active" : ""}`}
+        >
           Notes
         </button>
         <div className="divider w-full"></div>
-        <button onClick={() => setActiveSection("habits")} className="btn">
+        <button
+          onClick={() => setActiveSection("habits")}
+          className={`btn ${activeSection === "habits" ? "btn-active" : ""}`}
+        >
           Habits
         </button>
 
