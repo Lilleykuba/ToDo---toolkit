@@ -126,23 +126,24 @@ function App() {
             >
               ☰
             </button>
-
-            <section>
-              <AddTask
-                selectedCategory={selectedCategory}
-                onCategorySelect={(id) => setSelectedCategory(id)}
-              />
-            </section>
-            <div className="divider"></div>
-            <section>
-              <h2 className="text-2xl font-bold text-primary mb-4">
-                Your Tasks
-              </h2>
-              <TaskList
-                selectedCategory={selectedCategory}
-                onShareTask={(taskId) => setSharingTaskId(taskId)}
-              />
-            </section>
+            <div className="flex flex-col gap-4 w-full">
+              <section>
+                <AddTask
+                  selectedCategory={selectedCategory}
+                  onCategorySelect={(id) => setSelectedCategory(id)}
+                />
+              </section>
+              <div className="divider"></div>
+              <section>
+                <h2 className="text-2xl font-bold text-primary mb-4">
+                  Your Tasks
+                </h2>
+                <TaskList
+                  selectedCategory={selectedCategory}
+                  onShareTask={(taskId) => setSharingTaskId(taskId)}
+                />
+              </section>
+            </div>
           </div>
         );
     }
