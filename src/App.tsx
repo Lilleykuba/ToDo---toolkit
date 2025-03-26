@@ -120,6 +120,12 @@ function App() {
       default: // "tasks"
         return (
           <div className="w-full">
+            <button
+              onClick={toggleSidebar}
+              className="btn btn-primary btn-sm sm:btn lg:hidden fixed top-2 left-2 sm:left-4 sm:top-4 z-50"
+            >
+              ☰
+            </button>
             <section>
               <AddTask
                 selectedCategory={selectedCategory}
