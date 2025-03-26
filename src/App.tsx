@@ -7,9 +7,12 @@ import Auth from "./components/Auth";
 import Sidebar from "./components/Sidebar";
 import RegisterGuest from "./components/RegisterGuest";
 import ShareItem from "./components/ShareItem";
+
 const Dashboard = React.lazy(() => import("./components/Dashboard"));
 const Notes = React.lazy(() => import("./components/Notes"));
 const Habits = React.lazy(() => import("./components/Habits"));
+
+type Section = "dashboard" | "notes" | "habits" | "tasks";
 
 function App() {
   const [user, setUser] = useState<User | null>(null); // Store the current user
@@ -18,10 +21,7 @@ function App() {
   const [isSwitchingFromGuest, setIsSwitchingFromGuest] = useState(false); // Guest to account upgrade state
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [sharingTaskId, setSharingTaskId] = useState<string | null>(null);
-  const [openDashboard, setOpenDashboard] = useState(false);
-  const [openNotes, setOpenNotes] = useState(false);
-  const [openHabits, setOpenHabits] = useState(false);
-  const [openTasks, setOpenTasks] = useState(true);
+  const [activeSection, setActiveSection] = useState<Section>("tasks");
 
   useEffect(() => {
     const auth = getAuth();
@@ -70,51 +70,10 @@ function App() {
     );
   }
 
-  if (openDashboard) {
-    return (
-      <div className="flex min-h-screen bg-base-200">
-        <Sidebar
-          user={{
-            email: user?.email || undefined,
-            isAnonymous: user?.isAnonymous || false,
-          }}
-          isOpen={sidebarOpen}
-          toggleSidebar={toggleSidebar}
-          onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
-          onOpenTasks={() => {
-            setOpenTasks(true);
-            setOpenDashboard(false);
-            setOpenNotes(false);
-            setOpenHabits(false);
-          }}
-          onOpenDashboard={() => {
-            setOpenDashboard(false);
-            setOpenNotes(false);
-            setOpenHabits(false);
-            setOpenTasks(false);
-          }}
-          openDashboard={openDashboard}
-          onOpenNotes={() => {
-            setOpenNotes(true);
-            setOpenDashboard(false);
-            setOpenHabits(false);
-            setOpenTasks(false);
-          }}
-          openNotes={openNotes}
-          onOpenHabits={() => {
-            setOpenHabits(true);
-            setOpenDashboard(false);
-            setOpenNotes(false);
-            setOpenTasks(false);
-          }}
-          openHabits={openHabits}
-        />
-        <main
-          className={`flex-grow p-2 sm:p-6 flex-col items-start sm:items-center transition-all mt-10 sm:mt-4 ${
-            sidebarOpen ? "ml-64" : "ml-0"
-          }`}
-        >
-          <h1 className="text-4xl text-center text-primary mb-4">Dashboard</h1>
+  const renderContent = () => {
+    switch (activeSection) {
+      case "dashboard":
+        return (
           <div className="w-full max-w-screen-lg bg-base-100 shadow-xl rounded-lg p-10 relative flex justify-center mx-auto">
             <button
               onClick={toggleSidebar}
@@ -129,56 +88,9 @@ function App() {
               />
             </Suspense>
           </div>
-        </main>
-      </div>
-    );
-  }
-
-  if (openNotes) {
-    return (
-      <div className="flex min-h-screen bg-base-200">
-        <Sidebar
-          user={{
-            email: user?.email || undefined,
-            isAnonymous: user?.isAnonymous || false,
-          }}
-          isOpen={sidebarOpen}
-          toggleSidebar={toggleSidebar}
-          onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
-          onOpenTasks={() => {
-            setOpenTasks(true);
-            setOpenDashboard(false);
-            setOpenNotes(false);
-            setOpenHabits(false);
-          }}
-          onOpenDashboard={() => {
-            setOpenDashboard(true);
-            setOpenNotes(false);
-            setOpenHabits(false);
-            setOpenTasks(false);
-          }}
-          openDashboard={openDashboard}
-          onOpenNotes={() => {
-            setOpenNotes(false);
-            setOpenDashboard(false);
-            setOpenHabits(false);
-            setOpenTasks(false);
-          }}
-          openNotes={openNotes}
-          onOpenHabits={() => {
-            setOpenHabits(true);
-            setOpenDashboard(false);
-            setOpenNotes(false);
-            setOpenTasks(false);
-          }}
-          openHabits={openHabits}
-        />
-        <main
-          className={`flex-grow p-2 sm:p-6 flex-col items-start sm:items-center transition-all mt-10 sm:mt-4 ${
-            sidebarOpen ? "ml-64" : "ml-0"
-          }`}
-        >
-          <h1 className="text-4xl text-center text-primary mb-4">Notes</h1>
+        );
+      case "notes":
+        return (
           <div className="w-full max-w-screen-lg bg-base-100 shadow-xl rounded-lg p-10 relative flex justify-center mx-auto">
             <button
               onClick={toggleSidebar}
@@ -190,56 +102,9 @@ function App() {
               <Notes />
             </Suspense>
           </div>
-        </main>
-      </div>
-    );
-  }
-
-  if (openHabits) {
-    return (
-      <div className="flex min-h-screen bg-base-200">
-        <Sidebar
-          user={{
-            email: user?.email || undefined,
-            isAnonymous: user?.isAnonymous || false,
-          }}
-          isOpen={sidebarOpen}
-          toggleSidebar={toggleSidebar}
-          onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
-          onOpenTasks={() => {
-            setOpenTasks(true);
-            setOpenDashboard(false);
-            setOpenNotes(false);
-            setOpenHabits(false);
-          }}
-          onOpenDashboard={() => {
-            setOpenDashboard(true);
-            setOpenNotes(false);
-            setOpenHabits(false);
-            setOpenTasks(false);
-          }}
-          openDashboard={openDashboard}
-          onOpenNotes={() => {
-            setOpenNotes(true);
-            setOpenDashboard(false);
-            setOpenHabits(false);
-            setOpenTasks(false);
-          }}
-          openNotes={openNotes}
-          onOpenHabits={() => {
-            setOpenHabits(false);
-            setOpenDashboard(false);
-            setOpenNotes(false);
-            setOpenTasks(false);
-          }}
-          openHabits={openHabits}
-        />
-        <main
-          className={`flex-grow p-2 sm:p-6 flex-col items-start sm:items-center transition-all mt-10 sm:mt-4 ${
-            sidebarOpen ? "ml-64" : "ml-0"
-          }`}
-        >
-          <h1 className="text-4xl text-center text-primary mb-4">Habits</h1>
+        );
+      case "habits":
+        return (
           <div className="w-full max-w-screen-lg bg-base-100 shadow-xl rounded-lg p-10 relative flex justify-center mx-auto">
             <button
               onClick={toggleSidebar}
@@ -247,70 +112,13 @@ function App() {
             >
               ☰
             </button>
-            <Suspense fallback={<div>Loading Notes...</div>}>
+            <Suspense fallback={<div>Loading Habits...</div>}>
               <Habits />
             </Suspense>
           </div>
-        </main>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex min-h-screen bg-base-200">
-      {/* Sidebar */}
-
-      <Sidebar
-        user={{
-          email: user?.email || undefined,
-          isAnonymous: user?.isAnonymous || false,
-        }}
-        isOpen={sidebarOpen}
-        toggleSidebar={toggleSidebar}
-        onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
-        onOpenTasks={() => {
-          setOpenTasks(true);
-          setOpenDashboard(false);
-          setOpenNotes(false);
-          setOpenHabits(false);
-        }}
-        onOpenDashboard={() => {
-          setOpenDashboard(true);
-          setOpenNotes(false);
-          setOpenHabits(false);
-          setOpenTasks(false);
-        }}
-        openDashboard={openDashboard}
-        onOpenNotes={() => {
-          setOpenNotes(true);
-          setOpenDashboard(false);
-          setOpenHabits(false);
-          setOpenTasks(false);
-        }}
-        openNotes={openNotes}
-        onOpenHabits={() => {
-          setOpenDashboard(false);
-          setOpenNotes(false);
-          setOpenHabits(true);
-          setOpenTasks(false);
-        }}
-        openHabits={openHabits}
-      />
-
-      {/* Main Content */}
-      <main
-        className={`flex-grow p-2 sm:p-6 flex items-start justify-center transition-all mt-10 sm:mt-4 mx-auto ${
-          sidebarOpen ? "ml-64" : "ml-0"
-        }`}
-      >
-        <div className="w-full max-w-screen-lg bg-base-100 shadow-xl rounded-lg p-10 relative flex justify-center mx-auto">
-          <button
-            onClick={toggleSidebar}
-            className="btn btn-primary btn-sm sm:btn lg:hidden fixed top-2 left-2 sm:left-4 sm:top-4 z-50"
-          >
-            ☰
-          </button>
-          {/* Content */}
+        );
+      default: // "tasks"
+        return (
           <div className="w-full">
             <section>
               <AddTask
@@ -318,9 +126,7 @@ function App() {
                 onCategorySelect={(id) => setSelectedCategory(id)}
               />
             </section>
-
             <div className="divider"></div>
-
             <section>
               <h2 className="text-2xl font-bold text-primary mb-4">
                 Your Tasks
@@ -331,9 +137,33 @@ function App() {
               />
             </section>
           </div>
-        </div>
+        );
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen bg-base-200">
+      <Sidebar
+        user={{
+          email: user?.email || undefined,
+          isAnonymous: user?.isAnonymous || false,
+        }}
+        isOpen={sidebarOpen}
+        toggleSidebar={toggleSidebar}
+        onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
+        activeSection={activeSection}
+        setActiveSection={setActiveSection}
+      />
+      <main
+        className={`flex-grow p-2 sm:p-6 transition-all mt-10 sm:mt-4 ${
+          sidebarOpen ? "ml-64" : "ml-0"
+        }`}
+      >
+        {activeSection === "Dashboard" && (
+          <h1 className="text-4xl text-center text-primary mb-4">Dashboard</h1>
+        )}
+        {renderContent()}
       </main>
-      {/* <CookieConsent /> */}
     </div>
   );
 }

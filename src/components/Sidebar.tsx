@@ -11,27 +11,17 @@ const Sidebar = ({
   isOpen,
   toggleSidebar,
   onSwitchToAccount,
-  onOpenNotes,
-  openNotes,
-  onOpenDashboard,
-  openDashboard,
-  onOpenHabits,
-  openHabits,
-  openTasks,
-  onOpenTasks,
+  activeSection,
+  setActiveSection,
 }: {
   user: { email?: string; isAnonymous: boolean };
   isOpen: boolean;
   toggleSidebar: () => void;
   onSwitchToAccount: () => void;
-  onOpenNotes: (isOpen: boolean) => void;
-  openNotes: boolean;
-  onOpenDashboard: (isOpen: boolean) => void;
-  openDashboard: boolean;
-  onOpenHabits: (isOpen: boolean) => void;
-  openHabits: boolean;
-  openTasks: boolean;
-  onOpenTasks: (isOpen: boolean) => void;
+  activeSection: "tasks" | "dashboard" | "notes" | "habits";
+  setActiveSection: (
+    section: "tasks" | "dashboard" | "notes" | "habits"
+  ) => void;
 }) => {
   const handleLogout = async () => {
     const auth = getAuth();
@@ -101,7 +91,7 @@ const Sidebar = ({
       >
         {/* App Title */}
         <h1 className="text-2xl font-bold text-primary text-center mb-8 mt-16 lg:mt-4">
-          Todo-san
+          Taskonaut
         </h1>
 
         <div className="flex gap-2 items-center">
@@ -128,27 +118,20 @@ const Sidebar = ({
         )}
 
         <div className="divider w-full"></div>
-
-        <button onClick={() => onOpenTasks(!openTasks)} className="btn">
+        <button onClick={() => setActiveSection("tasks")} className="btn">
           Tasks
         </button>
-
         <div className="divider w-full"></div>
-
-        <button onClick={() => onOpenDashboard(!openDashboard)} className="btn">
-          {openDashboard ? "Tasks" : "Dashboard"}
+        <button onClick={() => setActiveSection("dashboard")} className="btn">
+          Dashboard
         </button>
-
         <div className="divider w-full"></div>
-
-        <button onClick={() => onOpenNotes(!openNotes)} className="btn">
-          {openNotes ? "Tasks" : "Notes"}
+        <button onClick={() => setActiveSection("notes")} className="btn">
+          Notes
         </button>
-
         <div className="divider w-full"></div>
-
-        <button onClick={() => onOpenHabits(!openHabits)} className="btn">
-          {openHabits ? "Tasks" : "Habits"}
+        <button onClick={() => setActiveSection("habits")} className="btn">
+          Habits
         </button>
 
         <div className="mt-auto space-y-8">
