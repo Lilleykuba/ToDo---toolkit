@@ -17,6 +17,8 @@ const Sidebar = ({
   openDashboard,
   onOpenHabits,
   openHabits,
+  openTasks,
+  onOpenTasks,
 }: {
   user: { email?: string; isAnonymous: boolean };
   isOpen: boolean;
@@ -28,6 +30,8 @@ const Sidebar = ({
   openDashboard: boolean;
   onOpenHabits: (isOpen: boolean) => void;
   openHabits: boolean;
+  openTasks: boolean;
+  onOpenTasks: (isOpen: boolean) => void;
 }) => {
   const handleLogout = async () => {
     const auth = getAuth();
@@ -122,6 +126,12 @@ const Sidebar = ({
             Upgrade to Account
           </button>
         )}
+
+        <div className="divider w-full"></div>
+
+        <button onClick={() => onOpenTasks(!openTasks)} className="btn">
+          Tasks
+        </button>
 
         <div className="divider w-full"></div>
 

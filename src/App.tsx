@@ -21,6 +21,7 @@ function App() {
   const [openDashboard, setOpenDashboard] = useState(false);
   const [openNotes, setOpenNotes] = useState(false);
   const [openHabits, setOpenHabits] = useState(false);
+  const [openTasks, setOpenTasks] = useState(true);
 
   useEffect(() => {
     const auth = getAuth();
@@ -80,22 +81,31 @@ function App() {
           isOpen={sidebarOpen}
           toggleSidebar={toggleSidebar}
           onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
+          onOpenTasks={() => {
+            setOpenTasks(true);
+            setOpenDashboard(false);
+            setOpenNotes(false);
+            setOpenHabits(false);
+          }}
           onOpenDashboard={() => {
             setOpenDashboard(false);
             setOpenNotes(false);
             setOpenHabits(false);
+            setOpenTasks(false);
           }}
           openDashboard={openDashboard}
           onOpenNotes={() => {
             setOpenNotes(true);
             setOpenDashboard(false);
             setOpenHabits(false);
+            setOpenTasks(false);
           }}
           openNotes={openNotes}
           onOpenHabits={() => {
             setOpenHabits(true);
             setOpenDashboard(false);
             setOpenNotes(false);
+            setOpenTasks(false);
           }}
           openHabits={openHabits}
         />
@@ -135,22 +145,31 @@ function App() {
           isOpen={sidebarOpen}
           toggleSidebar={toggleSidebar}
           onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
+          onOpenTasks={() => {
+            setOpenTasks(true);
+            setOpenDashboard(false);
+            setOpenNotes(false);
+            setOpenHabits(false);
+          }}
           onOpenDashboard={() => {
             setOpenDashboard(true);
             setOpenNotes(false);
             setOpenHabits(false);
+            setOpenTasks(false);
           }}
           openDashboard={openDashboard}
           onOpenNotes={() => {
             setOpenNotes(false);
             setOpenDashboard(false);
             setOpenHabits(false);
+            setOpenTasks(false);
           }}
           openNotes={openNotes}
           onOpenHabits={() => {
             setOpenHabits(true);
             setOpenDashboard(false);
             setOpenNotes(false);
+            setOpenTasks(false);
           }}
           openHabits={openHabits}
         />
@@ -187,22 +206,31 @@ function App() {
           isOpen={sidebarOpen}
           toggleSidebar={toggleSidebar}
           onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
+          onOpenTasks={() => {
+            setOpenTasks(true);
+            setOpenDashboard(false);
+            setOpenNotes(false);
+            setOpenHabits(false);
+          }}
           onOpenDashboard={() => {
             setOpenDashboard(true);
             setOpenNotes(false);
             setOpenHabits(false);
+            setOpenTasks(false);
           }}
           openDashboard={openDashboard}
           onOpenNotes={() => {
             setOpenNotes(true);
             setOpenDashboard(false);
             setOpenHabits(false);
+            setOpenTasks(false);
           }}
           openNotes={openNotes}
           onOpenHabits={() => {
             setOpenHabits(false);
             setOpenDashboard(false);
             setOpenNotes(false);
+            setOpenTasks(false);
           }}
           openHabits={openHabits}
         />
@@ -240,22 +268,31 @@ function App() {
         isOpen={sidebarOpen}
         toggleSidebar={toggleSidebar}
         onSwitchToAccount={() => setIsSwitchingFromGuest(true)}
+        onOpenTasks={() => {
+          setOpenTasks(true);
+          setOpenDashboard(false);
+          setOpenNotes(false);
+          setOpenHabits(false);
+        }}
         onOpenDashboard={() => {
           setOpenDashboard(true);
           setOpenNotes(false);
           setOpenHabits(false);
+          setOpenTasks(false);
         }}
         openDashboard={openDashboard}
         onOpenNotes={() => {
           setOpenNotes(true);
           setOpenDashboard(false);
           setOpenHabits(false);
+          setOpenTasks(false);
         }}
         openNotes={openNotes}
         onOpenHabits={() => {
           setOpenDashboard(false);
           setOpenNotes(false);
           setOpenHabits(true);
+          setOpenTasks(false);
         }}
         openHabits={openHabits}
       />
