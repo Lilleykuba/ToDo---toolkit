@@ -193,7 +193,9 @@ const Habits = () => {
         </button>
         <div className="divider"></div>
         <div className="w-full">
-          {/* Habit table replacing habit list */}
+          <button className="btn text-primary font-bold">
+            Go to next week
+          </button>
           <table className="table-auto w-full">
             <thead>
               <tr>
