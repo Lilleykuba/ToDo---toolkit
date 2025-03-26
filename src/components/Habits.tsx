@@ -192,9 +192,9 @@ const Habits = () => {
           Create a Habit
         </button>
         <div className="divider"></div>
-        <div className="w-full">
-          <button className="btn text-primary font-bold">
-            Go to next week
+        <div className="w-full pt-12 relative">
+          <button className="btn text-primary font-bold absolute top-[-1rem] right-2">
+            Finish Week
           </button>
           <table className="table-auto w-full">
             <thead>
