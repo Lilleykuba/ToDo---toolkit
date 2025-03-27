@@ -196,12 +196,15 @@ const Habits = () => {
           <button className="btn text-primary font-bold absolute top-[-1rem] right-2">
             Finish Week
           </button>
-          <table className="table-auto w-full">
+          <table className="table-auto w-full gap-2 sm:my-0 my-48 sm:rotate-0 transform rotate-[90deg]">
             <thead>
               <tr>
                 <th className="border-none px-4 py-2">Habits</th>
                 {weekDays.map((day) => (
-                  <th key={day} className="border-none px-4 py-2">
+                  <th
+                    key={day}
+                    className="border-none px-4 py-2 sm:rotate-0 transform rotate-[-90deg]"
+                  >
                     {day}
                   </th>
                 ))}
@@ -210,7 +213,7 @@ const Habits = () => {
             <tbody>
               {habits.map((habit) => (
                 <tr key={habit.id}>
-                  <td className="border-none px-4 py-2 flex items-center gap-2 text-left">
+                  <td className="border-none px-4 py-2 flex items-center gap-2 text-left sm:rotate-0 transform rotate-[-90deg]">
                     {habit.name}
                     <div
                       className="w-4 h-4 rounded-full"
@@ -218,7 +221,10 @@ const Habits = () => {
                     ></div>
                   </td>
                   {weekDays.map((day) => (
-                    <td key={day} className="border-none px-4 py-2 text-center">
+                    <td
+                      key={day}
+                      className="border-none px-4 py-2 text-center sm:rotate-0 transform rotate-[-90deg]"
+                    >
                       <input
                         type="checkbox"
                         checked={habitCompletion[habit.id]?.[day] || false}
