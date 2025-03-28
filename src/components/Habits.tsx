@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import FullCalendar from "@fullcalendar/react";
+{
+  /* import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
+import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick */
+}
 import {
   collection,
   query,
