@@ -184,7 +184,7 @@ const Habits = () => {
 
   return (
     <div className="flex flex-col w-full mt-4">
-      <div className="flex flex-col items-start gap-4 w-full">
+      <div className="flex flex-col items-start gap-4">
         <button
           className="font-bold btn text-xl text-primary self-center"
           onClick={handleOpenHabitModal}
@@ -192,18 +192,18 @@ const Habits = () => {
           Create a Habit
         </button>
         <div className="divider"></div>
-        <div className="w-full pt-12 relative">
-          <button className="btn text-primary font-bold absolute top-[-1rem] right-2">
+        <div className="w-full pt-12 py-0 relative sm:overflow-x-hidden overflow-x-auto">
+          <button className="btn text-primary font-bold absolute top-[-1rem] sm:right-2 left-2 ">
             Finish Week
           </button>
-          <table className="table-auto w-full gap-2 sm:my-0 my-48 sm:rotate-0 transform rotate-[90deg]">
+          <table className="table-auto w-full gap-2 scale-80 sm:scale-100">
             <thead>
               <tr>
                 <th className="border-none px-4 py-2">Habits</th>
                 {weekDays.map((day) => (
                   <th
                     key={day}
-                    className="border-none px-4 py-2 sm:rotate-0 transform rotate-[-90deg]"
+                    className="border-none px-4 py-2 sm:rotate-0 transform"
                   >
                     {day}
                   </th>
@@ -213,7 +213,7 @@ const Habits = () => {
             <tbody>
               {habits.map((habit) => (
                 <tr key={habit.id}>
-                  <td className="border-none px-4 py-2 flex items-center gap-2 text-left sm:rotate-0 transform rotate-[-90deg]">
+                  <td className="border-none px-4 py-2 flex items-center gap-2 text-left">
                     {habit.name}
                     <div
                       className="w-4 h-4 rounded-full"
@@ -221,10 +221,7 @@ const Habits = () => {
                     ></div>
                   </td>
                   {weekDays.map((day) => (
-                    <td
-                      key={day}
-                      className="border-none px-4 py-2 text-center sm:rotate-0 transform rotate-[-90deg]"
-                    >
+                    <td key={day} className="border-none px-4 py-2 text-center">
                       <input
                         type="checkbox"
                         checked={habitCompletion[habit.id]?.[day] || false}
@@ -239,7 +236,7 @@ const Habits = () => {
           </table>
         </div>
         <div className="divider"></div>
-        <div className="w-full">
+        {/* <div className="w-full">
           <FullCalendar
             plugins={[timeGridPlugin, interactionPlugin]}
             dateClick={handleDateClick}
@@ -250,7 +247,7 @@ const Habits = () => {
               right: "timeGridWeek,timeGridDay", // user can switch between the two
             }}
           />
-        </div>
+        </div> */}
       </div>
       <p className="mt-4">Selected date: {date}</p>
       <dialog id="eventModal" className="modal">

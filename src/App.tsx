@@ -105,7 +105,7 @@ function App() {
         );
       case "habits":
         return (
-          <div className="w-full max-w-screen-lg bg-base-100 shadow-xl rounded-lg p-10 relative flex justify-center mx-auto">
+          <div className="w-full sm:max-w-screen-lg max-w-[95vw] bg-base-100 shadow-xl rounded-lg p-10 relative flex justify-center mx-auto">
             <button
               onClick={toggleSidebar}
               className="btn btn-primary btn-sm sm:btn lg:hidden fixed top-2 left-2 sm:left-4 sm:top-4 z-50"
