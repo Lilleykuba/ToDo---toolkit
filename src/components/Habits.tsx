@@ -198,7 +198,7 @@ const Habits = () => {
         </button>
         <div className="divider"></div>
         <div className="w-full pt-12 py-0 relative sm:overflow-x-hidden overflow-x-auto">
-          <button className="btn text-primary font-bold absolute top-[-1rem] sm:right-2 left-2 ">
+          <button className="btn text-primary font-bold absolute bottom-[-1rem] sm:right-2 left-2 ">
             Finish Week
           </button>
           <table className="table-auto w-full gap-2 scale-80 sm:scale-100">
