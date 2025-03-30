@@ -97,10 +97,6 @@ const Habits = () => {
     }
   };
 
-  const handleAddEvent = () => {
-    return;
-  };
-
   const handleAddHabit = async (e: React.FormEvent) => {
     e.preventDefault();
     const currentUser = getAuth().currentUser;
@@ -187,6 +183,10 @@ const Habits = () => {
     }
   };
 
+  const handleFinishWeek = () => {
+    return;
+  };
+
   return (
     <div className="flex flex-col w-full mt-4">
       <div className="flex flex-col items-start gap-4">
@@ -198,7 +198,10 @@ const Habits = () => {
         </button>
         <div className="divider"></div>
         <div className="w-full pt-12 py-0 relative sm:overflow-x-hidden overflow-x-auto">
-          <button className="btn text-primary font-bold absolute bottom-[-1rem] sm:right-2 left-2 ">
+          <button
+            className="btn text-primary font-bold absolute bottom-[-1rem] sm:right-2 left-2 "
+            onClick={handleFinishWeek}
+          >
             Finish Week
           </button>
           <table className="table-auto w-full gap-2 scale-80 sm:scale-100">
