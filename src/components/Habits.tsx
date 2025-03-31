@@ -187,6 +187,10 @@ const Habits = () => {
     return;
   };
 
+  const handleAddEvent = () => {
+    return;
+  };
+
   return (
     <div className="flex flex-col w-full mt-4">
       <div className="flex flex-col items-start gap-4">
