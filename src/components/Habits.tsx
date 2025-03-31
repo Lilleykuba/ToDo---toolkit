@@ -201,7 +201,7 @@ const Habits = () => {
           Create a Habit
         </button>
         <div className="divider"></div>
-        <div className="w-full pt-12 py-0 relative sm:overflow-x-hidden overflow-x-auto">
+        <div className="w-full pb-8 py-0 relative sm:overflow-x-hidden overflow-x-auto">
           <button
             className="btn text-primary font-bold absolute bottom-[-3rem] right-2 w-36 sm:w-24"
             onClick={handleFinishWeek}
