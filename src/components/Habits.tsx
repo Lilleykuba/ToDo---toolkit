@@ -123,7 +123,7 @@ const Habits = () => {
       // Use setDoc with the generated doc reference
       await setDoc(habitRef, {
         ...habit,
-        uid: currentUser.uid, // changed from userId to uid to match security rule
+        uid: currentUser.uid,
       });
 
       setHabitName("");
