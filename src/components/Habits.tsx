@@ -74,19 +74,6 @@ const Habits = () => {
     fetchHabits();
   }, []);
 
-  {
-    /* const handleDateClick = (arg: any) => {
-    setDate(arg.dateStr);
-    const modal = document.getElementById(
-      "eventModal"
-    ) as HTMLDialogElement | null;
-    if (modal) {
-      modal.showModal();
-    }
-  };
-  */
-  }
-
   const handleOpenHabitModal = (arg: any) => {
     setDate(arg.dateStr);
     const modal = document.getElementById(
