@@ -235,18 +235,6 @@ const Habits = () => {
           </table>
         </div>
         <div className="divider"></div>
-        {/* <div className="w-full">
-          <FullCalendar
-            plugins={[timeGridPlugin, interactionPlugin]}
-            dateClick={handleDateClick}
-            initialView="timeGridWeek"
-            headerToolbar={{
-              left: "prev,next",
-              center: "title",
-              right: "timeGridWeek,timeGridDay", // user can switch between the two
-            }}
-          />
-        </div> */}
       </div>
       <p className="mt-4">Selected date: {date}</p>
       <dialog id="eventModal" className="modal">
