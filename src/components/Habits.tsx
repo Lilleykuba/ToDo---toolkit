@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 {
-  /* import FullCalendar from "@fullcalendar/react";
+  /*
+  This is a FullCalendar component that allows users to create and manage habits.
+import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick */
 }
