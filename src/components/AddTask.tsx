@@ -99,7 +99,6 @@ const AddTask = ({
         sharedWith: selectedShareUsers.map((u) => u.uid),
       });
 
-      // Reset the form
       setTaskName("");
       setPriority("Medium");
       setSubtasks([]);
