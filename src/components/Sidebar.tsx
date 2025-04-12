@@ -90,7 +90,7 @@ const Sidebar = ({
         } lg:translate-x-0 lg:static`}
       >
         {/* App Title */}
-        <h1 className="text-2xl font-bold text-primary text-center mb-8 mt-16 lg:mt-4">
+        <h1 className="text-3xl font-bold text-primary text-center mb-8 mt-16 lg:mt-4">
           Taskonaut
         </h1>
 
