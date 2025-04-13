@@ -19,7 +19,7 @@ function App() {
   const [loading, setLoading] = useState(true); // Loading state while checking auth
   const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar toggle for mobile
   const [isSwitchingFromGuest, setIsSwitchingFromGuest] = useState(false); // Guest to account upgrade state
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null); //Filter tasks by category
   const [sharingTaskId, setSharingTaskId] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<Section>("tasks");
 
