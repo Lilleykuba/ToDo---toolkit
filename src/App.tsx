@@ -20,7 +20,7 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar toggle for mobile
   const [isSwitchingFromGuest, setIsSwitchingFromGuest] = useState(false); // Guest to account upgrade state
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null); //Filter tasks by category
-  const [sharingTaskId, setSharingTaskId] = useState<string | null>(null);
+  const [sharingTaskId, setSharingTaskId] = useState<string | null>(null); // Task ID for sharing
   const [activeSection, setActiveSection] = useState<Section>("tasks");
 
   useEffect(() => {
