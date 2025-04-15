@@ -21,7 +21,7 @@ function App() {
   const [isSwitchingFromGuest, setIsSwitchingFromGuest] = useState(false); // Guest to account upgrade state
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null); //Filter tasks by category
   const [sharingTaskId, setSharingTaskId] = useState<string | null>(null); // Task ID for sharing
-  const [activeSection, setActiveSection] = useState<Section>("tasks");
+  const [activeSection, setActiveSection] = useState<Section>("tasks"); // sets Active section of the app
 
   useEffect(() => {
     const auth = getAuth();
