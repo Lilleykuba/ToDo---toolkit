@@ -223,7 +223,7 @@ const TaskList = ({
             <div
               {...provided.droppableProps}
               ref={provided.innerRef}
-              className="space-y-4 overflow-auto max-h-96"
+              className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 overflow-auto max-h-96"
             >
               {tasks.map((task, index) => (
                 <Draggable key={task.id} draggableId={task.id} index={index}>
